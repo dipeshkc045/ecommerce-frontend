@@ -1,0 +1,76 @@
+@use '../../../../scss/variables' as *;
+
+:host {
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.category-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 8px;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+
+    .card-circle {
+      box-shadow: $shadow-hover;
+    }
+  }
+}
+
+.card-circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  @include flex-center;
+  transition: box-shadow 0.25s ease;
+  box-shadow: $shadow-soft;
+}
+
+.card-icon {
+  font-size: 36px;
+  line-height: 1;
+}
+
+.card-label {
+  font-family: $font-primary;
+  font-size: 13px;
+  font-weight: 600;
+  color: $color-text-body;
+  text-align: center;
+  @include truncate;
+  max-width: 110px;
+}
+
+/* RESPONSIVE */
+@media (max-width: $bp-md) {
+  .card-circle {
+    width: 80px;
+    height: 80px;
+  }
+
+  .card-icon {
+    font-size: 28px;
+  }
+
+  .card-label {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: $bp-sm) {
+  .card-circle {
+    width: 68px;
+    height: 68px;
+  }
+
+  .card-icon {
+    font-size: 24px;
+  }
+}

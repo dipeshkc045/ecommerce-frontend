@@ -1,0 +1,70 @@
+<header class="site-header" role="banner">
+  <div class="header-inner">
+
+    <!-- LEFT: Logo -->
+    <a routerLink="/" class="logo" aria-label="emox home">
+      <span class="logo-text">emox</span>
+    </a>
+
+    <!-- CENTER: Search bar -->
+    <div class="search-wrapper">
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Search for products, brands and more..."
+        aria-label="Search products"
+      />
+      <button class="search-btn" aria-label="Search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- RIGHT: Actions -->
+    <div class="header-actions">
+
+      <!-- Location -->
+      <button class="action-item location-btn" aria-label="Select location">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+        <span class="action-label">Deliver to<br/><strong>New York</strong></span>
+      </button>
+
+      <!-- Country Flag -->
+      <button class="action-item flag-btn" aria-label="Select country">
+        <span class="flag-emoji">🇺🇸</span>
+        <svg class="chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </button>
+
+      <!-- Cart -->
+      <a routerLink="/cart" class="action-item cart-action" aria-label="Shopping cart">
+        <div class="cart-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 01-8 0"/>
+          </svg>
+          <span class="cart-badge" *ngIf="cartCount() > 0">{{ cartCount() }}</span>
+        </div>
+      </a>
+
+      <!-- Sign In -->
+      <a
+        *ngIf="!auth.isLoggedIn()"
+        routerLink="/login"
+        class="sign-in-btn"
+      >Sign In</a>
+      <a
+        *ngIf="auth.isLoggedIn()"
+        routerLink="/orders"
+        class="sign-in-btn"
+      >Account</a>
+    </div>
+  </div>
+</header>

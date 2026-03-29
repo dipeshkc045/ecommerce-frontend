@@ -1,0 +1,613 @@
+@use '../../../scss/variables' as *;
+
+/* ================================================================
+   Orders Page
+   ================================================================ */
+
+.orders-page {
+  @include container;
+  padding-top: 3rem;
+  padding-bottom: 5rem;
+}
+
+/* ── Page Header ──────────────────────────────────────────────── */
+.page-header {
+  margin-bottom: 2.5rem;
+  border-bottom: 1px solid $color-border;
+  padding-bottom: 1.5rem;
+}
+
+.page-title {
+  font-family: $font-primary;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: $color-text-strong;
+  margin: 0 0 0.35rem;
+}
+
+.page-subtitle {
+  font-size: 0.925rem;
+  color: $color-text-muted;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ── Auth Prompt ──────────────────────────────────────────────── */
+.auth-prompt {
+  text-align: center;
+  padding: 5rem 2rem;
+
+  .auth-icon {
+    color: $color-text-muted;
+    margin-bottom: 1.5rem;
+    opacity: 0.45;
+  }
+
+  h2 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: $color-text-strong;
+    margin: 0 0 0.5rem;
+  }
+
+  p {
+    color: $color-text-muted;
+    font-size: 0.925rem;
+    margin: 0 0 2rem;
+  }
+}
+
+.btn-primary {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  background: $color-accent;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-radius: $radius-sm;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.15s;
+
+  &:hover {
+    background: darken($color-accent, 8%);
+    transform: translateY(-1px);
+  }
+}
+
+/* ── Loading Skeleton ─────────────────────────────────────────── */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.skeleton-order {
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  overflow: hidden;
+}
+
+.skeleton-header {
+  height: 64px;
+  background: #f3f4f6;
+}
+
+.skeleton-body {
+  display: flex;
+  gap: 1.25rem;
+  padding: 1.5rem;
+}
+
+.skeleton-image {
+  width: 160px;
+  height: 160px;
+  border-radius: $radius-sm;
+  background: #f3f4f6;
+  flex-shrink: 0;
+}
+
+.skeleton-lines {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-top: 0.25rem;
+}
+
+.skeleton-line {
+  height: 14px;
+  border-radius: 4px;
+  background: #f3f4f6;
+
+  &.wide { width: 60%; }
+  &.medium { width: 40%; }
+  &.short { width: 25%; }
+}
+
+.skeleton-progress {
+  height: 48px;
+  margin: 0 1.5rem 1.5rem;
+  border-radius: $radius-sm;
+  background: #f3f4f6;
+}
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent);
+    animation: shimmer 1.5s infinite;
+  }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* ── Empty State ──────────────────────────────────────────────── */
+.empty-state {
+  text-align: center;
+  padding: 5rem 2rem;
+
+  .empty-icon {
+    color: $color-text-muted;
+    opacity: 0.35;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.empty-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: $color-text-body;
+  margin: 0 0 0.5rem;
+}
+
+.empty-desc {
+  color: $color-text-muted;
+  font-size: 0.925rem;
+  margin: 0 0 2rem;
+}
+
+/* ── Fallback Banner ──────────────────────────────────────────── */
+.fallback-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background: #fffbeb;
+  border: 1px solid #fbbf24;
+  border-radius: $radius-md;
+  padding: 1rem 1.25rem;
+  margin-bottom: 2rem;
+
+  &__icon {
+    color: #d97706;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  &__body {
+    flex: 1;
+    font-size: 0.875rem;
+    line-height: 1.55;
+
+    strong {
+      display: block;
+      color: #92400e;
+      margin-bottom: 0.15rem;
+    }
+
+    p {
+      margin: 0;
+      color: #a16207;
+    }
+  }
+
+  &__dismiss {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #a16207;
+    padding: 2px;
+    border-radius: $radius-xs;
+    transition: color 0.15s;
+
+    &:hover {
+      color: #92400e;
+    }
+  }
+}
+
+/* ── Order Card ───────────────────────────────────────────────── */
+.order-card {
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  overflow: hidden;
+  margin-bottom: 2rem;
+  background: #fff;
+}
+
+/* ── Order Header ─────────────────────────────────────────────── */
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  background: #f9fafb;
+  border-bottom: 1px solid $color-border;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.order-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.order-number {
+  font-size: 1rem;
+  font-weight: 700;
+  color: $color-text-body;
+  margin: 0;
+}
+
+.view-invoice {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: $color-accent;
+  text-decoration: none;
+  transition: color 0.15s;
+
+  &:hover {
+    color: darken($color-accent, 10%);
+  }
+}
+
+.order-header-right {
+  text-align: right;
+}
+
+.order-date-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: $color-text-muted;
+  margin-bottom: 0.1rem;
+}
+
+.order-date {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: $color-text-body;
+}
+
+/* ── Order Item Row ───────────────────────────────────────────── */
+.order-item {
+  display: grid;
+  grid-template-columns: 160px 1fr 1fr 1fr;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  border-bottom: 1px solid $color-border;
+
+  &:last-of-type {
+    border-bottom: none;
+  }
+}
+
+.order-item-image {
+  width: 160px;
+  height: 160px;
+  border-radius: $radius-sm;
+  overflow: hidden;
+  background: #f5f5f5;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.order-item-info {
+  .item-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: $color-text-body;
+    margin: 0 0 0.35rem;
+    line-height: 1.4;
+  }
+
+  .item-price {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: $color-text-body;
+    margin: 0 0 0.65rem;
+  }
+
+  .item-desc {
+    font-size: 0.825rem;
+    color: $color-text-muted;
+    line-height: 1.65;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+.order-item-address,
+.order-item-shipping {
+  h4 {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: $color-text-body;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin: 0 0 0.6rem;
+  }
+
+  p {
+    font-size: 0.85rem;
+    color: $color-text-muted;
+    margin: 0 0 0.2rem;
+    line-height: 1.55;
+  }
+}
+
+.edit-link {
+  display: inline-block;
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: $color-accent;
+  text-decoration: none;
+  margin-top: 0.35rem;
+  transition: color 0.15s;
+
+  &:hover {
+    color: darken($color-accent, 10%);
+  }
+}
+
+/* ── Progress Tracker ─────────────────────────────────────────── */
+.progress-section {
+  padding: 1.25rem 1.5rem 1.5rem;
+  border-bottom: 1px solid $color-border;
+}
+
+.progress-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: $color-text-body;
+  margin: 0 0 0.75rem;
+}
+
+.progress-track {
+  position: relative;
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 0.6rem;
+}
+
+.progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: $color-accent;
+  border-radius: 99px;
+  transition: width 0.6s ease;
+}
+
+.progress-steps {
+  display: flex;
+  justify-content: space-between;
+
+  span {
+    font-size: 0.75rem;
+    color: $color-text-muted;
+    font-weight: 500;
+
+    &.active {
+      color: $color-accent;
+      font-weight: 600;
+    }
+  }
+}
+
+/* ── Order Footer ─────────────────────────────────────────────── */
+.order-footer {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2rem;
+  padding: 1.5rem;
+  background: #f9fafb;
+  border-top: 1px solid $color-border;
+}
+
+.footer-billing,
+.footer-payment {
+  h4 {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: $color-text-body;
+    margin: 0 0 0.6rem;
+  }
+
+  p {
+    font-size: 0.85rem;
+    color: $color-text-muted;
+    margin: 0 0 0.2rem;
+    line-height: 1.55;
+  }
+}
+
+.payment-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.visa-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem 0.5rem;
+  background: linear-gradient(135deg, #1a1f71, #2b3990);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.payment-details {
+  p {
+    font-size: 0.85rem;
+    color: $color-text-muted;
+    margin: 0;
+    line-height: 1.55;
+  }
+
+  .payment-sub {
+    font-size: 0.8rem;
+    margin-top: 0.15rem;
+  }
+}
+
+.footer-totals {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: $color-text-muted;
+
+  &.order-total {
+    border-top: 1px solid $color-border;
+    padding-top: 0.55rem;
+    margin-top: 0.2rem;
+    font-weight: 700;
+    color: $color-text-body;
+    font-size: 0.95rem;
+  }
+}
+
+/* ================================================================
+   Responsive
+   ================================================================ */
+@media (max-width: $bp-lg) {
+  .order-item {
+    grid-template-columns: 120px 1fr 1fr;
+  }
+
+  .order-item-shipping {
+    grid-column: 2 / -1;
+  }
+
+  .order-item-image {
+    width: 120px;
+    height: 120px;
+  }
+
+  .order-footer {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .footer-totals {
+    grid-column: 1 / -1;
+    border-top: 1px solid $color-border;
+    padding-top: 1rem;
+  }
+}
+
+@media (max-width: $bp-md) {
+  .orders-page {
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+  }
+
+  .order-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .order-header-right {
+    text-align: left;
+  }
+
+  .order-item {
+    grid-template-columns: 100px 1fr;
+    gap: 1rem;
+  }
+
+  .order-item-image {
+    width: 100px;
+    height: 100px;
+    grid-row: 1 / 2;
+  }
+
+  .order-item-info {
+    grid-column: 2;
+  }
+
+  .order-item-address {
+    grid-column: 1 / -1;
+  }
+
+  .order-item-shipping {
+    grid-column: 1 / -1;
+  }
+
+  .order-footer {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-totals {
+    grid-column: 1;
+  }
+}
+
+@media (max-width: $bp-sm) {
+  .page-title {
+    font-size: 1.35rem;
+  }
+
+  .skeleton-body {
+    flex-direction: column;
+  }
+
+  .skeleton-image {
+    width: 100%;
+    height: 120px;
+  }
+
+  .order-item {
+    grid-template-columns: 1fr;
+  }
+
+  .order-item-image {
+    width: 100%;
+    height: 180px;
+  }
+}

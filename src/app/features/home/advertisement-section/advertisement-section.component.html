@@ -1,0 +1,25 @@
+<section class="advertisement" aria-label="Promotions">
+  <div class="ad-inner">
+    <div class="banners-grid">
+      @for (banner of banners; track banner.id) {
+        <a class="banner-card" [routerLink]="banner.href" [style.background]="banner.gradient">
+          <div class="banner-content">
+            <span class="banner-icon" aria-hidden="true">{{ banner.icon }}</span>
+            <div class="banner-text">
+              <h3 class="banner-title">{{ banner.title }}</h3>
+              <p class="banner-subtitle">{{ banner.subtitle }}</p>
+            </div>
+            <span class="banner-cta">
+              {{ banner.cta }}
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"/>
+                <polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </span>
+          </div>
+        </a>
+      }
+    </div>
+  </div>
+</section>

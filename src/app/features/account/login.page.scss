@@ -1,0 +1,393 @@
+@use '../../../scss/variables' as *;
+
+/* ================================================================
+   Auth Layout — Split Screen
+   ================================================================ */
+
+.auth-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* ── Brand Panel (Left) ───────────────────────────────────────── */
+.brand-panel {
+  position: relative;
+  background: linear-gradient(160deg, $color-primary 0%, #16213e 50%, #0f3460 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: rgba($color-accent, 0.08);
+    top: -120px;
+    right: -120px;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    border-radius: 50%;
+    background: rgba($color-accent, 0.05);
+    bottom: -80px;
+    left: -80px;
+  }
+}
+
+.brand-panel__content {
+  position: relative;
+  z-index: 1;
+  max-width: 420px;
+}
+
+.brand-logo {
+  display: inline-block;
+  font-family: $font-primary;
+  font-size: 1.65rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #fff;
+  text-decoration: none;
+  margin-bottom: 2.5rem;
+}
+
+.brand-headline {
+  font-family: $font-primary;
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.2;
+  margin: 0 0 0.75rem;
+}
+
+.brand-sub {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.7;
+  margin: 0 0 2.5rem;
+}
+
+.brand-features {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+
+  svg {
+    flex-shrink: 0;
+    opacity: 0.7;
+  }
+}
+
+/* ── Form Panel (Right) ──────────────────────────────────────── */
+.form-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  background: $color-bg-page;
+}
+
+.form-container {
+  width: 100%;
+  max-width: 420px;
+}
+
+.form-header {
+  margin-bottom: 2rem;
+}
+
+.form-title {
+  font-family: $font-primary;
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: $color-text-strong;
+  margin: 0 0 0.4rem;
+}
+
+.form-subtitle {
+  font-size: 0.9rem;
+  color: $color-text-muted;
+  margin: 0;
+
+  .form-link {
+    color: $color-accent;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.15s;
+
+    &:hover {
+      color: $color-primary;
+    }
+  }
+}
+
+/* ── Form Controls ────────────────────────────────────────────── */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-label {
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: $color-text-body;
+}
+
+.label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.forgot-link {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: $color-accent;
+  text-decoration: none;
+  transition: color 0.15s;
+
+  &:hover {
+    color: $color-primary;
+  }
+}
+
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  border: 1.5px solid $color-border;
+  border-radius: $radius-sm;
+  padding: 0 0.85rem;
+  height: 48px;
+  background: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+
+  &:focus-within {
+    border-color: $color-primary;
+    box-shadow: 0 0 0 3px rgba($color-primary, 0.08);
+  }
+
+  &.has-error {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.08);
+  }
+}
+
+.input-icon {
+  flex-shrink: 0;
+  color: $color-text-light;
+}
+
+.input-wrapper input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-family: $font-primary;
+  font-size: 0.9rem;
+  color: $color-text-body;
+  background: transparent;
+  height: 100%;
+
+  &::placeholder {
+    color: $color-text-light;
+  }
+}
+
+.toggle-pw {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: $color-text-light;
+  border-radius: $radius-xs;
+  transition: color 0.15s;
+
+  &:hover {
+    color: $color-text-body;
+  }
+}
+
+.field-error {
+  font-size: 0.775rem;
+  color: #ef4444;
+  font-weight: 500;
+}
+
+/* ── Alert ────────────────────────────────────────────────────── */
+.alert-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 0.9rem;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: $radius-sm;
+  font-size: 0.85rem;
+  color: #dc2626;
+  font-weight: 500;
+}
+
+/* ── Submit Button ────────────────────────────────────────────── */
+.btn-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  height: 48px;
+  border: none;
+  border-radius: $radius-sm;
+  font-family: $font-primary;
+  font-size: 0.925rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: #fff;
+  background: $color-primary;
+  transition: background 0.2s, opacity 0.2s, transform 0.15s;
+  margin-top: 0.25rem;
+
+  &:hover:not(:disabled) {
+    background: lighten($color-primary, 6%);
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  &.loading {
+    pointer-events: none;
+  }
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Divider ──────────────────────────────────────────────────── */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.75rem 0;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: $color-border;
+  }
+
+  span {
+    font-size: 0.8rem;
+    color: $color-text-light;
+    white-space: nowrap;
+  }
+}
+
+/* ── Social Buttons ───────────────────────────────────────────── */
+.social-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 44px;
+  border: 1.5px solid $color-border;
+  border-radius: $radius-sm;
+  background: #fff;
+  font-family: $font-primary;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: $color-text-body;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.15s;
+
+  &:hover {
+    border-color: $color-text-light;
+    background: $color-bg-light;
+  }
+}
+
+/* ================================================================
+   Responsive
+   ================================================================ */
+@media (max-width: $bp-lg) {
+  .brand-panel {
+    padding: 2rem;
+  }
+
+  .brand-headline {
+    font-size: 1.85rem;
+  }
+}
+
+@media (max-width: $bp-md) {
+  .auth-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .brand-panel {
+    display: none;
+  }
+
+  .form-panel {
+    padding: 2rem 1.25rem;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+}
+
+@media (max-width: $bp-sm) {
+  .form-title {
+    font-size: 1.4rem;
+  }
+
+  .social-buttons {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,25 @@
+<nav class="category-navbar" role="navigation" aria-label="Product categories">
+  <div class="navbar-inner">
+    <ul class="nav-list" role="menubar">
+      @for (cat of categories; track cat.label) {
+        <li role="none">
+          <a
+            class="nav-link"
+            [routerLink]="cat.route"
+            role="menuitem"
+          >{{ cat.label }}</a>
+        </li>
+      }
+      <li role="none" class="deals-item">
+        <a
+          class="nav-link deals-link"
+          [routerLink]="bestDeals.route"
+          role="menuitem"
+        >
+          {{ bestDeals.label }}
+          <span class="live-badge" aria-label="Live">Live</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>

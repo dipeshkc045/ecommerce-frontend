@@ -1,0 +1,17 @@
+@use '../scss/variables' as *;
+
+:host {
+  display: block;
+  min-height: 100vh;
+  background: $color-bg-page;
+  font-family: $font-primary;
+}
+
+/* APP CONTENT */
+.app-content {
+  min-height: calc(100vh - #{$header-height});
+}
+
+.app-content main {
+  /* No padding - let pages control their own layout */
+}

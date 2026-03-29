@@ -1,0 +1,20 @@
+<section class="featured-products" aria-label="Products">
+  <div class="section-inner">
+    <h2 class="sr-only">Products</h2>
+
+    <div class="products-grid">
+      @for (product of products; track product.id) {
+        <a [routerLink]="product.href" class="product-card">
+          <img
+            [src]="product.imageSrc"
+            [alt]="product.imageAlt"
+            class="card-image"
+            loading="lazy"
+          />
+          <h3 class="card-name">{{ product.name }}</h3>
+          <p class="card-price">{{ product.price }}</p>
+        </a>
+      }
+    </div>
+  </div>
+</section>

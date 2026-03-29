@@ -1,0 +1,61 @@
+<section class="hero" aria-label="Featured promotions">
+  <div class="hero-wrapper">
+    <div class="hero-inner">
+      <!-- LEFT PANEL: Main banner -->
+      <div class="hero-main">
+        <div class="hero-content">
+          <span class="hero-tag">Weekend Deal</span>
+          <h1 class="hero-headline">Premium Wireless<br />Headphones</h1>
+          <p class="hero-price">
+            Starting at <span class="price-value">$299</span>
+          </p>
+          <a routerLink="/products" class="hero-cta">
+            Shop Now
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </a>
+        </div>
+        <div class="hero-image-main">
+          <div class="image-placeholder main-placeholder">
+            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1">
+              <path d="M3 18V12a9 9 0 0118 0v6" />
+              <path
+                d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT PANEL: Sale card -->
+      <div class="hero-side">
+        <div class="hero-side-content">
+          <span class="side-label">Special Offer</span>
+          <span class="side-discount">50% OFF</span>
+          <p class="side-desc">On selected sneakers</p>
+          <a routerLink="/products" class="side-cta">View Collection</a>
+        </div>
+        <div class="hero-image-side">
+          <div class="image-placeholder side-placeholder">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.35)"
+              stroke-width="1">
+              <path d="M2 19l.77-2.32A6 6 0 018.45 13h7.1a6 6 0 015.68 3.68L22 19" />
+              <path d="M2 19h20v1a1 1 0 01-1 1H3a1 1 0 01-1-1v-1z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SLIDER DOTS (centered below hero) -->
+  <div class="slider-dots" role="tablist" aria-label="Banner slides">
+    @for (dot of [0, 1, 2, 3]; track dot) {
+    <button class="dot" [class.active]="activeSlide() === dot" (click)="setSlide(dot)" role="tab"
+      [attr.aria-selected]="activeSlide() === dot" [attr.aria-label]="'Slide ' + (dot + 1)"></button>
+    }
+  </div>
+</section>
