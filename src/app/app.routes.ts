@@ -5,7 +5,13 @@ import { authGuard } from './core/auth/auth.guard';
 export const routes: Routes = [
 	{
 		path: '',
+		pathMatch: 'full',
 		loadComponent: () => import('./features/home/home.page').then((m) => m.HomePage)
+	},
+	{
+		path: 'home',
+		pathMatch: 'full',
+		redirectTo: ''
 	},
 	{
 		path: 'products',
@@ -21,7 +27,6 @@ export const routes: Routes = [
 	},
 	{
 		path: 'checkout',
-		canActivate: [authGuard],
 		loadComponent: () => import('./features/checkout/checkout.page').then((m) => m.CheckoutPage)
 	},
 	{

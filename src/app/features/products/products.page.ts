@@ -6,7 +6,6 @@ import { FormsModule } from '@angular/forms';
 import { ProductApi, type ProductResponse } from '../../core/api/product.api';
 import { CartService } from '../../core/cart/cart.service';
 import { InventoryApi, type InventoryResponse } from '../../core/api/inventory.api';
-import { AuthRequiredService } from '../../core/auth/auth-required.service';
 import { FALLBACK_PRODUCTS } from './fallback-products.data';
 
 @Component({
@@ -25,7 +24,6 @@ export class ProductsPage implements OnInit {
   private readonly api = inject(ProductApi);
   private readonly cart = inject(CartService);
   private readonly inventoryApi = inject(InventoryApi);
-  private readonly authRequired = inject(AuthRequiredService);
 
   /** undefined = loading, null = error, array = loaded */
   readonly allProducts = signal<ProductResponse[] | null | undefined>(undefined);
@@ -49,6 +47,10 @@ export class ProductsPage implements OnInit {
   readonly selectedPriceRange = signal<string | null>(null);
   readonly sortBy = signal<string>('default');
   readonly viewMode = signal<'grid' | 'list'>('grid');
+  readonly filtersExpanded = signal(false);
+  readonly activeFilterCount = computed(() =>
+    this.selectedCategories().length + (this.selectedPriceRange() ? 1 : 0)
+  );
 
   readonly filteredProducts = computed(() => {
     let products = this.allProducts() ?? [];
@@ -138,6 +140,10 @@ export class ProductsPage implements OnInit {
     this.sortBy.set('default');
   }
 
+  toggleFiltersPanel(): void {
+    this.filtersExpanded.update((open) => !open);
+  }
+
   onSortChange(event: Event): void {
     const value = (event.target as HTMLSelectElement).value;
     this.sortBy.set(value);
@@ -148,7 +154,6 @@ export class ProductsPage implements OnInit {
   }
 
   addToCart(productId: number): void {
-    if (!this.authRequired.guard()) return;
     this.cart.add(String(productId), 1);
   }
 

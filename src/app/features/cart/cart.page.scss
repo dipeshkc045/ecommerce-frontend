@@ -6,13 +6,13 @@
 // ═══════════════════════════════════════════════════════════════════
 :host {
   display: block;
-  background: $color-bg-page;
+  background: linear-gradient(180deg, #fbfcfe 0%, $color-bg-page 100%);
   min-height: 100vh;
 }
 
 .cart-page {
   @include container;
-  padding-top: 40px;
+  padding-top: 36px;
   padding-bottom: 80px;
 }
 
@@ -89,8 +89,8 @@
 // ═══════════════════════════════════════════════════════════════════
 .cart-layout {
   display: grid;
-  grid-template-columns: 1fr 380px;
-  gap: 40px;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 32px;
   align-items: start;
 }
 
@@ -138,25 +138,27 @@
 // ─── Cart Item ───────────────────────────────────────────────────
 .cart-item {
   display: grid;
-  grid-template-columns: 140px 1fr auto;
+  grid-template-columns: 124px 1fr auto;
   gap: 24px;
-  padding: 28px 0 20px;
+  padding: 24px 0 18px;
   align-items: start;
 }
 
 .item-image-wrap {
   display: block;
-  width: 140px;
-  height: 150px;
-  border-radius: $radius-md;
+  width: 124px;
+  height: 132px;
+  border-radius: $radius-lg;
   overflow: hidden;
-  background: $color-bg-light;
+  background: linear-gradient(180deg, #f8fafc 0%, $color-bg-light 100%);
   flex-shrink: 0;
+  border: 1px solid $color-border-light;
 
   img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    padding: 14px;
     transition: transform 0.3s;
   }
 
@@ -293,7 +295,7 @@
   font-size: 13px;
   font-weight: 500;
   padding: 0 0 24px;
-  margin-left: 164px; // image width + gap
+  margin-left: 148px;
 
   &.in-stock {
     color: #059669;
@@ -310,11 +312,13 @@
 // ORDER SUMMARY
 // ═══════════════════════════════════════════════════════════════════
 .order-summary {
-  background: $color-bg-light;
-  border-radius: $radius-lg;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba($color-border-light, 0.95);
+  border-radius: $radius-xl;
   padding: 28px;
   position: sticky;
-  top: calc(#{$header-height} + 24px);
+  top: calc(#{$header-height} + #{$navbar-height} + 20px);
+  box-shadow: $shadow-soft;
 }
 
 .summary-title {
@@ -378,7 +382,7 @@
   width: 100%;
   padding: 15px;
   margin-top: 24px;
-  background: #4f46e5;
+  background: $color-primary;
   color: #fff;
   font-family: $font-primary;
   font-size: 16px;
@@ -390,7 +394,7 @@
   transition: background 0.2s;
 
   &:hover {
-    background: #4338ca;
+    background: $color-accent;
   }
 }
 
@@ -441,8 +445,11 @@
 .reco-card {
   display: block;
   text-decoration: none;
-  border-radius: $radius-md;
+  border-radius: $radius-lg;
   overflow: hidden;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba($color-border-light, 0.95);
+  padding: 12px;
   transition: transform 0.2s, box-shadow 0.2s;
 
   &:hover {
@@ -452,15 +459,16 @@
 }
 
 .reco-image {
-  aspect-ratio: 1;
-  background: $color-bg-light;
+  aspect-ratio: 1 / 1.1;
+  background: linear-gradient(180deg, #f8fafc 0%, $color-bg-light 100%);
   overflow: hidden;
   border-radius: $radius-md;
 
   img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    padding: 12px;
     transition: transform 0.3s;
   }
 
@@ -472,7 +480,7 @@
 .reco-info {
   @include flex-between;
   align-items: flex-start;
-  padding: 14px 4px 0;
+  padding: 14px 2px 2px;
   gap: 12px;
 }
 
@@ -514,17 +522,17 @@
   }
 
   .cart-item {
-    grid-template-columns: 120px 1fr auto;
+    grid-template-columns: 112px 1fr auto;
     gap: 18px;
   }
 
   .item-image-wrap {
-    width: 120px;
-    height: 130px;
+    width: 112px;
+    height: 120px;
   }
 
   .stock-badge {
-    margin-left: 138px;
+    margin-left: 130px;
   }
 }
 
@@ -561,7 +569,7 @@
 
   .item-image-wrap {
     width: 100px;
-    height: 110px;
+    height: 108px;
   }
 
   .item-price-desktop {
@@ -573,7 +581,7 @@
   }
 
   .stock-badge {
-    margin-left: 114px;
+    margin-left: 112px;
   }
 
   .reco-grid {

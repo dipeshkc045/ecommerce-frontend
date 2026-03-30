@@ -60,11 +60,12 @@
         routerLink="/login"
         class="sign-in-btn"
       >Sign In</a>
-      <a
+      <button
         *ngIf="auth.isLoggedIn()"
-        routerLink="/orders"
-        class="sign-in-btn"
-      >Account</a>
+        type="button"
+        class="sign-out-btn"
+        (click)="logout()"
+      >Logout</button>
     </div>
   </div>
 </header>

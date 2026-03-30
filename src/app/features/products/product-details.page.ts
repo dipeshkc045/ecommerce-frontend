@@ -11,7 +11,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { ProductApi, type ProductResponse } from '../../core/api/product.api';
 import { CartService } from '../../core/cart/cart.service';
 import { InventoryApi } from '../../core/api/inventory.api';
-import { AuthRequiredService } from '../../core/auth/auth-required.service';
 import { FALLBACK_PRODUCTS } from './fallback-products.data';
 
 @Component({
@@ -218,7 +217,9 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
   styles: [`
     :host {
       display: block;
-      background: #fafafa;
+      background:
+        radial-gradient(circle at top right, rgba(255, 111, 97, 0.08), transparent 22%),
+        linear-gradient(180deg, #fbfcfe 0%, #f5f7fb 100%);
       min-height: 100vh;
     }
 
@@ -230,15 +231,15 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
     }
 
     .product-detail {
-      max-width: 1200px;
+      max-width: 1360px;
       margin: 0 auto;
-      padding: 40px;
+      padding: 36px 24px 72px;
     }
 
     .breadcrumb {
       font-size: 13px;
       color: #64748b;
-      margin-bottom: 24px;
+      margin-bottom: 28px;
     }
 
     .breadcrumb a {
@@ -252,58 +253,72 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
 
     .detail-layout {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      margin-bottom: 60px;
+      grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
+      gap: 40px;
+      margin-bottom: 40px;
+      align-items: start;
     }
 
     /* GALLERY */
     .gallery {
       display: grid;
-      grid-template-columns: 80px 1fr;
-      gap: 16px;
+      grid-template-columns: 72px 1fr;
+      gap: 18px;
+      padding: 22px;
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      border-radius: 20px;
+      box-shadow: 0 18px 44px rgba(15, 23, 42, 0.08);
     }
 
     .thumbnails {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
     .thumb-btn {
-      width: 80px;
-      height: 80px;
+      width: 72px;
+      height: 72px;
       border: 2px solid transparent;
-      border-radius: 8px;
+      border-radius: 14px;
       overflow: hidden;
-      background: #fff;
+      background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
       padding: 0;
       cursor: pointer;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, transform 0.2s;
     }
 
     .thumb-btn.active {
       border-color: #1a1a2e;
     }
 
+    .thumb-btn:hover {
+      transform: translateY(-1px);
+    }
+
     .thumb-btn img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
+      padding: 8px;
     }
 
     .main-image {
       position: relative;
-      border-radius: 12px;
+      border-radius: 18px;
       overflow: hidden;
-      background: #fff;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
+      border: 1px solid rgba(226, 232, 240, 0.92);
+      min-height: 460px;
     }
 
     .main-image img {
       width: 100%;
-      height: 500px;
-      object-fit: cover;
+      height: 100%;
+      min-height: 460px;
+      object-fit: contain;
+      padding: 28px;
     }
 
     .main-image .badge {
@@ -320,11 +335,20 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
     .badge.bestseller { background: #ef4444; color: #fff; }
 
     /* INFO */
+    .info {
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 18px 44px rgba(15, 23, 42, 0.08);
+    }
+
     .info h1 {
-      font-size: 32px;
+      font-size: 30px;
       font-weight: 700;
       color: #1a1a2e;
       margin: 0 0 8px;
+      line-height: 1.15;
     }
 
     .sku {
@@ -347,11 +371,12 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
       display: flex;
       align-items: center;
       gap: 14px;
-      margin-bottom: 20px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
     }
 
     .current-price {
-      font-size: 32px;
+      font-size: 30px;
       font-weight: 700;
       color: #1a1a2e;
     }
@@ -374,11 +399,11 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
     .description {
       color: #475569;
       line-height: 1.6;
-      margin-bottom: 24px;
+      margin-bottom: 28px;
     }
 
     .option-section {
-      margin-bottom: 24px;
+      margin-bottom: 22px;
     }
 
     .option-section h3 {
@@ -514,13 +539,16 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
       display: flex;
       gap: 14px;
       margin-bottom: 28px;
+      flex-wrap: wrap;
     }
 
     .btn-primary {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 16px 32px;
+      justify-content: center;
+      min-height: 52px;
+      padding: 14px 28px;
       background: #1a1a2e;
       color: #fff;
       border: none;
@@ -539,7 +567,9 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 16px 24px;
+      justify-content: center;
+      min-height: 52px;
+      padding: 14px 24px;
       border: 1px solid #e5e7eb;
       background: #fff;
       color: #1a1a2e;
@@ -557,7 +587,8 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
 
     .trust-badges {
       display: flex;
-      gap: 24px;
+      gap: 18px;
+      flex-wrap: wrap;
       padding-top: 20px;
       border-top: 1px solid #e5e7eb;
     }
@@ -566,6 +597,9 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
       display: flex;
       align-items: center;
       gap: 8px;
+      padding: 10px 14px;
+      background: #f8fafc;
+      border-radius: 999px;
       font-size: 13px;
       color: #64748b;
     }
@@ -578,14 +612,15 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
 
     /* TABS */
     .product-tabs {
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: 20px;
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      box-shadow: 0 18px 44px rgba(15, 23, 42, 0.08);
       overflow: hidden;
     }
 
     .tab-content {
-      padding: 32px;
+      padding: 28px 30px 32px;
     }
 
     .tab-content h3 {
@@ -756,10 +791,10 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
 
     /* RESPONSIVE */
     @media (max-width: 1024px) {
-      .product-detail { padding: 24px; }
+      .product-detail { padding: 28px 20px 56px; }
       .detail-layout {
         grid-template-columns: 1fr;
-        gap: 40px;
+        gap: 24px;
       }
       .gallery {
         grid-template-columns: 1fr;
@@ -767,12 +802,40 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
       .thumbnails {
         flex-direction: row;
         order: 1;
+        flex-wrap: wrap;
       }
       .main-image { order: 0; }
     }
 
     @media (max-width: 640px) {
+      .product-detail { padding: 24px 16px 48px; }
+      .gallery,
+      .info,
+      .product-tabs {
+        border-radius: 18px;
+      }
+      .gallery {
+        padding: 16px;
+      }
+      .main-image,
+      .main-image img {
+        min-height: 320px;
+      }
+      .main-image img {
+        padding: 18px;
+      }
+      .info {
+        padding: 22px 18px;
+      }
+      .info h1,
+      .current-price {
+        font-size: 26px;
+      }
       .actions { flex-direction: column; }
+      .btn-primary,
+      .btn-outline {
+        width: 100%;
+      }
       .trust-badges {
         flex-direction: column;
         gap: 12px;
@@ -786,7 +849,6 @@ export class ProductDetailsPage implements OnInit {
   private readonly api = inject(ProductApi);
   private readonly cart = inject(CartService);
   private readonly inventoryApi = inject(InventoryApi);
-  private readonly authRequired = inject(AuthRequiredService);
 
   readonly product = signal<ProductResponse | null | undefined>(undefined);
   readonly loadError = signal<string | null>(null);
@@ -891,7 +953,6 @@ export class ProductDetailsPage implements OnInit {
   }
 
   addToCart(productId: number): void {
-    if (!this.authRequired.guard()) return;
     this.cart.add(String(productId), this.quantity());
   }
 }

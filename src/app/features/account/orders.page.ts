@@ -145,6 +145,10 @@ export class OrdersPage implements OnInit {
     this.fallbackDismissed.set(true);
   }
 
+  logout(): void {
+    void this.auth.logoutAndRedirect('/login');
+  }
+
   /* ── Template helpers ────────────────────────────────────── */
   getProductImage(productId: string): string {
     const product = FALLBACK_PRODUCTS.find((p) => String(p.id) === productId);

@@ -1,69 +1,5 @@
 <div class="shop-layout">
-  <!-- ═══ SIDEBAR ═══ -->
-  <aside class="sidebar">
-    <div class="sidebar-header">
-      <h2 class="sidebar-title">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="4" y1="21" x2="4" y2="14" /><line x1="4" y1="10" x2="4" y2="3" />
-          <line x1="12" y1="21" x2="12" y2="12" /><line x1="12" y1="8" x2="12" y2="3" />
-          <line x1="20" y1="21" x2="20" y2="16" /><line x1="20" y1="12" x2="20" y2="3" />
-          <line x1="1" y1="14" x2="7" y2="14" /><line x1="9" y1="8" x2="15" y2="8" />
-          <line x1="17" y1="16" x2="23" y2="16" />
-        </svg>
-        Filters
-      </h2>
-      @if (selectedCategories().length || selectedPriceRange()) {
-        <button class="clear-all-btn" (click)="resetFilters()">Clear all</button>
-      }
-    </div>
-
-    <!-- Category Filter -->
-    <div class="filter-group">
-      <h3 class="filter-title">Category</h3>
-      <div class="filter-options">
-        @for (cat of categories; track cat) {
-          <label class="checkbox-label">
-            <input type="checkbox"
-              [checked]="selectedCategories().includes(cat)"
-              (change)="toggleCategory(cat)" />
-            <span class="checkbox-custom"></span>
-            <span class="checkbox-text">{{ cat }}</span>
-          </label>
-        }
-      </div>
-    </div>
-
-    <!-- Price Range Filter -->
-    <div class="filter-group">
-      <h3 class="filter-title">Price Range</h3>
-      <div class="filter-options">
-        @for (range of priceRanges; track range.id) {
-          <label class="radio-label">
-            <input type="radio"
-              name="priceRange"
-              [checked]="selectedPriceRange() === range.id"
-              (change)="selectPriceRange(range.id)" />
-            <span class="radio-custom"></span>
-            <span class="radio-text">{{ range.label }}</span>
-          </label>
-        }
-      </div>
-    </div>
-
-    <button class="reset-filters-btn" (click)="resetFilters()">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="1 4 1 10 7 10" />
-        <path d="M3.51 15a9 9 0 102.13-9.36L1 10" />
-      </svg>
-      Reset All Filters
-    </button>
-  </aside>
-
-  <!-- ═══ MAIN CONTENT ═══ -->
   <main class="main-content">
-    <!-- Top bar -->
     <div class="content-header">
       <div class="header-left">
         <nav class="breadcrumb" aria-label="Breadcrumb">
@@ -76,12 +12,14 @@
         </nav>
         <h1 class="page-title">All Products</h1>
       </div>
+
       <div class="header-right">
         @if (!isLoading() && !loadError()) {
           <span class="results-count">
             {{ filteredProducts().length }} of {{ allProducts()?.length || 0 }} products
           </span>
         }
+
         <div class="sort-control">
           <label class="sort-label" for="sortSelect">Sort by:</label>
           <select id="sortSelect" class="sort-select" [value]="sortBy()" (change)="onSortChange($event)">
@@ -92,6 +30,22 @@
             <option value="name-desc">Name: Z–A</option>
           </select>
         </div>
+
+        <button class="filters-trigger" type="button" (click)="toggleFiltersPanel()" [class.active]="filtersExpanded()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="21" x2="4" y2="14" /><line x1="4" y1="10" x2="4" y2="3" />
+            <line x1="12" y1="21" x2="12" y2="12" /><line x1="12" y1="8" x2="12" y2="3" />
+            <line x1="20" y1="21" x2="20" y2="16" /><line x1="20" y1="12" x2="20" y2="3" />
+            <line x1="1" y1="14" x2="7" y2="14" /><line x1="9" y1="8" x2="15" y2="8" />
+            <line x1="17" y1="16" x2="23" y2="16" />
+          </svg>
+          Filters
+          @if (activeFilterCount()) {
+            <span class="filters-count">{{ activeFilterCount() }}</span>
+          }
+        </button>
+
         <div class="view-toggle">
           <button class="view-btn" [class.active]="viewMode() === 'grid'" (click)="viewMode.set('grid')"
             aria-label="Grid view">
@@ -115,7 +69,86 @@
       </div>
     </div>
 
-    <!-- Active filter tags -->
+    <section class="filters-toolbar">
+      <div class="quick-filter-group">
+        <span class="toolbar-label">Categories</span>
+        <div class="quick-filter-chips">
+          @for (cat of categories; track cat) {
+            <button
+              class="quick-chip"
+              type="button"
+              [class.active]="selectedCategories().includes(cat)"
+              (click)="toggleCategory(cat)">
+              {{ cat }}
+            </button>
+          }
+        </div>
+      </div>
+
+      <div class="quick-filter-group">
+        <span class="toolbar-label">Price</span>
+        <div class="quick-filter-chips">
+          @for (range of priceRanges; track range.id) {
+            <button
+              class="quick-chip"
+              type="button"
+              [class.active]="selectedPriceRange() === range.id"
+              (click)="selectPriceRange(selectedPriceRange() === range.id ? null : range.id)">
+              {{ range.label }}
+            </button>
+          }
+        </div>
+      </div>
+    </section>
+
+    @if (filtersExpanded()) {
+      <section class="filters-panel">
+        <div class="filters-panel__header">
+          <div>
+            <p class="filters-panel__eyebrow">Refine results</p>
+            <h2 class="filters-panel__title">Choose what matters</h2>
+          </div>
+          <button class="clear-all-btn" type="button" (click)="resetFilters()">Clear all</button>
+        </div>
+
+        <div class="filters-panel__grid">
+          <div class="filter-group">
+            <h3 class="filter-title">Category</h3>
+            <div class="filter-options filter-options--chips">
+              @for (cat of categories; track cat) {
+                <button
+                  class="chip-choice"
+                  type="button"
+                  [class.active]="selectedCategories().includes(cat)"
+                  (click)="toggleCategory(cat)">
+                  {{ cat }}
+                </button>
+              }
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <h3 class="filter-title">Price range</h3>
+            <div class="filter-options">
+              @for (range of priceRanges; track range.id) {
+                <label class="radio-label">
+                  <input type="radio"
+                    name="priceRange"
+                    [checked]="selectedPriceRange() === range.id"
+                    (change)="selectPriceRange(range.id)" />
+                  <span class="radio-custom"></span>
+                  <span class="radio-text">{{ range.label }}</span>
+                </label>
+              }
+              @if (selectedPriceRange()) {
+                <button class="inline-reset-btn" type="button" (click)="selectPriceRange(null)">Remove price filter</button>
+              }
+            </div>
+          </div>
+        </div>
+      </section>
+    }
+
     @if (selectedCategories().length || selectedPriceRange()) {
       <div class="active-filters">
         @for (cat of selectedCategories(); track cat) {
@@ -133,7 +166,6 @@
       </div>
     }
 
-    <!-- Loading State -->
     @if (isLoading()) {
       <div class="loading-state">
         <div class="skeleton-grid" [class.list-mode]="viewMode() === 'list'">
@@ -151,7 +183,6 @@
       </div>
     }
 
-    <!-- Fallback / Offline Banner -->
     @if (usingFallback() && !fallbackDismissed()) {
       <div class="fallback-banner">
         <div class="fallback-banner__icon">
@@ -185,7 +216,6 @@
       </div>
     }
 
-    <!-- Empty State -->
     @if (allProducts() && allProducts()!.length >= 0 && filteredProducts().length === 0 && !isLoading()) {
       <div class="empty-state">
         <div class="empty-icon">
@@ -202,7 +232,6 @@
       </div>
     }
 
-    <!-- Product Grid -->
     @if (allProducts() && filteredProducts().length > 0) {
       <div class="product-grid" [class.list-mode]="viewMode() === 'list'">
         @for (p of filteredProducts(); track p.id; let i = $index) {
@@ -238,8 +267,7 @@
               <p class="card-sku">SKU: {{ p.sku }}</p>
               <div class="card-footer">
                 <span class="card-price">{{ p.price | currency:'USD':'symbol' }}</span>
-                <button class="add-to-cart" (click)="addToCart(p.id)"
-                  aria-label="Add to cart">
+                <button class="add-to-cart" (click)="addToCart(p.id)" aria-label="Add to cart">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />

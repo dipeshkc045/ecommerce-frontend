@@ -16,4 +16,8 @@ export class HeaderComponent {
   protected readonly auth = inject(AuthService);
   protected readonly cart = inject(CartService);
   protected readonly cartCount = this.cart.totalItems;
+
+  logout(): void {
+    void this.auth.logoutAndRedirect('/login');
+  }
 }
