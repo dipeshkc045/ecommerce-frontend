@@ -1,0 +1,14 @@
+node_modules/
+.git/
+.gitignore
+README.md
+*.md
+.editorconfig
+.vscode/
+.angular/
+dist/
+coverage/
+test/
+e2e/
+.env*
+*.local

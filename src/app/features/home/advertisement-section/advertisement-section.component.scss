@@ -3,22 +3,18 @@
 
 :host {
   display: block;
-  padding: 40px 0 48px;
-  background: #fff;
 }
 
 .ad-inner {
   @include container;
 }
 
-// ─── Banners Grid ────────────────────────────────────────────────
 .banners-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
 
-// ─── Banner Card ─────────────────────────────────────────────────
 .banner-card {
   display: block;
   text-decoration: none;
@@ -91,29 +87,17 @@
   width: fit-content;
   transition: background 0.2s;
 
-  svg {
-    transition: transform 0.2s ease;
-  }
+  svg { transition: transform 0.2s ease; }
 
   .banner-card:hover & {
     background: rgba(255, 255, 255, 0.22);
   }
 }
 
-// ─── Responsive ──────────────────────────────────────────────────
 @media (max-width: $bp-lg) {
-  .banners-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-  }
-
-  .banner-card {
-    padding: 28px 24px;
-  }
-
-  .banner-title {
-    font-size: 18px;
-  }
+  .banners-grid { gap: 16px; }
+  .banner-card { padding: 28px 24px; }
+  .banner-title { font-size: 18px; }
 }
 
 @media (max-width: $bp-md) {
@@ -121,69 +105,28 @@
     grid-template-columns: 1fr;
     gap: 16px;
   }
-
-  .banner-card {
-    padding: 24px 20px;
-  }
-
+  .banner-card { padding: 24px 20px; }
   .banner-content {
     flex-direction: row;
     align-items: center;
     gap: 16px;
   }
-
-  .banner-icon {
-    font-size: 32px;
-  }
-
-  .banner-text {
-    flex: 1;
-    gap: 4px;
-  }
-
-  .banner-title {
-    font-size: 18px;
-  }
-
-  .banner-subtitle {
-    font-size: 13px;
-  }
-
-  .banner-cta {
-    margin-top: 0;
-    white-space: nowrap;
-  }
+  .banner-icon { font-size: 32px; }
+  .banner-text { flex: 1; gap: 4px; }
+  .banner-title { font-size: 18px; }
+  .banner-subtitle { font-size: 13px; }
+  .banner-cta { margin-top: 0; white-space: nowrap; }
 }
 
 @media (max-width: $bp-sm) {
-  :host {
-    padding: 28px 0 20px;
-  }
-
   .banner-content {
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
   }
-
-  .banner-card {
-    padding: 20px 18px;
-  }
-
-  .banner-icon {
-    font-size: 28px;
-  }
-
-  .banner-title {
-    font-size: 16px;
-  }
-
-  .banner-subtitle {
-    font-size: 12px;
-  }
-
-  .banner-cta {
-    font-size: 13px;
-    padding: 7px 14px;
-  }
+  .banner-card { padding: 20px 18px; }
+  .banner-icon { font-size: 28px; }
+  .banner-title { font-size: 16px; }
+  .banner-subtitle { font-size: 12px; }
+  .banner-cta { font-size: 13px; padding: 7px 14px; }
 }

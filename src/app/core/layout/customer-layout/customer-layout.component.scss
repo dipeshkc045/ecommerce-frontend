@@ -1,0 +1,23 @@
+:host { display: block; min-height: 100dvh; }
+
+.customer-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+.customer-body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  background: var(--bg-surface-secondary);
+}
+
+.customer-main {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+  background: var(--bg-page);
+  transition: margin-left var(--transition-base);
+  outline: none;
+}

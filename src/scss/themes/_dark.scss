@@ -1,0 +1,24 @@
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  --surface-page:        #0f172a;
+  --surface-card:        #1e293b;
+  --surface-muted:       #1e293b;
+  --surface-raised:      #263344;
+  --surface-glass:       rgba(30, 41, 59, 0.85);
+
+  --text-primary:        #f1f5f9;
+  --text-secondary:      #94a3b8;
+  --text-muted:          #64748b;
+  --text-disabled:       #475569;
+  --text-inverse:        #0f172a;
+
+  --border-color:        #334155;
+  --border-color-strong: #475569;
+
+  --shadow-xs:   0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-sm:   0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-md:   0 4px 20px rgba(0, 0, 0, 0.5);
+  --shadow-lg:   0 8px 30px rgba(0, 0, 0, 0.6);
+  --shadow-xl:   0 20px 60px rgba(0, 0, 0, 0.7);
+}

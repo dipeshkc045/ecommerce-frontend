@@ -1,0 +1,29 @@
+[data-theme='luxury'] {
+  color-scheme: light;
+
+  --color-primary:       #1a1208;
+  --color-primary-hover: #120c05;
+  --color-primary-light: #2e2418;
+  --color-accent:        #c9a84c;
+  --color-accent-hover:  #b8943f;
+  --color-accent-light:  #f5eed8;
+
+  --surface-page:        #faf8f5;
+  --surface-card:        #fffdf9;
+  --surface-muted:       #f3efe8;
+  --surface-raised:      #ebe4d8;
+  --surface-glass:       rgba(255, 253, 249, 0.88);
+
+  --text-primary:        #1a1208;
+  --text-secondary:      #5c4f3d;
+  --text-muted:          #8a7960;
+  --text-accent:         #9a7b2f;
+
+  --border-color:        #e8dfd0;
+  --border-color-strong: #d4c8b4;
+  --border-radius-md:    4px;
+  --border-radius-lg:    8px;
+
+  --shadow-sm:   0 2px 12px rgba(26, 18, 8, 0.08);
+  --shadow-md:   0 8px 24px rgba(26, 18, 8, 0.12);
+}

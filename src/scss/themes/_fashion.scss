@@ -1,0 +1,30 @@
+[data-theme='fashion'] {
+  color-scheme: light;
+
+  --color-primary:       #18181b;
+  --color-primary-hover: #09090b;
+  --color-primary-light: #3f3f46;
+  --color-accent:        #ec4899;
+  --color-accent-hover:  #db2777;
+  --color-accent-light:  #fce7f3;
+
+  --surface-page:        #ffffff;
+  --surface-card:        #fafafa;
+  --surface-muted:       #f4f4f5;
+  --surface-raised:      #ffffff;
+  --surface-glass:       rgba(255, 255, 255, 0.92);
+
+  --text-primary:        #18181b;
+  --text-secondary:      #52525b;
+  --text-muted:          #a1a1aa;
+  --text-accent:         #ec4899;
+
+  --border-color:        #e4e4e7;
+  --border-color-strong: #d4d4d8;
+  --border-radius-md:    2px;
+  --border-radius-lg:    4px;
+  --border-radius-pill:  9999px;
+
+  --shadow-sm:   0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-md:   0 4px 16px rgba(0, 0, 0, 0.08);
+}

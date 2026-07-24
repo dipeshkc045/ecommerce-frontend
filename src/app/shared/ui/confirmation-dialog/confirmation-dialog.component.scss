@@ -1,0 +1,101 @@
+:host { display: contents; }
+
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: var(--z-modal);
+  animation: fade-in 150ms ease;
+}
+
+.dialog-panel {
+  background: var(--bg-surface);
+  border-radius: var(--border-radius-xl);
+  padding: 32px;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: var(--shadow-xl);
+  animation: scale-in 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  text-align: center;
+}
+
+.dialog-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  margin-bottom: 20px;
+}
+
+.dialog-icon--danger  { background: var(--color-danger-light);  color: var(--color-danger); }
+.dialog-icon--warning { background: var(--color-warning-light); color: var(--color-warning); }
+.dialog-icon--info    { background: var(--color-info-light);    color: var(--color-info); }
+
+.dialog-title {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 10px;
+}
+
+.dialog-message {
+  font-size: var(--text-md);
+  color: var(--text-secondary);
+  margin: 0 0 28px;
+  line-height: var(--line-height-relaxed);
+}
+
+.dialog-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.btn-cancel {
+  flex: 1;
+  padding: 11px 20px;
+  border: 1.5px solid var(--border-color);
+  background: transparent;
+  color: var(--text-primary);
+  border-radius: var(--border-radius-pill);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color var(--transition-fast);
+  &:hover { border-color: var(--text-primary); }
+}
+
+.btn-confirm {
+  flex: 1;
+  padding: 11px 20px;
+  border: none;
+  color: #fff;
+  border-radius: var(--border-radius-pill);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: filter var(--transition-fast);
+  &:hover { filter: brightness(0.9); }
+}
+
+.btn-confirm--danger  { background: var(--color-danger); }
+.btn-confirm--warning { background: var(--color-warning); }
+.btn-confirm--info    { background: var(--color-info); }
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: scale(1); }
+}

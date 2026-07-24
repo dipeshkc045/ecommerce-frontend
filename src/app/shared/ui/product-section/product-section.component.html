@@ -1,0 +1,79 @@
+<section class="ps" [class.ps--carousel]="layout() === 'carousel'" [style.background]="background()">
+  @if (title() || subtitle() || buttonLabel()) {
+    <div class="ps__header">
+      <div class="ps__header-text">
+        @if (title()) {
+          <h2 class="ps__title">{{ title() }}</h2>
+        }
+        @if (subtitle()) {
+          <p class="ps__subtitle">{{ subtitle() }}</p>
+        }
+      </div>
+      @if (buttonLabel() && buttonLink()) {
+        <a [routerLink]="buttonLink()" class="ps__link">
+          {{ buttonLabel() }}
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+      }
+    </div>
+  }
+
+  @if (layout() === 'carousel') {
+    <div class="ps__carousel">
+      @for (product of products(); track product.id) {
+        <app-product-card
+          [product]="product"
+          [variant]="variant()"
+          [showRating]="showRating()"
+          [showWishlist]="showWishlist()"
+          [showQuickView]="showQuickView()"
+          [showCompare]="showCompare()"
+          [showFeatures]="showFeatures()"
+          [showBadge]="showBadge()"
+          [showCategory]="showCategory()"
+          [showPrice]="showPrice()"
+          [showOldPrice]="showOldPrice()"
+          [showDiscount]="showDiscount()"
+          [showStock]="showStock()"
+          [showDescription]="showDescription()"
+          [animated]="animated()"
+          (productClick)="onProductClick($event)"
+          (addToCart)="onAddToCart($event)"
+          (wishlistToggle)="onWishlistToggle($event)"
+          (quickView)="onQuickView($event)"
+          (compare)="onCompare($event)"
+        />
+      }
+    </div>
+  } @else {
+    <div class="ps__grid" [style.grid-template-columns]="gridColumnsStyle()">
+      @for (product of products(); track product.id) {
+        <app-product-card
+          [product]="product"
+          [variant]="variant()"
+          [showRating]="showRating()"
+          [showWishlist]="showWishlist()"
+          [showQuickView]="showQuickView()"
+          [showCompare]="showCompare()"
+          [showFeatures]="showFeatures()"
+          [showBadge]="showBadge()"
+          [showCategory]="showCategory()"
+          [showPrice]="showPrice()"
+          [showOldPrice]="showOldPrice()"
+          [showDiscount]="showDiscount()"
+          [showStock]="showStock()"
+          [showDescription]="showDescription()"
+          [animated]="animated()"
+          (productClick)="onProductClick($event)"
+          (addToCart)="onAddToCart($event)"
+          (wishlistToggle)="onWishlistToggle($event)"
+          (quickView)="onQuickView($event)"
+          (compare)="onCompare($event)"
+        />
+      }
+    </div>
+  }
+</section>

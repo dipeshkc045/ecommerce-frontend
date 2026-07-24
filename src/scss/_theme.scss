@@ -1,0 +1,21 @@
+// ─── Theme System ──────────────────────────────────────────────────
+// Smooth color scheme transitions when toggling dark/light mode.
+
+*, *::before, *::after {
+  transition:
+    background-color var(--transition-base),
+    border-color var(--transition-base),
+    color var(--transition-base),
+    box-shadow var(--transition-base);
+}
+
+// Reset transitions for elements that should not animate on theme change
+a, button, input, select, textarea {
+  transition: none;
+}
+
+// Apply theme variables to body
+body {
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+}

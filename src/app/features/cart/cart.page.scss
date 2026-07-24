@@ -6,7 +6,7 @@
 // ═══════════════════════════════════════════════════════════════════
 :host {
   display: block;
-  background: $color-bg-page;
+  background: var(--bg-page);
   min-height: 100vh;
 }
 
@@ -150,7 +150,7 @@
   height: 150px;
   border-radius: $radius-md;
   overflow: hidden;
-  background: $color-bg-light;
+  background: var(--bg-surface-secondary);
   flex-shrink: 0;
 
   img {
@@ -237,7 +237,7 @@
   font-size: 14px;
   font-weight: 500;
   color: $color-text-strong;
-  background: #fff;
+  background: var(--bg-surface);
   border: 1px solid $color-border;
   border-radius: $radius-sm;
   padding: 8px 32px 8px 14px;
@@ -310,7 +310,7 @@
 // ORDER SUMMARY
 // ═══════════════════════════════════════════════════════════════════
 .order-summary {
-  background: $color-bg-light;
+  background: var(--bg-surface-secondary);
   border-radius: $radius-lg;
   padding: 28px;
   position: sticky;
@@ -378,7 +378,7 @@
   width: 100%;
   padding: 15px;
   margin-top: 24px;
-  background: #4f46e5;
+  background: var(--color-primary);
   color: #fff;
   font-family: $font-primary;
   font-size: 16px;
@@ -390,7 +390,7 @@
   transition: background 0.2s;
 
   &:hover {
-    background: #4338ca;
+    background: var(--color-accent);
   }
 }
 
@@ -453,7 +453,7 @@
 
 .reco-image {
   aspect-ratio: 1;
-  background: $color-bg-light;
+  background: var(--bg-surface-secondary);
   overflow: hidden;
   border-radius: $radius-md;
 

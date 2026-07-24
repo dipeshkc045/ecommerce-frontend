@@ -1,147 +1,100 @@
 @use '@angular/material' as mat;
+@use 'scss/tokens' as *;
+@use 'scss/section' as *;
+@use 'scss/mixins' as *;
+@use 'scss/animations' as *;
+@use 'scss/typography' as *;
+@use 'scss/spacing' as *;
+@use 'scss/colors' as *;
+@use 'scss/layout' as *;
+@use 'scss/theme' as *;
+@use 'scss/showcase' as *;
+@use 'scss/themes/light';
+@use 'scss/themes/dark';
+@use 'scss/themes/luxury';
+@use 'scss/themes/electronics';
+@use 'scss/themes/fashion';
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-
-:root {
-	--bg-gradient: #ffffff;
-	--card-glass: rgba(255, 255, 255, 0.82);
-	--card-stroke: rgba(15, 23, 42, 0.08);
-	--shadow-soft: 0 20px 60px rgba(15, 23, 42, 0.08);
-	--text-strong: #0f172a;
-	--text-muted: #475569;
-	--brand-primary: #1a1a2e;
-	--brand-accent: #ff6f61;
-}
-
-html {
-	color-scheme: light;
-}
-
+// ─── Angular Material Theme ─────────────────────────────────────────
 @include mat.core();
 
-$primary: mat.m2-define-palette(mat.$m2-indigo-palette, 500, 300, 700);
+$primary:   mat.m2-define-palette(mat.$m2-indigo-palette, 500, 300, 700);
 $secondary: mat.m2-define-palette(mat.$m2-orange-palette, 500, 300, 700);
 
-$theme: mat.m2-define-light-theme(
-	(
-		color: (
-			primary: $primary,
-			accent: $secondary
-		),
-		density: 0
-	)
-);
+$theme: mat.m2-define-light-theme((
+  color: (
+    primary: $primary,
+    accent:  $secondary
+  ),
+  density: 0
+));
 
 html {
-	@include mat.all-component-themes($theme);
+  @include mat.all-component-themes($theme);
+  color-scheme: light;
 }
 
-* {
-	box-sizing: border-box;
+// ─── Global Resets & Base ──────────────────────────────────────────
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-html,
+html, body {
+  height: 100%;
+}
+
 body {
-	height: 100%;
-}
-
-body {
-	margin: 0;
-	background: #ffffff;
-	color: var(--text-strong);
-	font-family: 'Inter', system-ui, -apple-system, sans-serif;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
+  font-family: 'Space Grotesk', 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: var(--text-md);
+  line-height: var(--line-height-normal);
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 a {
-	color: inherit;
-	text-decoration: none;
+  color: inherit;
+  text-decoration: none;
 }
 
-.center {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	padding: 16px;
+img, svg {
+  display: block;
+  max-width: 100%;
 }
 
-.grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-	gap: 16px;
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
 }
 
-.product a {
-	text-decoration: none;
+input, select, textarea {
+  font-family: inherit;
 }
 
-.price {
-	font-weight: 600;
-}
-
-.totals,
-.summary {
-	display: flex;
-	justify-content: space-between;
-	gap: 12px;
-	padding-top: 12px;
-}
-
+// ─── Utility Classes ───────────────────────────────────────────────
 .glass-surface {
-	background: var(--card-glass);
-	backdrop-filter: blur(10px);
-	border: 1px solid var(--card-stroke);
-	box-shadow: var(--shadow-soft);
-	border-radius: 16px;
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: var(--shadow-md);
+  border-radius: var(--border-radius-lg);
 }
 
-.muted {
-	color: var(--text-muted);
-}
-
-.hero {
-	display: grid;
-	grid-template-columns: 1fr minmax(260px, 320px);
-	gap: 20px;
-	align-items: center;
-	padding: 22px;
-	border-radius: 20px;
-	background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(249, 115, 22, 0.06));
-	border: 1px solid var(--card-stroke);
-	box-shadow: var(--shadow-soft);
-}
-
-.hero-actions {
-	display: flex;
-	gap: 12px;
-	margin-top: 12px;
-}
-
-.hero-card {
-	padding: 16px;
-	border-radius: 16px;
-}
-
-.eyebrow {
-	text-transform: uppercase;
-	letter-spacing: 0.08em;
-	font-size: 12px;
-	margin: 0 0 4px;
-	color: var(--text-muted);
-}
-
-.pill {
-	display: inline-flex;
-	padding: 6px 10px;
-	border-radius: 999px;
-	background: var(--pill);
-	color: var(--brand-primary);
-	font-weight: 600;
-}
-
-@media (max-width: 900px) {
-	.hero {
-		grid-template-columns: 1fr;
-	}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

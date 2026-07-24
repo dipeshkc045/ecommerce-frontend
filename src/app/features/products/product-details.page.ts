@@ -1,23 +1,21 @@
 import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { NgIf, NgFor, CurrencyPipe } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { map, catchError, of } from 'rxjs';
 
-import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
 
-import { ProductApi, type ProductResponse } from '../../core/api/product.api';
-import { CartService } from '../../core/cart/cart.service';
-import { InventoryApi } from '../../core/api/inventory.api';
-import { AuthRequiredService } from '../../core/auth/auth-required.service';
-import { FALLBACK_PRODUCTS } from './fallback-products.data';
+import { LucideCloudOff, LucideRefreshCw, LucideInfo, LucideMinus, LucidePlus, LucideCheckCircle, LucideShoppingBag, LucideHeart, LucideTruck, LucideShieldCheck } from '@lucide/angular';
+
+import { ProductsFacade } from '../../core/facades/products.facade';
+import { CartFacade } from '../../core/facades/cart.facade';
+import { PRODUCT_PLACEHOLDER_IMAGE } from '../../core/models/product.model';
 
 @Component({
   standalone: true,
   selector: 'app-product-details-page',
-  imports: [NgIf, NgFor, RouterLink, CurrencyPipe, MatIconModule, MatButtonModule, MatProgressSpinnerModule, MatTabsModule],
+  imports: [NgIf, NgFor, RouterLink, CurrencyPipe, LucideCloudOff, LucideRefreshCw, LucideInfo, LucideMinus, LucidePlus, LucideCheckCircle, LucideShoppingBag, LucideHeart, LucideTruck, LucideShieldCheck, MatButtonModule, MatProgressSpinnerModule, MatTabsModule],
   template: `
     <div class="center" *ngIf="isLoading()">
       <mat-progress-spinner diameter="40" mode="indeterminate" />
@@ -26,12 +24,12 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
     <!-- Error state (no fallback possible for details) -->
     <div class="error-container" *ngIf="loadError() && !product()">
       <div class="error-card">
-        <mat-icon class="error-icon">cloud_off</mat-icon>
+        <svg lucideCloudOff class="error-icon"></svg>
         <h2>Unable to load product</h2>
         <p>{{ loadError() }}</p>
         <div class="error-actions">
           <button class="btn-primary" (click)="retryLoad()">
-            <mat-icon>refresh</mat-icon> Try Again
+            <svg lucideRefreshCw></svg> Try Again
           </button>
           <a class="btn-outline" routerLink="/products">Browse Products</a>
         </div>
@@ -40,7 +38,7 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
 
     <!-- Fallback banner (shown when product loaded from fallback data) -->
     <div class="fallback-notice" *ngIf="usingFallback() && product()">
-      <mat-icon>info</mat-icon>
+      <svg lucideInfo></svg>
       <span>Showing cached product info. Live data unavailable.</span>
       <button (click)="retryLoad()">Retry</button>
     </div>
@@ -120,34 +118,34 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
             <h3>Quantity</h3>
             <div class="quantity-control">
               <button class="qty-btn" (click)="decrementQty()" [disabled]="quantity() <= 1">
-                <mat-icon>remove</mat-icon>
+                <svg lucideMinus></svg>
               </button>
               <span class="qty-value">{{ quantity() }}</span>
               <button class="qty-btn" (click)="incrementQty()">
-                <mat-icon>add</mat-icon>
+                <svg lucidePlus></svg>
               </button>
             </div>
           </div>
 
           <!-- STOCK STATUS -->
           <div class="stock-status" *ngIf="inventory() as inv">
-            <mat-icon [class.in-stock]="inv.availableQuantity > 0">check_circle</mat-icon>
+            <svg lucideCheckCircle [class.in-stock]="inv.availableQuantity > 0"></svg>
             <span *ngIf="inv.availableQuantity > 0">In Stock ({{ inv.availableQuantity }} available)</span>
             <span *ngIf="inv.availableQuantity === 0" class="out-of-stock">Out of Stock</span>
           </div>
           <div class="stock-status loading" *ngIf="inventory() === undefined">
-            <mat-icon>sync</mat-icon>
+            <svg lucideRefreshCw></svg>
             <span>Checking availability...</span>
           </div>
 
           <!-- ACTION BUTTONS -->
           <div class="actions">
             <button class="btn-primary" (click)="addToCart(p.id)">
-              <mat-icon>shopping_bag</mat-icon>
+              <svg lucideShoppingBag></svg>
               Add to Cart
             </button>
             <button class="btn-outline" (click)="addToCart(p.id)">
-              <mat-icon>favorite_border</mat-icon>
+              <svg lucideHeart></svg>
               Wishlist
             </button>
           </div>
@@ -155,15 +153,15 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
           <!-- TRUST BADGES -->
           <div class="trust-badges">
             <div class="badge-item">
-              <mat-icon>local_shipping</mat-icon>
+              <svg lucideTruck></svg>
               <span>Free Shipping</span>
             </div>
             <div class="badge-item">
-              <mat-icon>autorenew</mat-icon>
+              <svg lucideRefreshCw></svg>
               <span>Easy Returns</span>
             </div>
             <div class="badge-item">
-              <mat-icon>verified_user</mat-icon>
+              <svg lucideShieldCheck></svg>
               <span>Secure Payment</span>
             </div>
           </div>
@@ -218,7 +216,7 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
   styles: [`
     :host {
       display: block;
-      background: #fafafa;
+      background: var(--bg-page);
       min-height: 100vh;
     }
 
@@ -276,7 +274,7 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
       border: 2px solid transparent;
       border-radius: 8px;
       overflow: hidden;
-      background: #fff;
+      background: var(--bg-surface);
       padding: 0;
       cursor: pointer;
       transition: border-color 0.2s;
@@ -296,7 +294,7 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
       position: relative;
       border-radius: 12px;
       overflow: hidden;
-      background: #fff;
+      background: var(--bg-surface);
       box-shadow: 0 4px 20px rgba(0,0,0,0.08);
     }
 
@@ -317,7 +315,7 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
       text-transform: uppercase;
     }
 
-    .badge.bestseller { background: #ef4444; color: #fff; }
+    .badge.bestseller { background: var(--color-danger); color: #fff; }
 
     /* INFO */
     .info h1 {
@@ -363,7 +361,7 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
     }
 
     .discount {
-      background: #10b981;
+      background: var(--color-success);
       color: #fff;
       padding: 4px 10px;
       border-radius: 4px;
@@ -398,7 +396,7 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
       height: 44px;
       border: 1px solid #e5e7eb;
       border-radius: 8px;
-      background: #fff;
+      background: var(--bg-surface);
       font-size: 14px;
       font-weight: 600;
       color: #1a1a2e;
@@ -411,7 +409,7 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
     }
 
     .size-btn.active {
-      background: #1a1a2e;
+      background: var(--color-primary);
       color: #fff;
       border-color: #1a1a2e;
     }
@@ -461,8 +459,8 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
       cursor: not-allowed;
     }
 
-    .qty-btn mat-icon {
-      font-size: 18px;
+    .qty-btn svg[lucideMinus],
+    .qty-btn svg[lucidePlus] {
       width: 18px;
       height: 18px;
     }
@@ -487,13 +485,12 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
       color: #475569;
     }
 
-    .stock-status mat-icon {
-      font-size: 20px;
+    .stock-status svg {
       width: 20px;
       height: 20px;
     }
 
-    .stock-status mat-icon.in-stock {
+    .stock-status svg.in-stock {
       color: #10b981;
     }
 
@@ -501,7 +498,7 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
       color: #ef4444;
     }
 
-    .stock-status.loading mat-icon {
+    .stock-status.loading svg {
       animation: spin 1s linear infinite;
     }
 
@@ -521,7 +518,7 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
       align-items: center;
       gap: 10px;
       padding: 16px 32px;
-      background: #1a1a2e;
+      background: var(--color-primary);
       color: #fff;
       border: none;
       border-radius: 8px;
@@ -532,7 +529,7 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
     }
 
     .btn-primary:hover {
-      background: #ff6f61;
+      background: var(--color-accent);
     }
 
     .btn-outline {
@@ -541,7 +538,7 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
       gap: 10px;
       padding: 16px 24px;
       border: 1px solid #e5e7eb;
-      background: #fff;
+      background: var(--bg-surface);
       color: #1a1a2e;
       border-radius: 8px;
       font-size: 16px;
@@ -570,15 +567,14 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
       color: #64748b;
     }
 
-    .badge-item mat-icon {
-      font-size: 18px;
+    .badge-item svg {
       width: 18px;
       height: 18px;
     }
 
     /* TABS */
     .product-tabs {
-      background: #fff;
+      background: var(--bg-surface);
       border-radius: 12px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.06);
       overflow: hidden;
@@ -665,15 +661,14 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
 
     .error-card {
       text-align: center;
-      background: #fff;
+      background: var(--bg-surface);
       border-radius: 16px;
       padding: 48px 40px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.08);
       max-width: 460px;
     }
 
-    .error-card .error-icon {
-      font-size: 48px;
+    .error-card svg[lucideCloudOff] {
       width: 48px;
       height: 48px;
       color: #94a3b8;
@@ -701,7 +696,7 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
     }
 
     .error-actions .btn-outline {
-      background: #fff;
+      background: var(--bg-surface);
       border: 1px solid #e5e7eb;
       color: #1a1a2e;
       text-decoration: none;
@@ -720,14 +715,14 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
       max-width: 1200px;
       margin: 16px auto 0;
       padding: 12px 20px;
-      background: #fffbeb;
-      border: 1px solid #f59e0b33;
+      background: var(--bg-surface-secondary);
+      border: 1px solid var(--border-color);
       border-radius: 8px;
       font-size: 13px;
       color: #92400e;
     }
 
-    .fallback-notice mat-icon {
+    .fallback-notice svg {
       color: #d97706;
       font-size: 18px;
       width: 18px;
@@ -739,8 +734,8 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
     }
 
     .fallback-notice button {
-      background: #fff;
-      border: 1px solid #f59e0b55;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
       border-radius: 6px;
       padding: 4px 14px;
       font-size: 13px;
@@ -751,7 +746,7 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
     }
 
     .fallback-notice button:hover {
-      background: #fef3c7;
+      background: var(--bg-surface-secondary);
     }
 
     /* RESPONSIVE */
@@ -782,86 +777,36 @@ import { FALLBACK_PRODUCTS } from './fallback-products.data';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProductDetailsPage implements OnInit {
+  readonly facade = inject(ProductsFacade);
+  private readonly cart = inject(CartFacade);
   private readonly route = inject(ActivatedRoute);
-  private readonly api = inject(ProductApi);
-  private readonly cart = inject(CartService);
-  private readonly inventoryApi = inject(InventoryApi);
-  private readonly authRequired = inject(AuthRequiredService);
 
-  readonly product = signal<ProductResponse | null | undefined>(undefined);
-  readonly loadError = signal<string | null>(null);
-  readonly usingFallback = signal(false);
-  readonly isLoading = computed(() => this.product() === undefined);
+  readonly product = this.facade.selectedProduct;
+  readonly loadError = this.facade.error;
+  readonly usingFallback = this.facade.usingFallback;
+  readonly isLoading = this.facade.detailLoading;
 
-  readonly inventory = signal<any>(undefined);
+  readonly inventory = computed(() => this.facade.inventoryFor(this.productId));
 
   private get productId(): number {
     return Number(this.route.snapshot.paramMap.get('id'));
   }
 
   ngOnInit(): void {
-    this.loadProduct();
-    this.loadInventory();
+    this.facade.loadById(this.productId);
+    this.facade.loadInventory(this.productId);
   }
 
   loadProduct(): void {
-    const id = this.productId;
-    this.product.set(undefined);
-    this.loadError.set(null);
-    this.usingFallback.set(false);
-
-    this.api.getById(id).subscribe({
-      next: (p) => {
-        this.product.set(p);
-        this.usingFallback.set(false);
-      },
-      error: (err) => {
-        console.warn('Product details API unavailable, using fallback:', err?.message ?? err);
-        const fallback = this.buildFallbackProduct(id);
-        this.product.set(fallback);
-        this.usingFallback.set(true);
-        this.loadError.set(
-          err?.status === 0
-            ? 'Server is unreachable. Showing placeholder info.'
-            : err?.error?.message ?? 'Could not load product details.'
-        );
-      },
-    });
+    this.facade.loadById(this.productId);
   }
 
   retryLoad(): void {
     this.loadProduct();
-    this.loadInventory();
+    this.facade.loadInventory(this.productId);
   }
 
-  private loadInventory(): void {
-    const id = this.productId;
-    this.inventoryApi.getInventory(id).pipe(
-      map((res) => res.data),
-      catchError(() => of(null))
-    ).subscribe((data) => this.inventory.set(data));
-  }
-
-  private buildFallbackProduct(id: number): ProductResponse {
-    const match = FALLBACK_PRODUCTS.find(p => p.id === id);
-    if (match) return match;
-
-    return {
-      id,
-      name: `Product #${id}`,
-      description: 'Product details are temporarily unavailable. Please try again later to see full information.',
-      price: '0.00',
-      sku: `SKU-${id}`,
-      categoryId: null,
-      categoryName: null,
-      active: true,
-      imageUrl: this.fallbackImage,
-      createdAt: null,
-      updatedAt: null,
-    };
-  }
-
-  readonly fallbackImage = 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80';
+  readonly fallbackImage = PRODUCT_PLACEHOLDER_IMAGE;
   readonly galleryImages = [
     'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80',
     'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80',
@@ -891,7 +836,6 @@ export class ProductDetailsPage implements OnInit {
   }
 
   addToCart(productId: number): void {
-    if (!this.authRequired.guard()) return;
-    this.cart.add(String(productId), this.quantity());
+    this.cart.addProduct(productId, this.quantity());
   }
 }

@@ -1,0 +1,62 @@
+:host {
+  display: block;
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+}
+
+:host.app-card--default {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+}
+
+:host.app-card--elevated {
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-md);
+}
+
+:host.app-card--outlined {
+  background: transparent;
+  border: 1.5px solid var(--border-color);
+}
+
+:host.app-card--glass {
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: var(--shadow-md);
+}
+
+:host.app-card--hoverable {
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+  cursor: pointer;
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+.card-header {
+  padding: 20px 20px 0;
+}
+
+.card-title {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 4px;
+}
+
+.card-subtitle {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.card-body {
+  padding: 20px;
+
+  :host.app-card--no-padding & {
+    padding: 0;
+  }
+}

@@ -1,0 +1,51 @@
+// ─── Reusable Section Utility Classes ──────────────────────────────
+// Sections default to transparent so the page background shows through.
+// Only use --surface variants when there is a clear UX reason.
+
+.section {
+  padding-block: var(--space-16);
+
+  @media (max-width: 768px) {
+    padding-block: var(--space-12);
+  }
+}
+
+.section--sm {
+  padding-block: var(--space-10);
+}
+
+.section--lg {
+  padding-block: var(--space-20);
+}
+
+.section--surface {
+  background: var(--bg-surface);
+}
+
+.section--muted {
+  background: var(--bg-surface-secondary);
+}
+
+.section--elevated {
+  background: var(--bg-elevated);
+}
+
+.section--brand {
+  background: var(--bg-brand-primary);
+  color: var(--text-inverse);
+}
+
+.section--accent {
+  background: var(--bg-brand-accent);
+  color: var(--text-inverse);
+}
+
+.section--glass {
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+}
+
+.section--inverse {
+  background: var(--bg-inverse);
+  color: var(--text-inverse);
+}

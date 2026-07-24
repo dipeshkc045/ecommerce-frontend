@@ -6,10 +6,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
-import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatChipsModule } from '@angular/material/chips';
+
+import { LucideX, LucideRefreshCw, LucidePencil, LucideTrash2 } from '@lucide/angular';
 
 import { ProductApi, type ProductPayload, type ProductResponse } from '../../core/api/product.api';
 
@@ -20,12 +21,15 @@ import { ProductApi, type ProductPayload, type ProductResponse } from '../../cor
     NgIf,
     NgFor,
     ReactiveFormsModule,
+    LucideX,
+    LucideRefreshCw,
+    LucidePencil,
+    LucideTrash2,
     MatCardModule,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
     MatTableModule,
-    MatIconModule,
     MatProgressSpinnerModule,
     MatSlideToggleModule,
     MatChipsModule
@@ -45,7 +49,7 @@ import { ProductApi, type ProductPayload, type ProductResponse } from '../../cor
         <mat-label>Search by name or SKU</mat-label>
         <input matInput type="search" [value]="searchTerm()" (input)="onSearch($any($event.target).value)" />
         <button mat-icon-button matSuffix aria-label="Clear" *ngIf="searchTerm()" (click)="onSearch('')">
-          <mat-icon>close</mat-icon>
+          <svg lucideX></svg>
         </button>
       </mat-form-field>
 
@@ -55,7 +59,7 @@ import { ProductApi, type ProductPayload, type ProductResponse } from '../../cor
       </div>
 
       <button mat-stroked-button color="primary" (click)="refresh()" [disabled]="busy()">
-        <mat-icon>refresh</mat-icon>
+        <svg lucideRefreshCw></svg>
         Refresh
       </button>
     </div>
@@ -139,11 +143,11 @@ import { ProductApi, type ProductPayload, type ProductResponse } from '../../cor
                 </div>
                 <div class="card-actions">
                   <button mat-stroked-button color="primary" (click)="beginEdit(p)">
-                    <mat-icon>edit</mat-icon>
+                    <svg lucidePencil></svg>
                     Edit
                   </button>
                   <button mat-stroked-button color="warn" (click)="remove(p)" [disabled]="busy()">
-                    <mat-icon>delete</mat-icon>
+                    <svg lucideTrash2></svg>
                     Delete
                   </button>
                 </div>

@@ -1,0 +1,113 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: inherit;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+  border-radius: var(--border-radius-pill);
+  text-decoration: none;
+  user-select: none;
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    transform 100ms ease;
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--shadow-focus);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+}
+
+// ── Size Variants
+:host.app-btn--sm {
+  height: 34px;
+  padding: 0 14px;
+  font-size: var(--text-xs);
+}
+
+:host.app-btn--md {
+  height: 42px;
+  padding: 0 20px;
+  font-size: var(--text-sm);
+}
+
+:host.app-btn--lg {
+  height: 52px;
+  padding: 0 28px;
+  font-size: var(--text-md);
+}
+
+// ── Style Variants
+:host.app-btn--primary {
+  background: var(--color-accent);
+  color: #fff;
+  &:hover:not(:disabled) { background: var(--color-accent-hover); }
+}
+
+:host.app-btn--secondary {
+  background: var(--color-primary);
+  color: #fff;
+  &:hover:not(:disabled) { background: var(--color-primary-light); }
+}
+
+:host.app-btn--ghost {
+  background: transparent;
+  color: var(--text-primary);
+  border-color: transparent;
+  &:hover:not(:disabled) {   background: var(--bg-surface-secondary); }
+}
+
+:host.app-btn--outline {
+  background: transparent;
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+  &:hover:not(:disabled) {
+    background: var(--color-accent-light);
+  }
+}
+
+:host.app-btn--danger {
+  background: var(--color-danger);
+  color: #fff;
+  &:hover:not(:disabled) { background: #dc2626; }
+}
+
+:host.app-btn--full {
+  width: 100%;
+}
+
+:host.app-btn--disabled,
+:host:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+// ── Loading State
+:host.app-btn--loading {
+  pointer-events: none;
+}
+
+.btn-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

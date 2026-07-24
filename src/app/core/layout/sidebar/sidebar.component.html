@@ -1,0 +1,77 @@
+<!-- Mobile overlay -->
+@if (mobileOpen()) {
+  <div class="sidebar-overlay" (click)="closeMobile()" aria-hidden="true"></div>
+}
+
+<aside
+  class="sidebar"
+  [class.sidebar--collapsed]="collapsed()"
+  [class.sidebar--mobile-open]="mobileOpen()"
+  role="navigation"
+  [attr.aria-label]="title() || 'Sidebar navigation'"
+>
+  <!-- Header -->
+  <div class="sidebar-header">
+    @if (!collapsed()) {
+      <span class="sidebar-title">{{ title() }}</span>
+    }
+    <button
+      class="sidebar-toggle"
+      type="button"
+      [attr.aria-label]="collapsed() ? 'Expand sidebar' : 'Collapse sidebar'"
+      (click)="layout.toggleSidebar()"
+    >
+      <svg width="18" height="18">
+        @if (collapsed()) {
+          <polyline points="9 18 15 12 9 6"/>
+        } @else {
+          <polyline points="15 18 9 12 15 6"/>
+        }
+      </svg>
+    </button>
+  </div>
+
+  <!-- Navigation Items -->
+  <nav class="sidebar-nav">
+    <ul class="sidebar-list" role="list">
+      @for (item of items(); track item.id) {
+        <li class="sidebar-item">
+          <a
+            [routerLink]="item.route"
+            routerLinkActive="sidebar-link--active"
+            [routerLinkActiveOptions]="{ exact: item.route === '/' }"
+            class="sidebar-link"
+            [class.sidebar-link--collapsed]="collapsed()"
+            [attr.aria-label]="collapsed() ? item.label : null"
+            [attr.title]="collapsed() ? item.label : null"
+            (click)="closeMobile()"
+          >
+            <span class="sidebar-icon" aria-hidden="true" [innerHTML]="item.icon"></span>
+            @if (!collapsed()) {
+              <span class="sidebar-label">{{ item.label }}</span>
+              @if (item.badge) {
+                <span class="sidebar-badge">{{ item.badge }}</span>
+              }
+            }
+          </a>
+        </li>
+      }
+    </ul>
+  </nav>
+
+  <!-- Footer -->
+  <div class="sidebar-footer">
+    <button
+      class="sidebar-link sidebar-link--logout"
+      type="button"
+      (click)="closeMobile()"
+    >
+      <span class="sidebar-icon" aria-hidden="true">
+        <svg lucideLogOut width="18" height="18"></svg>
+      </span>
+      @if (!collapsed()) {
+        <span class="sidebar-label">Sign Out</span>
+      }
+    </button>
+  </div>
+</aside>

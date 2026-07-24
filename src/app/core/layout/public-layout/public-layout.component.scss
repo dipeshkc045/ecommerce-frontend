@@ -1,0 +1,14 @@
+:host { display: block; min-height: 100dvh; }
+
+.public-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+.public-main {
+  flex: 1;
+  width: 100%;
+  background: var(--bg-page);
+  outline: none;
+}

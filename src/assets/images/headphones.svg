@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800" role="img" aria-label="Headphones placeholder">
+  <rect width="100%" height="100%" fill="transparent" />
+  <g transform="translate(400,400)">
+    <g fill="none" stroke="#222" stroke-width="24" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M-220 0a220 220 0 0 1 440 0"/>
+      <rect x="-270" y="40" width="110" height="160" rx="28" />
+      <rect x="160" y="40" width="110" height="160" rx="28" />
+    </g>
+    <text x="0" y="260" font-family="Inter, Arial, sans-serif" font-size="46" fill="#222" text-anchor="middle">Headphones</text>
+  </g>
+</svg>

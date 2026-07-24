@@ -42,7 +42,7 @@
   font-family: $font-primary;
   font-size: 13px;
   font-weight: 600;
-  color: $color-text-body;
+  color: var(--text-primary);
   text-align: center;
   @include truncate;
   max-width: 110px;

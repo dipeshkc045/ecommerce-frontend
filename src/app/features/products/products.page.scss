@@ -6,7 +6,7 @@
 // ═══════════════════════════════════════════════════════════════════
 :host {
   display: block;
-  background: $color-bg-light;
+  background: var(--bg-page);
   min-height: 100vh;
 }
 
@@ -26,7 +26,7 @@
 // SIDEBAR
 // ═══════════════════════════════════════════════════════════════════
 .sidebar {
-  background: #fff;
+  background: var(--bg-surface);
   border-radius: $radius-lg;
   padding: 24px;
   box-shadow: $shadow-soft;
@@ -310,7 +310,7 @@
   font-size: 13px;
   font-weight: 500;
   color: $color-text-strong;
-  background: #fff;
+  background: var(--bg-surface);
   border: 1px solid $color-border;
   border-radius: $radius-sm;
   padding: 8px 32px 8px 12px;
@@ -330,7 +330,7 @@
 // ─── View Toggle ─────────────────────────────────────────────────
 .view-toggle {
   display: flex;
-  background: #fff;
+  background: var(--bg-surface);
   border: 1px solid $color-border;
   border-radius: $radius-sm;
   overflow: hidden;
@@ -374,7 +374,7 @@
   align-items: center;
   gap: 6px;
   padding: 5px 12px;
-  background: #fff;
+  background: var(--bg-surface);
   border: 1px solid $color-border;
   border-radius: $radius-pill;
   font-family: $font-primary;
@@ -417,7 +417,7 @@
 }
 
 .skeleton-card {
-  background: #fff;
+  background: var(--bg-surface);
   border-radius: $radius-md;
   overflow: hidden;
   box-shadow: $shadow-soft;
@@ -471,8 +471,8 @@
   gap: 14px;
   padding: 16px 20px;
   margin-bottom: 20px;
-  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
-  border: 1px solid #f59e0b33;
+  background: var(--bg-surface-secondary);
+  border: 1px solid var(--border-color);
   border-radius: $radius-md;
   animation: bannerSlideIn 0.35s ease-out;
 }
@@ -490,7 +490,7 @@
 
 .fallback-banner__icon {
   flex-shrink: 0;
-  color: #d97706;
+  color: var(--color-warning);
   margin-top: 2px;
 }
 
@@ -503,7 +503,7 @@
   font-family: $font-primary;
   font-size: 14px;
   font-weight: 700;
-  color: #92400e;
+  color: var(--text-primary);
   display: block;
   margin-bottom: 2px;
 }
@@ -511,7 +511,7 @@
 .fallback-banner__desc {
   font-family: $font-primary;
   font-size: 13px;
-  color: #a16207;
+  color: var(--text-secondary);
   margin: 0;
   line-height: 1.5;
 }
@@ -530,9 +530,9 @@
   font-family: $font-primary;
   font-size: 13px;
   font-weight: 600;
-  color: #92400e;
-  background: #fff;
-  border: 1px solid #f59e0b55;
+  color: var(--text-primary);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
   border-radius: $radius-sm;
   padding: 6px 14px;
   cursor: pointer;
@@ -540,8 +540,8 @@
   white-space: nowrap;
 
   &:hover {
-    background: #fef3c7;
-    border-color: #f59e0b;
+    background: var(--bg-surface-secondary);
+    border-color: var(--border-color-strong);
   }
 }
 
@@ -554,14 +554,14 @@
   padding: 0;
   border: none;
   background: transparent;
-  color: #a16207;
+  color: var(--text-secondary);
   border-radius: $radius-sm;
   cursor: pointer;
   transition: all 0.15s;
 
   &:hover {
-    background: #f59e0b22;
-    color: #92400e;
+    background: var(--bg-surface-secondary);
+    color: var(--text-primary);
   }
 }
 
@@ -572,7 +572,7 @@
   @include flex-center;
   flex-direction: column;
   padding: 80px 40px;
-  background: #fff;
+  background: var(--bg-surface);
   border-radius: $radius-lg;
   box-shadow: $shadow-soft;
   text-align: center;
@@ -624,7 +624,7 @@
   @include flex-center;
   flex-direction: column;
   padding: 80px 40px;
-  background: #fff;
+  background: var(--bg-surface);
   border-radius: $radius-lg;
   box-shadow: $shadow-soft;
   text-align: center;
@@ -696,7 +696,7 @@
 
 // ─── Product Card ────────────────────────────────────────────────
 .product-card {
-  background: #fff;
+  background: var(--bg-surface);
   border-radius: $radius-md;
   overflow: hidden;
   box-shadow: $shadow-soft;
@@ -745,10 +745,10 @@
   letter-spacing: 0.03em;
   z-index: 2;
 
-  &[data-type='bestseller'] { background: #ef4444; color: #fff; }
-  &[data-type='new']        { background: #f59e0b; color: #fff; }
-  &[data-type='sale']       { background: #10b981; color: #fff; }
-  &[data-type='hot']        { background: #ec4899; color: #fff; }
+  &[data-type='bestseller'] { background: var(--color-danger); color: #fff; }
+  &[data-type='new']        { background: var(--color-warning); color: #fff; }
+  &[data-type='sale']       { background: var(--color-success); color: #fff; }
+  &[data-type='hot']        { background: var(--color-accent); color: #fff; }
 }
 
 .image-overlay {
@@ -766,7 +766,7 @@
   align-items: center;
   gap: 6px;
   padding: 10px 20px;
-  background: #fff;
+  background: var(--bg-surface);
   border: none;
   border-radius: $radius-pill;
   font-family: $font-primary;

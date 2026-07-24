@@ -1,0 +1,20 @@
+// Showcase product card accent tokens (home featured section)
+
+:root {
+  --showcase-accent-blue:   #00b0ff;
+  --showcase-accent-pink:   #ff3399;
+  --showcase-accent-orange: #ff9500;
+  --showcase-accent-teal:   #009688;
+  --showcase-accent-purple: #a855f7;
+
+  --showcase-bg-blue:   linear-gradient(180deg, #0a5380 0%, #17161d 100%);
+  --showcase-bg-pink:   linear-gradient(180deg, #6b294d 0%, #17161d 100%);
+  --showcase-bg-orange: linear-gradient(180deg, #7a3e1d 0%, #17161d 100%);
+  --showcase-bg-teal:   linear-gradient(180deg, #0d4f4a 0%, #17161d 100%);
+  --showcase-bg-purple: linear-gradient(180deg, #4c1d95 0%, #17161d 100%);
+
+  --showcase-text:       #f3f5fa;
+  --showcase-text-muted: #a4a9b8;
+  --showcase-star:       #ffcc00;
+  --showcase-btn-text:   #12141c;
+}

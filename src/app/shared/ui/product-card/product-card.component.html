@@ -1,0 +1,131 @@
+@if (variant() === 'showcase') {
+  <article class="pc pc--showcase" [attr.data-accent]="product().accent" [class.pc--animated]="animated()">
+    <div class="pc__price-tag">{{ product().price | currency: 'USD' : 'symbol' : '1.0-0' }}</div>
+
+    <div class="pc__image-zone">
+      <a [routerLink]="detailLink()" (click)="onProductClick()">
+        <img [src]="product().imageUrl" [alt]="product().name" class="pc__image" loading="lazy" />
+      </a>
+    </div>
+
+    <div class="pc__content">
+      <h3 class="pc__name">{{ product().name }}</h3>
+
+      @if (hasFeatures() && showFeatures()) {
+        <div class="pc__columns">
+          @if (showDescription() && product().description) {
+            <div class="pc__column">
+              <p class="pc__description">{{ product().description }}</p>
+              @if (showRating()) {
+                <app-rating-stars [rating]="product().rating" />
+              }
+            </div>
+          }
+          <div class="pc__column" [class.pc__column--full]="!showDescription() || !product().description">
+            @for (feature of product().features; track feature.title) {
+              <div class="pc__feature">
+                <span class="pc__feature-title">{{ feature.title }}</span>
+                <span class="pc__feature-detail">{{ feature.detail }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      } @else if (showDescription() && product().description) {
+        <p class="pc__description">{{ product().description }}</p>
+      }
+
+      <app-button
+        class="pc__action"
+        variant="secondary"
+        [fullWidth]="true"
+        (click)="onAddToCart($event)"
+      >
+        Add to cart
+      </app-button>
+    </div>
+  </article>
+} @else {
+  <app-card variant="elevated" [hoverable]="true" class="pc" [class.pc--animated]="animated()" [attr.data-accent]="product().accent">
+    <a [routerLink]="detailLink()" class="pc__image-wrap" [attr.data-accent]="product().accent" (click)="onProductClick()">
+      <img class="pc__image" [src]="product().imageUrl" [alt]="product().name" loading="lazy" />
+      @if (showBadge() && badgeLabel()) {
+        <app-badge [variant]="badgeVariant()" class="pc__badge">{{ badgeLabel() }}</app-badge>
+      }
+    </a>
+
+    <div class="pc__body">
+      @if (showCategory() && product().categoryName) {
+        <p class="pc__category">{{ product().categoryName }}</p>
+      }
+
+      @if (showRating()) {
+        <app-rating-stars [rating]="product().rating" />
+      }
+
+      <h3 class="pc__title">
+        <a [routerLink]="detailLink()" (click)="onProductClick()">{{ product().name }}</a>
+      </h3>
+
+      @if (showSku()) {
+        <p class="pc__sku">SKU: {{ product().sku }}</p>
+      }
+
+      @if (showDescription()) {
+        <p class="pc__description">{{ product().description }}</p>
+      }
+
+      @if (showStock()) {
+        <p class="pc__stock" [class.pc__stock--low]="product().stockStatus === 'lowStock'" [class.pc__stock--out]="product().stockStatus === 'outOfStock'">
+          @if (product().stockStatus === 'inStock') {
+            In Stock
+          } @else if (product().stockStatus === 'lowStock') {
+            Only {{ product().stockQuantity }} left
+          } @else {
+            Out of Stock
+          }
+        </p>
+      }
+
+      <div class="pc__footer">
+        @if (showPrice()) {
+          <div class="pc__pricing">
+            <span class="pc__price">{{ product().price | currency: 'USD' : 'symbol' }}</span>
+            @if (hasDiscount() && showOldPrice()) {
+              <span class="pc__old-price">{{ product().oldPrice | currency: 'USD' : 'symbol' }}</span>
+            }
+            @if (hasDiscount() && showDiscount()) {
+              <span class="pc__discount">-{{ product().discountPercentage }}%</span>
+            }
+          </div>
+        }
+
+        <div class="pc__actions">
+          @if (showWishlist()) {
+            <button class="pc__icon-btn" [class.pc__icon-btn--active]="wished()" (click)="onWishlistToggle($event)" aria-label="Toggle wishlist">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+              </svg>
+            </button>
+          }
+          @if (showQuickView()) {
+            <button class="pc__icon-btn" (click)="onQuickView($event)" aria-label="Quick view">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          }
+          @if (showCompare()) {
+            <button class="pc__icon-btn" (click)="onCompare($event)" aria-label="Compare">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+              </svg>
+            </button>
+          }
+          <app-button variant="primary" size="sm" [loading]="adding()" (click)="onAddToCart($event)" aria-label="Add to cart">
+            Add
+          </app-button>
+        </div>
+      </div>
+    </div>
+  </app-card>
+}

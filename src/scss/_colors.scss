@@ -1,0 +1,15 @@
+// ─── Color Utility Classes ─────────────────────────────────────────
+
+.text-primary   { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-muted     { color: var(--text-muted); }
+.text-accent    { color: var(--color-accent); }
+.text-success   { color: var(--color-success); }
+.text-warning   { color: var(--color-warning); }
+.text-danger    { color: var(--color-danger); }
+.text-info      { color: var(--color-info); }
+
+.bg-page   { background-color: var(--bg-page); }
+.bg-card   { background-color: var(--bg-surface); }
+.bg-muted  { background-color: var(--bg-surface-secondary); }
+.bg-accent { background-color: var(--color-accent); }

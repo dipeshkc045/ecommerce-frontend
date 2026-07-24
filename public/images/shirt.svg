@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800" role="img" aria-label="Shirt placeholder">
+  <rect width="100%" height="100%" fill="transparent" />
+  <g transform="translate(400,380)">
+    <path d="M-160 -200 L-80 -260 L0 -220 L80 -260 L160 -200 L160 60 L0 60 L-160 60 Z" fill="none" stroke="#222" stroke-width="18" stroke-linejoin="round"/>
+    <path d="M-80 -260 L-60 -160" fill="none" stroke="#222" stroke-width="14" stroke-linecap="round"/>
+    <path d="M80 -260 L60 -160" fill="none" stroke="#222" stroke-width="14" stroke-linecap="round"/>
+    <path d="M-60 -160 L60 -160" fill="none" stroke="#222" stroke-width="14" stroke-linecap="round"/>
+    <path d="M0 -220 L0 60" stroke="#222" stroke-width="10" stroke-dasharray="8,8"/>
+    <circle cx="-120" cy="-100" r="10" fill="#222"/>
+    <circle cx="120" cy="-100" r="10" fill="#222"/>
+    <text x="0" y="320" font-family="Inter, Arial, sans-serif" font-size="46" fill="#222" text-anchor="middle">Shirt</text>
+  </g>
+</svg>

@@ -1,0 +1,27 @@
+:host {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-toast);
+  pointer-events: none;
+}
+
+.global-loader {
+  height: 3px;
+  background: transparent;
+  overflow: hidden;
+}
+
+.loader-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-teal), var(--color-accent));
+  background-size: 200% 100%;
+  animation: progress-indeterminate 1.5s ease-in-out infinite;
+}
+
+@keyframes progress-indeterminate {
+  0%   { background-position: 200% 50%; transform: scaleX(0.3); transform-origin: left; }
+  50%  { background-position: 0% 50%; transform: scaleX(1); }
+  100% { background-position: -100% 50%; transform: scaleX(0.3); transform-origin: right; }
+}

@@ -1,10 +1,11 @@
 {
   "name": "ecommerce-web",
   "version": "0.0.0",
+  "type": "module",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "start:admin": "ng serve --host 0.0.0.0 --port 4300",
+    "start": "ng serve --hmr",
+    "start:admin": "ng serve --host 0.0.0.0 --port 4300 --hmr",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
@@ -36,8 +37,11 @@
     "@angular/platform-server": "^21.0.0",
     "@angular/router": "^21.0.0",
     "@angular/ssr": "^21.0.3",
+    "@lucide/angular": "^1.26.0",
+    "@tailwindcss/postcss": "^4.3.3",
     "express": "^5.1.0",
     "rxjs": "~7.8.0",
+    "tailwindcss": "^4.3.3",
     "tslib": "^2.3.0"
   },
   "devDependencies": {

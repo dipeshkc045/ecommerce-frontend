@@ -1,0 +1,72 @@
+@use 'scss/variables' as *;
+@use 'scss/mixins' as *;
+
+:host {
+  display: block;
+  padding: var(--space-12) 0;
+}
+
+.ps__header {
+  @include container;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+
+.ps__header-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.ps__title {
+  margin: 0;
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+}
+
+.ps__subtitle {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.ps__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-accent);
+  text-decoration: none;
+  white-space: nowrap;
+
+  &:hover {
+    color: var(--color-accent-hover);
+  }
+}
+
+.ps__grid {
+  @include container;
+  display: grid;
+  gap: var(--space-6);
+  align-items: stretch;
+}
+
+.ps__carousel {
+  @include container;
+  display: flex;
+  gap: var(--space-6);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: var(--space-2);
+
+  & > * {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+  }
+}

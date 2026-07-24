@@ -3,8 +3,6 @@
 
 :host {
   display: block;
-  padding: 40px 0 48px;
-  background: #fafbfe;
 }
 
 .categories-inner {
@@ -20,7 +18,7 @@
   font-family: $font-primary;
   font-size: 22px;
   font-weight: 700;
-  color: $color-text-strong;
+  color: var(--text-primary);
   margin: 0;
   letter-spacing: -0.01em;
 }
@@ -29,7 +27,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: $color-primary;
+  color: var(--color-accent);
   font-family: $font-primary;
   font-size: 14px;
   font-weight: 600;
@@ -38,7 +36,7 @@
 
   &:hover {
     gap: 10px;
-    color: color.adjust($color-primary, $lightness: 10%);
+    color: var(--color-accent-hover);
   }
 }
 
@@ -50,35 +48,14 @@
   padding-bottom: 12px;
 }
 
-/* RESPONSIVE */
 @media (max-width: $bp-md) {
-  .section-title {
-    font-size: 18px;
-  }
-
-  .cards-scroll {
-    gap: 14px;
-  }
+  .section-title { font-size: 18px; }
+  .cards-scroll { gap: 14px; }
 }
 
 @media (max-width: $bp-sm) {
-  :host {
-    padding: 28px 0 20px;
-  }
-
-  .section-header {
-    margin-bottom: 20px;
-  }
-
-  .section-title {
-    font-size: 16px;
-  }
-
-  .view-all {
-    font-size: 13px;
-  }
-
-  .cards-scroll {
-    gap: 10px;
-  }
+  .section-header { margin-bottom: 20px; }
+  .section-title { font-size: 16px; }
+  .view-all { font-size: 13px; }
+  .cards-scroll { gap: 10px; }
 }

@@ -1,0 +1,134 @@
+// ─── Design Tokens: CSS Custom Properties ─────────────────────────
+// These are the single source of truth for all visual design decisions.
+// Usage: var(--color-primary) in any SCSS or inline style.
+
+:root {
+  // ── Brand Colors
+  --color-primary:       #1a1a2e;
+  --color-primary-hover: #16162a;
+  --color-primary-light: #2d2d4a;
+  --color-accent:        #ff6f61;
+  --color-accent-hover:  #e85d50;
+  --color-accent-light:  #fff0ef;
+  --color-teal:          #009688;
+  --color-teal-hover:    #00796b;
+
+  // ── Semantic Colors
+  --color-success:       #22c55e;
+  --color-success-light: #dcfce7;
+  --color-warning:       #f59e0b;
+  --color-warning-light: #fef3c7;
+  --color-danger:        #ef4444;
+  --color-danger-light:  #fee2e2;
+  --color-info:          #3b82f6;
+  --color-info-light:    #dbeafe;
+
+  // ── Semantic Background Tokens ───────────────────────────────
+  --bg-page:              var(--surface-page);
+  --bg-surface:           var(--surface-card);
+  --bg-surface-secondary: var(--surface-muted);
+  --bg-elevated:          var(--surface-raised);
+  --bg-glass:             var(--surface-glass);
+  --bg-overlay:           var(--surface-overlay);
+  --bg-brand-primary:     var(--color-primary);
+  --bg-brand-accent:      var(--color-accent);
+  --bg-inverse:           #0f172a;
+
+  // ── Surface & Background (legacy aliases, keep for backward compat)
+  --surface-page:        #ffffff;
+  --surface-card:        #ffffff;
+  --surface-overlay:     rgba(15, 23, 42, 0.5);
+  --surface-glass:       rgba(255, 255, 255, 0.82);
+  --surface-muted:       #f5f6fa;
+  --surface-raised:      #f8f9fc;
+
+  // ── Text
+  --text-primary:        #0f172a;
+  --text-secondary:      #475569;
+  --text-muted:          #94a3b8;
+  --text-disabled:       #cbd5e1;
+  --text-inverse:        #ffffff;
+  --text-accent:         #ff6f61;
+  --text-link:           #3b82f6;
+
+  // ── Border
+  --border-color:        #e5e7eb;
+  --border-color-strong: #cbd5e1;
+  --border-color-focus:  #ff6f61;
+  --border-radius-xs:    4px;
+  --border-radius-sm:    8px;
+  --border-radius-md:    12px;
+  --border-radius-lg:    16px;
+  --border-radius-xl:    20px;
+  --border-radius-2xl:   24px;
+  --border-radius-pill:  9999px;
+
+  // ── Shadows
+  --shadow-xs:   0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm:   0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-md:   0 4px 20px rgba(0, 0, 0, 0.08);
+  --shadow-lg:   0 8px 30px rgba(0, 0, 0, 0.10);
+  --shadow-xl:   0 20px 60px rgba(0, 0, 0, 0.12);
+  --shadow-focus: 0 0 0 3px rgba(255, 111, 97, 0.25);
+
+  // ── Layout
+  --header-height:      72px;
+  --sidebar-width:      260px;
+  --sidebar-collapsed:  72px;
+  --footer-height:      auto;
+  --page-max-width:     1440px;
+  --content-max-width:  1200px;
+
+  // ── Z-Index
+  --z-base:       0;
+  --z-raised:     10;
+  --z-dropdown:   100;
+  --z-sticky:     200;
+  --z-fixed:      300;
+  --z-overlay:    400;
+  --z-modal:      500;
+  --z-toast:      600;
+  --z-tooltip:    700;
+
+  // ── Transitions
+  --transition-fast:   150ms ease;
+  --transition-base:   250ms ease;
+  --transition-slow:   400ms ease;
+  --transition-spring: 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  // ── Spacing Scale
+  --space-1:   4px;
+  --space-2:   8px;
+  --space-3:   12px;
+  --space-4:   16px;
+  --space-5:   20px;
+  --space-6:   24px;
+  --space-8:   32px;
+  --space-10:  40px;
+  --space-12:  48px;
+  --space-16:  64px;
+  --space-20:  80px;
+  --space-24:  96px;
+
+  // ── Font Scale
+  --text-xs:   0.75rem;    // 12px
+  --text-sm:   0.875rem;   // 14px
+  --text-md:   1rem;       // 16px
+  --text-lg:   1.125rem;   // 18px
+  --text-xl:   1.25rem;    // 20px
+  --text-2xl:  1.5rem;     // 24px
+  --text-3xl:  1.875rem;   // 30px
+  --text-4xl:  2.25rem;    // 36px
+  --text-5xl:  3rem;       // 48px
+
+  --font-weight-normal:   400;
+  --font-weight-medium:   500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:     700;
+  --font-weight-black:    900;
+
+  --line-height-tight:  1.25;
+  --line-height-snug:   1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+}

@@ -110,14 +110,14 @@ import { AuthService } from '../../core/auth/auth.service';
       }
 
       .summary {
-        background: rgba(245, 240, 230, 0.9);
-        border: 1px solid rgba(87, 66, 46, 0.16);
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
         box-shadow: 0 12px 30px rgba(87, 66, 46, 0.12);
       }
 
       .actions-card {
-        background: #fffdf8;
-        border: 1px solid rgba(87, 66, 46, 0.12);
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
         box-shadow: 0 10px 26px rgba(87, 66, 46, 0.08);
       }
 

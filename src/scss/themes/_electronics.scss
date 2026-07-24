@@ -1,0 +1,29 @@
+[data-theme='electronics'] {
+  color-scheme: dark;
+
+  --color-primary:       #0ea5e9;
+  --color-primary-hover: #0284c7;
+  --color-primary-light: #38bdf8;
+  --color-accent:        #06b6d4;
+  --color-accent-hover:  #0891b2;
+  --color-accent-light:  #ecfeff;
+  --color-teal:          #14b8a6;
+
+  --surface-page:        #0a0f1a;
+  --surface-card:        #111827;
+  --surface-muted:       #0f172a;
+  --surface-raised:      #1f2937;
+  --surface-glass:       rgba(17, 24, 39, 0.9);
+
+  --text-primary:        #e0f2fe;
+  --text-secondary:      #7dd3fc;
+  --text-muted:          #64748b;
+  --text-inverse:        #0a0f1a;
+  --text-accent:         #22d3ee;
+
+  --border-color:        #1e3a5f;
+  --border-color-strong: #2563eb;
+  --border-color-focus:  #06b6d4;
+
+  --shadow-focus: 0 0 0 3px rgba(6, 182, 212, 0.35);
+}

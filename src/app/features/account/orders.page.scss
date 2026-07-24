@@ -1,4 +1,5 @@
 @use '../../../scss/variables' as *;
+@use 'sass:color';
 
 /* ================================================================
    Orders Page
@@ -69,7 +70,7 @@
   transition: background 0.2s, transform 0.15s;
 
   &:hover {
-    background: darken($color-accent, 8%);
+    background: color.adjust($color-accent, $lightness: -8%);
     transform: translateY(-1px);
   }
 }
@@ -89,7 +90,7 @@
 
 .skeleton-header {
   height: 64px;
-  background: #f3f4f6;
+  background: var(--bg-surface-secondary);
 }
 
 .skeleton-body {
@@ -102,7 +103,7 @@
   width: 160px;
   height: 160px;
   border-radius: $radius-sm;
-  background: #f3f4f6;
+  background: var(--bg-surface-secondary);
   flex-shrink: 0;
 }
 
@@ -117,7 +118,7 @@
 .skeleton-line {
   height: 14px;
   border-radius: 4px;
-  background: #f3f4f6;
+  background: var(--bg-surface-secondary);
 
   &.wide { width: 60%; }
   &.medium { width: 40%; }
@@ -128,7 +129,7 @@
   height: 48px;
   margin: 0 1.5rem 1.5rem;
   border-radius: $radius-sm;
-  background: #f3f4f6;
+  background: var(--bg-surface-secondary);
 }
 
 .shimmer {
@@ -179,14 +180,14 @@
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
-  background: #fffbeb;
-  border: 1px solid #fbbf24;
+  background: var(--bg-surface-secondary);
+  border: 1px solid var(--border-color);
   border-radius: $radius-md;
   padding: 1rem 1.25rem;
   margin-bottom: 2rem;
 
   &__icon {
-    color: #d97706;
+    color: var(--color-warning);
     flex-shrink: 0;
     margin-top: 1px;
   }
@@ -198,13 +199,13 @@
 
     strong {
       display: block;
-      color: #92400e;
+      color: var(--text-primary);
       margin-bottom: 0.15rem;
     }
 
     p {
       margin: 0;
-      color: #a16207;
+      color: var(--text-secondary);
     }
   }
 
@@ -212,13 +213,13 @@
     background: none;
     border: none;
     cursor: pointer;
-    color: #a16207;
+    color: var(--text-secondary);
     padding: 2px;
     border-radius: $radius-xs;
     transition: color 0.15s;
 
     &:hover {
-      color: #92400e;
+      color: var(--text-primary);
     }
   }
 }
@@ -229,7 +230,7 @@
   border-radius: $radius-md;
   overflow: hidden;
   margin-bottom: 2rem;
-  background: #fff;
+  background: var(--bg-surface);
 }
 
 /* ── Order Header ─────────────────────────────────────────────── */
@@ -238,7 +239,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1.25rem 1.5rem;
-  background: #f9fafb;
+  background: var(--bg-surface-secondary);
   border-bottom: 1px solid $color-border;
   flex-wrap: wrap;
   gap: 1rem;
@@ -268,7 +269,7 @@
   transition: color 0.15s;
 
   &:hover {
-    color: darken($color-accent, 10%);
+    color: color.adjust($color-accent, $lightness: -10%);
   }
 }
 
@@ -310,7 +311,7 @@
   height: 160px;
   border-radius: $radius-sm;
   overflow: hidden;
-  background: #f5f5f5;
+  background: var(--bg-surface-secondary);
 
   img {
     width: 100%;
@@ -376,7 +377,7 @@
   transition: color 0.15s;
 
   &:hover {
-    color: darken($color-accent, 10%);
+    color: color.adjust($color-accent, $lightness: -10%);
   }
 }
 
@@ -396,7 +397,7 @@
 .progress-track {
   position: relative;
   height: 6px;
-  background: #e5e7eb;
+  background: var(--bg-surface-secondary);
   border-radius: 99px;
   overflow: hidden;
   margin-bottom: 0.6rem;
@@ -434,7 +435,7 @@
   grid-template-columns: 1fr 1fr 1fr;
   gap: 2rem;
   padding: 1.5rem;
-  background: #f9fafb;
+  background: var(--bg-surface-secondary);
   border-top: 1px solid $color-border;
 }
 

@@ -1,0 +1,15 @@
+.rating-stars {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.rating-stars__icon {
+  fill: none;
+  stroke: var(--text-muted);
+  stroke-width: 2;
+
+  &--filled {
+    fill: var(--color-warning);
+    stroke: var(--color-warning);
+  }
+}

@@ -1,0 +1,53 @@
+// ─── Responsive Breakpoint Mixins ─────────────────────────────────
+
+// Breakpoints
+$bp-xs: 480px;
+$bp-sm: 640px;
+$bp-md: 768px;
+$bp-lg: 1024px;
+$bp-xl: 1280px;
+$bp-2xl: 1440px;
+
+// Mobile-first (min-width) - use these primarily
+@mixin sm { @media (min-width: #{$bp-sm}) { @content; } }
+@mixin md { @media (min-width: #{$bp-md}) { @content; } }
+@mixin lg { @media (min-width: #{$bp-lg}) { @content; } }
+@mixin xl { @media (min-width: #{$bp-xl}) { @content; } }
+@mixin xxl { @media (min-width: #{$bp-2xl}) { @content; } }
+
+// Desktop-first (max-width) - use for exceptions
+@mixin below-sm { @media (max-width: #{$bp-sm - 1}) { @content; } }
+@mixin below-md { @media (max-width: #{$bp-md - 1}) { @content; } }
+@mixin below-lg { @media (max-width: #{$bp-lg - 1}) { @content; } }
+@mixin below-xl { @media (max-width: #{$bp-xl - 1}) { @content; } }
+
+// ─── Common Mixins ─────────────────────────────────────────────────
+
+@mixin card-base {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+@mixin focus-ring {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+@mixin smooth-scroll {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+@mixin hide-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+@mixin glass {
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}

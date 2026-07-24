@@ -1,0 +1,134 @@
+<header class="site-header" role="banner">
+  <div class="header-inner">
+
+    <!-- Hamburger: Mobile only -->
+    <button
+      class="mobile-menu-btn"
+      type="button"
+      aria-label="Open navigation menu"
+      (click)="toggleMobileMenu()"
+    >
+      <svg lucideMenu width="22" height="22"></svg>
+    </button>
+
+    <!-- Logo -->
+    <a routerLink="/" class="logo" aria-label="Emox home">
+      <span class="logo-mark">e</span>
+      <span class="logo-text">emox</span>
+    </a>
+
+    <!-- Search Bar (desktop) -->
+    <div class="search-bar">
+      <svg lucideSearch class="search-icon" width="18" height="18"></svg>
+      <input
+        type="text"
+        class="search-field"
+        placeholder="Search for products, brands and more..."
+        aria-label="Search products"
+      />
+      <button class="search-submit" type="button" aria-label="Submit search">Search</button>
+    </div>
+
+    <!-- Header Actions -->
+    <div class="header-actions">
+
+      <!-- Search: Mobile trigger -->
+      <button class="action-icon-btn mobile-search-btn" aria-label="Search" (click)="toggleSearch()">
+        <svg lucideSearch width="20" height="20"></svg>
+      </button>
+
+      <!-- Theme Toggle -->
+      <button
+        class="action-icon-btn theme-btn"
+        type="button"
+        [attr.aria-label]="'Current theme: ' + themeLabel() + '. Click to change theme.'"
+        [title]="'Theme: ' + themeLabel()"
+        (click)="toggleTheme()"
+      >
+        @if (isDark()) {
+          <!-- Sun icon -->
+          <svg lucideSun width="20" height="20"></svg>
+        } @else {
+          <!-- Moon icon -->
+          <svg lucideMoon width="20" height="20"></svg>
+        }
+      </button>
+
+      <!-- Wishlist -->
+      <a routerLink="/wishlist" class="action-icon-btn" aria-label="Wishlist">
+        <svg lucideHeart width="20" height="20"></svg>
+      </a>
+
+      <!-- Cart -->
+      <a routerLink="/cart" class="action-icon-btn cart-btn" aria-label="Shopping cart">
+        <svg lucideShoppingCart width="20" height="20"></svg>
+        @if (cartCount() > 0) {
+          <span class="cart-badge">{{ cartCount() }}</span>
+        }
+      </a>
+
+      <!-- Auth / User -->
+      @if (!isLoggedIn()) {
+        <a routerLink="/login" class="sign-in-btn">Sign In</a>
+      } @else {
+        <div class="user-menu-wrap">
+          <button
+            class="user-avatar-btn"
+            type="button"
+            [attr.aria-expanded]="userMenuOpen()"
+            aria-haspopup="true"
+            (click)="toggleUserMenu()"
+          >
+            <div class="user-avatar">
+              <svg lucideUser width="18" height="18"></svg>
+            </div>
+            <svg lucideChevronDown class="chevron" [class.open]="userMenuOpen()" width="12" height="12"></svg>
+          </button>
+
+          @if (userMenuOpen()) {
+            <div class="user-dropdown" role="menu">
+              <a routerLink="/account" class="dropdown-item" role="menuitem" (click)="userMenuOpen.set(false)">
+                <svg lucideUser width="15" height="15"></svg>
+                My Account
+              </a>
+              <a routerLink="/orders" class="dropdown-item" role="menuitem" (click)="userMenuOpen.set(false)">
+                <svg lucideFileText width="15" height="15"></svg>
+                My Orders
+              </a>
+              <a routerLink="/wishlist" class="dropdown-item" role="menuitem" (click)="userMenuOpen.set(false)">
+                <svg lucideHeart width="15" height="15"></svg>
+                Wishlist
+              </a>
+              <hr class="dropdown-sep" />
+              <button class="dropdown-item dropdown-item--danger" type="button" role="menuitem" (click)="logout()">
+                <svg lucideLogOut width="15" height="15"></svg>
+                Sign Out
+              </button>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Category Navbar -->
+  <!-- <nav class="category-nav" aria-label="Shop categories">
+    <div class="category-nav-inner">
+      @for (cat of navCategories; track cat.label) {
+        <a
+          [routerLink]="cat.route"
+          class="category-link"
+        >{{ cat.label }}</a>
+      }
+      <a routerLink="/products" class="category-link category-link--deals">🔥 Best Deals</a>
+    </div>
+  </nav> -->
+
+  <!-- Mobile Search Bar -->
+  @if (searchOpen()) {
+    <div class="mobile-search">
+      <svg lucideSearch class="search-icon" width="16" height="16"></svg>
+      <input type="text" class="mobile-search-field" placeholder="Search products..." aria-label="Search" autofocus />
+    </div>
+  }
+</header>
