@@ -296,8 +296,8 @@
   margin-left: 164px; // image width + gap
 
   &.in-stock {
-    color: #059669;
-    svg { color: #10b981; }
+    color: var(--color-success);
+    svg { color: var(--color-success); }
   }
 
   &.shipping {

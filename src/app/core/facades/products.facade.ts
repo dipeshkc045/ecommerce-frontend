@@ -39,9 +39,10 @@ export class ProductsFacade {
   readonly hasProducts = computed(() => (this._products()?.length ?? 0) > 0);
 
   loadAll(): void {
+    this._products.set(this.productMapper.toDomainList(FALLBACK_PRODUCTS));
+    this._usingFallback.set(true);
     this._loading.set(true);
     this._error.set(null);
-    this._usingFallback.set(false);
 
     this.api
       .getAll()
@@ -53,11 +54,10 @@ export class ProductsFacade {
         next: (products) => {
           this._products.set(products);
           this._usingFallback.set(false);
+          this._error.set(null);
         },
         error: (err) => {
           const message = this.resolveErrorMessage(err);
-          this._products.set(this.productMapper.toDomainList(FALLBACK_PRODUCTS));
-          this._usingFallback.set(true);
           this._error.set(message);
         },
       });

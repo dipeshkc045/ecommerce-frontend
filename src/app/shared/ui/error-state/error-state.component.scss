@@ -47,5 +47,5 @@
   font-weight: 600;
   cursor: pointer;
   transition: background var(--transition-fast);
-  &:hover { background: #dc2626; }
+  &:hover { filter: brightness(1.15); }
 }

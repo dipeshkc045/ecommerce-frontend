@@ -8,6 +8,13 @@
 @use 'scss/colors' as *;
 @use 'scss/layout' as *;
 @use 'scss/theme' as *;
+@use 'scss/theme/colors.tokens';
+@use 'scss/theme/spacing.tokens';
+@use 'scss/theme/typography.tokens';
+@use 'scss/theme/radius.tokens';
+@use 'scss/theme/elevation.tokens';
+@use 'scss/theme/motion.tokens';
+@use 'scss/theme/breakpoints.tokens';
 @use 'scss/showcase' as *;
 @use 'scss/themes/light';
 @use 'scss/themes/dark';

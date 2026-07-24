@@ -2,21 +2,18 @@ import { ChangeDetectionStrategy, Component, computed, input, output } from '@an
 import { CurrencyPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
-import { BadgeComponent } from '../../ui/badge/badge.component';
-import { ButtonComponent } from '../../ui/button/button.component';
-import { CardComponent } from '../../ui/card/card.component';
-import { RatingStarsComponent } from '../../patterns/rating-stars/rating-stars.component';
 import type { ProductCardModel, ProductCardVariant } from './product-card.model';
 
 @Component({
   standalone: true,
   selector: 'app-product-card',
-  imports: [RouterLink, CurrencyPipe, BadgeComponent, ButtonComponent, CardComponent, RatingStarsComponent],
+  imports: [RouterLink, CurrencyPipe],
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductCardComponent {
+  readonly Math = Math;
   readonly product = input.required<ProductCardModel>();
   readonly variant = input<ProductCardVariant>('grid');
   readonly showRating = input(true);
@@ -69,6 +66,25 @@ export class ProductCardComponent {
   readonly hasFeatures = computed(() => this.product().features.length > 0);
 
   readonly isShowcase = computed(() => this.variant() === 'showcase');
+
+  readonly accentColors: Record<string, [string, string]> = {
+    blue: ['#6C8CFF', '#1B2450'],
+    pink: ['#F5384F', '#4A1420'],
+    orange: ['#FF7A59', '#4A1C14'],
+    teal: ['#3DD9A4', '#0E3A2C'],
+    purple: ['#8C6CFF', '#2A1B50'],
+  };
+
+  readonly mediaGradient = computed(() => {
+    const accent = this.product().accent;
+    const colors = accent && this.accentColors[accent] ? this.accentColors[accent] : ['#4A63E8', '#1E2030'];
+    return `background: radial-gradient(120% 120% at 30% 20%, ${colors[0]}22, transparent 60%), linear-gradient(160deg, ${colors[1]}, var(--color-bg-elevated));`;
+  });
+
+  formatCount(n: number): string {
+    if (n >= 1000) return (n / 1000).toFixed(n >= 10000 ? 0 : 1) + 'k';
+    return String(n);
+  }
 
   onProductClick(): void {
     this.productClick.emit(this.product());

@@ -79,7 +79,7 @@
 :host.app-btn--danger {
   background: var(--color-danger);
   color: #fff;
-  &:hover:not(:disabled) { background: #dc2626; }
+  &:hover:not(:disabled) { filter: brightness(1.15); }
 }
 
 :host.app-btn--full {

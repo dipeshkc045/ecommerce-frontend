@@ -76,7 +76,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: #fff;
+  background: var(--bg-surface);
   color: $color-blue-dark;
   padding: 14px 32px;
   border-radius: $radius-pill;
