@@ -1,23 +1,26 @@
 @if (variant() === 'showcase') {
   <article class="pc pc--showcase" [attr.data-accent]="product().accent" [class.pc--animated]="animated()">
     <div class="pc__price-tag">{{ product().price | currency: 'USD' : 'symbol' : '1.0-0' }}</div>
-
     <div class="pc__image-zone">
       <a [routerLink]="detailLink()" (click)="onProductClick()">
         <img [src]="product().imageUrl" [alt]="product().name" class="pc__image" loading="lazy" />
       </a>
     </div>
-
     <div class="pc__content">
       <h3 class="pc__name">{{ product().name }}</h3>
-
       @if (hasFeatures() && showFeatures()) {
         <div class="pc__columns">
           @if (showDescription() && product().description) {
             <div class="pc__column">
               <p class="pc__description">{{ product().description }}</p>
               @if (showRating()) {
-                <app-rating-stars [rating]="product().rating" />
+                <div class="pc__stars">
+                  @for (star of [1,2,3,4,5]; track star) {
+                    <svg class="pc__star" [class.pc__star--filled]="star <= Math.round(product().rating)" width="12" height="12" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M10 1.5l2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.1-5.4 3.1 1.3-6L1.3 7.7l6.1-.6z"/>
+                    </svg>
+                  }
+                </div>
               }
             </div>
           }
@@ -33,99 +36,91 @@
       } @else if (showDescription() && product().description) {
         <p class="pc__description">{{ product().description }}</p>
       }
-
-      <app-button
-        class="pc__action"
-        variant="secondary"
-        [fullWidth]="true"
-        (click)="onAddToCart($event)"
-      >
-        Add to cart
-      </app-button>
+      <button class="pc__action-btn" (click)="onAddToCart($event)">Add to cart</button>
     </div>
   </article>
 } @else {
-  <app-card variant="elevated" [hoverable]="true" class="pc" [class.pc--animated]="animated()" [attr.data-accent]="product().accent">
-    <a [routerLink]="detailLink()" class="pc__image-wrap" [attr.data-accent]="product().accent" (click)="onProductClick()">
-      <img class="pc__image" [src]="product().imageUrl" [alt]="product().name" loading="lazy" />
-      @if (showBadge() && badgeLabel()) {
-        <app-badge [variant]="badgeVariant()" class="pc__badge">{{ badgeLabel() }}</app-badge>
+  <article class="pc" [class.pc--animated]="animated()" [class.pc--adding]="adding()">
+    <!-- Badge -->
+    @if (showBadge() && badgeLabel()) {
+      <span class="pc__badge" [class]="'pc__badge--' + product().badge">{{ badgeLabel() }}</span>
+    }
+
+    <!-- Wishlist -->
+    @if (showWishlist()) {
+      <button class="pc__wishlist" [class.pc__wishlist--active]="wished()" (click)="onWishlistToggle($event)" aria-label="Add to wishlist">
+        <svg viewBox="0 0 24 24" stroke-width="2" fill="none" stroke="currentColor">
+          <path d="M12 21s-7-4.6-9.5-9C.7 8.2 2 4.5 5.5 3.6 8 3 10.4 4 12 6.5 13.6 4 16 3 18.5 3.6 22 4.5 23.3 8.2 21.5 12c-2.5 4.4-9.5 9-9.5 9z"/>
+        </svg>
+      </button>
+    }
+
+    <!-- Media: gradient background with SVG or product image -->
+    <a [routerLink]="detailLink()" class="pc__media" (click)="onProductClick()">
+      @if (product().accent && product().imageUrl.includes('.svg')) {
+        <div class="pc__media-bg" [style]="mediaGradient()">
+          <img class="pc__media-icon" [src]="product().imageUrl" [alt]="product().name" loading="lazy" />
+        </div>
+      } @else {
+        <img class="pc__media-img" [src]="product().imageUrl" [alt]="product().name" loading="lazy" />
       }
     </a>
 
+    <!-- Body -->
     <div class="pc__body">
-      @if (showCategory() && product().categoryName) {
-        <p class="pc__category">{{ product().categoryName }}</p>
-      }
-
-      @if (showRating()) {
-        <app-rating-stars [rating]="product().rating" />
+      @if (product().categoryName) {
+        <p class="pc__cat">{{ product().categoryName }}</p>
       }
 
       <h3 class="pc__title">
         <a [routerLink]="detailLink()" (click)="onProductClick()">{{ product().name }}</a>
       </h3>
 
-      @if (showSku()) {
-        <p class="pc__sku">SKU: {{ product().sku }}</p>
-      }
-
-      @if (showDescription()) {
-        <p class="pc__description">{{ product().description }}</p>
-      }
-
-      @if (showStock()) {
-        <p class="pc__stock" [class.pc__stock--low]="product().stockStatus === 'lowStock'" [class.pc__stock--out]="product().stockStatus === 'outOfStock'">
-          @if (product().stockStatus === 'inStock') {
-            In Stock
-          } @else if (product().stockStatus === 'lowStock') {
-            Only {{ product().stockQuantity }} left
-          } @else {
-            Out of Stock
-          }
-        </p>
-      }
-
-      <div class="pc__footer">
-        @if (showPrice()) {
-          <div class="pc__pricing">
-            <span class="pc__price">{{ product().price | currency: 'USD' : 'symbol' }}</span>
-            @if (hasDiscount() && showOldPrice()) {
-              <span class="pc__old-price">{{ product().oldPrice | currency: 'USD' : 'symbol' }}</span>
-            }
-            @if (hasDiscount() && showDiscount()) {
-              <span class="pc__discount">-{{ product().discountPercentage }}%</span>
+      @if (showRating()) {
+        <div class="pc__rating">
+          <div class="pc__stars">
+            @for (star of [1,2,3,4,5]; track star) {
+              <svg class="pc__star" [class.pc__star--filled]="star <= Math.round(product().rating)" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M10 1.5l2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.1-5.4 3.1 1.3-6L1.3 7.7l6.1-.6z"/>
+              </svg>
             }
           </div>
-        }
-
-        <div class="pc__actions">
-          @if (showWishlist()) {
-            <button class="pc__icon-btn" [class.pc__icon-btn--active]="wished()" (click)="onWishlistToggle($event)" aria-label="Toggle wishlist">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-              </svg>
-            </button>
-          }
-          @if (showQuickView()) {
-            <button class="pc__icon-btn" (click)="onQuickView($event)" aria-label="Quick view">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
-              </svg>
-            </button>
-          }
-          @if (showCompare()) {
-            <button class="pc__icon-btn" (click)="onCompare($event)" aria-label="Compare">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
-              </svg>
-            </button>
-          }
-          <app-button variant="primary" size="sm" [loading]="adding()" (click)="onAddToCart($event)" aria-label="Add to cart">
-            Add
-          </app-button>
+          <span class="pc__rating-text">{{ product().rating }} ({{ formatCount(product().reviewCount) }})</span>
         </div>
+      }
+
+      <div class="pc__pricing">
+        <span class="pc__price">{{ product().price | currency: 'USD' : 'symbol' : '1.0-0' }}</span>
+        @if (hasDiscount() && showOldPrice()) {
+          <span class="pc__price-old">{{ product().oldPrice | currency: 'USD' : 'symbol' : '1.0-0' }}</span>
+        }
+        @if (hasDiscount() && showDiscount()) {
+          <span class="pc__price-off">-{{ product().discountPercentage }}%</span>
+        }
       </div>
+
+      @if (product().stockStatus === 'inStock') {
+        <div class="pc__delivery">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round">
+            <path d="M4 12l5 5L20 6"/>
+          </svg>
+          Fast Delivery
+        </div>
+      }
+
+      <button class="pc__cta" [class.pc__cta--loading]="adding()" (click)="onAddToCart($event)">
+        @if (adding()) {
+          <svg class="pc__spinner" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <circle cx="12" cy="12" r="10" stroke-dasharray="31.4 31.4" stroke-linecap="round" />
+          </svg>
+          <span>Adding...</span>
+        } @else {
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+          <span>Add to Cart</span>
+        }
+      </button>
     </div>
-  </app-card>
+  </article>
 }

@@ -1,4 +1,4 @@
-@use '../../../../scss/variables' as *;
+@use 'scss/mixins' as *;
 
 :host {
   display: inline-block;
@@ -19,7 +19,7 @@
     transform: translateY(-4px);
 
     .card-circle {
-      box-shadow: $shadow-hover;
+      box-shadow: var(--shadow-lg);
     }
   }
 }
@@ -30,7 +30,7 @@
   border-radius: 50%;
   @include flex-center;
   transition: box-shadow 0.25s ease;
-  box-shadow: $shadow-soft;
+  box-shadow: var(--shadow-sm);
 }
 
 .card-icon {
@@ -39,17 +39,15 @@
 }
 
 .card-label {
-  font-family: $font-primary;
   font-size: 13px;
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--color-text-primary);
   text-align: center;
   @include truncate;
   max-width: 110px;
 }
 
-/* RESPONSIVE */
-@media (max-width: $bp-md) {
+@media (max-width: 768px) {
   .card-circle {
     width: 80px;
     height: 80px;
@@ -64,7 +62,7 @@
   }
 }
 
-@media (max-width: $bp-sm) {
+@media (max-width: 480px) {
   .card-circle {
     width: 68px;
     height: 68px;

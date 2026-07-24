@@ -28,14 +28,14 @@ import { RouterLink } from '@angular/router';
       color: var(--text-muted);
     }
     .wishlist-empty h2 { color: var(--text-primary); font-size: var(--text-2xl); }
-    .wishlist-empty p { font-size: var(--text-md); max-width: 320px; }
+    .wishlist-empty p { font-size: var(--text-base); max-width: 320px; }
     .btn-primary {
       display: inline-flex;
       align-items: center;
       padding: 12px 24px;
       background: var(--color-accent);
       color: #fff;
-      border-radius: var(--border-radius-pill);
+      border-radius: var(--radius-full);
       font-weight: 600;
       font-size: var(--text-sm);
       transition: background var(--transition-fast);

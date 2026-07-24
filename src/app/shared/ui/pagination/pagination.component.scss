@@ -17,7 +17,7 @@
   border: 1.5px solid var(--border-color);
   background: var(--bg-surface);
   color: var(--text-primary);
-  border-radius: var(--border-radius-md);
+  border-radius: var(--radius-md);
   font-size: var(--text-sm);
   font-weight: 500;
   cursor: pointer;
@@ -30,7 +30,7 @@
   }
 
   &:disabled {
-    opacity: 0.4;
+    opacity: 0.55;
     cursor: not-allowed;
   }
 }
@@ -38,7 +38,7 @@
 .page-btn--active {
   background: var(--color-accent);
   border-color: var(--color-accent);
-  color: #fff;
+    color: var(--color-text-inverse);
 }
 
 .page-btn--nav {

@@ -8,7 +8,7 @@
   white-space: nowrap;
   cursor: pointer;
   border: 1.5px solid transparent;
-  border-radius: var(--border-radius-pill);
+  border-radius: var(--radius-full);
   text-decoration: none;
   user-select: none;
   transition:
@@ -44,19 +44,19 @@
 :host.app-btn--lg {
   height: 52px;
   padding: 0 28px;
-  font-size: var(--text-md);
+  font-size: var(--text-base);
 }
 
 // ── Style Variants
 :host.app-btn--primary {
   background: var(--color-accent);
-  color: #fff;
+    color: var(--color-text-inverse);
   &:hover:not(:disabled) { background: var(--color-accent-hover); }
 }
 
 :host.app-btn--secondary {
   background: var(--color-primary);
-  color: #fff;
+    color: var(--color-text-inverse);
   &:hover:not(:disabled) { background: var(--color-primary-light); }
 }
 
@@ -78,8 +78,8 @@
 
 :host.app-btn--danger {
   background: var(--color-danger);
-  color: #fff;
-  &:hover:not(:disabled) { background: #dc2626; }
+    color: var(--color-text-inverse);
+  &:hover:not(:disabled) { filter: brightness(1.15); }
 }
 
 :host.app-btn--full {

@@ -1,213 +1,395 @@
-<div class="shop-layout">
-  <!-- ═══ SIDEBAR ═══ -->
-  <aside class="sidebar">
-    <div class="sidebar-header">
-      <h2 class="sidebar-title">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="4" y1="21" x2="4" y2="14" /><line x1="4" y1="10" x2="4" y2="3" />
-          <line x1="12" y1="21" x2="12" y2="12" /><line x1="12" y1="8" x2="12" y2="3" />
-          <line x1="20" y1="21" x2="20" y2="16" /><line x1="20" y1="12" x2="20" y2="3" />
-          <line x1="1" y1="14" x2="7" y2="14" /><line x1="9" y1="8" x2="15" y2="8" />
-          <line x1="17" y1="16" x2="23" y2="16" />
+<div class="plp">
+  <!-- ═══ BREADCRUMB ═══ -->
+  <nav class="plp-breadcrumb" aria-label="Breadcrumb">
+    <a routerLink="/">Home</a>
+    <svg class="plp-breadcrumb__chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="9 18 15 12 9 6" />
+    </svg>
+    <span class="plp-breadcrumb__current">Shop</span>
+    <svg class="plp-breadcrumb__chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="9 18 15 12 9 6" />
+    </svg>
+    <span class="plp-breadcrumb__current">Electronics</span>
+  </nav>
+
+  <!-- ═══ HERO BANNER ═══ -->
+  <section class="plp-hero">
+    <div class="plp-hero__bg"></div>
+    <div class="plp-hero__content">
+      <span class="plp-hero__eyebrow">Premium Collection</span>
+      <h1 class="plp-hero__title">Premium Electronics</h1>
+      <p class="plp-hero__desc">Discover devices designed for work, play, and everyday life</p>
+      <a routerLink="/products" class="plp-hero__cta">
+        Explore All
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
         </svg>
-        Filters
-      </h2>
-      @if (selectedCategories().length || selectedPriceRange()) {
-        <button class="clear-all-btn" (click)="resetFilters()">Clear all</button>
-      }
+      </a>
     </div>
+  </section>
 
-    <!-- Category Filter -->
-    <div class="filter-group">
-      <h3 class="filter-title">Category</h3>
-      <div class="filter-options">
-        @for (cat of categories; track cat) {
-          <label class="checkbox-label">
-            <input type="checkbox"
-              [checked]="selectedCategories().includes(cat)"
-              (change)="toggleCategory(cat)" />
-            <span class="checkbox-custom"></span>
-            <span class="checkbox-text">{{ cat }}</span>
-          </label>
-        }
-      </div>
-    </div>
-
-    <!-- Price Range Filter -->
-    <div class="filter-group">
-      <h3 class="filter-title">Price Range</h3>
-      <div class="filter-options">
-        @for (range of priceRanges; track range.id) {
-          <label class="radio-label">
-            <input type="radio"
-              name="priceRange"
-              [checked]="selectedPriceRange() === range.id"
-              (change)="selectPriceRange(range.id)" />
-            <span class="radio-custom"></span>
-            <span class="radio-text">{{ range.label }}</span>
-          </label>
-        }
-      </div>
-    </div>
-
-    <button class="reset-filters-btn" (click)="resetFilters()">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="1 4 1 10 7 10" />
-        <path d="M3.51 15a9 9 0 102.13-9.36L1 10" />
-      </svg>
-      Reset All Filters
-    </button>
-  </aside>
-
-  <!-- ═══ MAIN CONTENT ═══ -->
-  <main class="main-content">
-    <!-- Top bar -->
-    <div class="content-header">
-      <div class="header-left">
-        <nav class="breadcrumb" aria-label="Breadcrumb">
-          <a routerLink="/">Home</a>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9 18 15 12 9 6" />
+  <div class="plp-layout">
+    <!-- ═══ SIDEBAR ═══ -->
+    <aside class="plp-sidebar">
+      <div class="plp-sidebar__header">
+        <div class="plp-sidebar__title-group">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="21" x2="4" y2="14" /><line x1="4" y1="10" x2="4" y2="3" />
+            <line x1="12" y1="21" x2="12" y2="12" /><line x1="12" y1="8" x2="12" y2="3" />
+            <line x1="20" y1="21" x2="20" y2="16" /><line x1="20" y1="12" x2="20" y2="3" />
+            <line x1="1" y1="14" x2="7" y2="14" /><line x1="9" y1="8" x2="15" y2="8" />
+            <line x1="17" y1="16" x2="23" y2="16" />
           </svg>
-          <span class="breadcrumb-current">Products</span>
-        </nav>
-        <h1 class="page-title">All Products</h1>
-      </div>
-      <div class="header-right">
-        @if (!isLoading() && !loadError()) {
-          <span class="results-count">
-            {{ filteredProducts().length }} of {{ facade.products()?.length || 0 }} products
-          </span>
-        }
-        <div class="sort-control">
-          <label class="sort-label" for="sortSelect">Sort by:</label>
-          <select id="sortSelect" class="sort-select" [value]="sortBy()" (change)="onSortChange($event)">
-            <option value="default">Featured</option>
-            <option value="price-asc">Price: Low to High</option>
-            <option value="price-desc">Price: High to Low</option>
-            <option value="name-asc">Name: A–Z</option>
-            <option value="name-desc">Name: Z–A</option>
-          </select>
+          <span>Filters</span>
         </div>
-        <div class="view-toggle">
-          <button class="view-btn" [class.active]="viewMode() === 'grid'" (click)="viewMode.set('grid')"
-            aria-label="Grid view">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" />
-              <rect x="3" y="14" width="7" height="7" /><rect x="14" y="14" width="7" height="7" />
+        @if (activeFilterCount()) {
+          <button class="plp-sidebar__clear" (click)="resetFilters()">Clear all</button>
+        }
+      </div>
+
+      <!-- Categories -->
+      <div class="plp-filter">
+        <button class="plp-filter__toggle" (click)="_tog('cat')" type="button">
+          <span>Category</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+            [class.rotated]="_isOpen('cat')">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </button>
+        @if (_isOpen('cat')) {
+          <div class="plp-filter__body">
+            <div class="plp-filter__chips">
+              @for (cat of categories; track cat) {
+                <button class="plp-chip" [class.active]="selectedCategories().includes(cat)" (click)="toggleCategory(cat)" type="button">
+                  {{ cat }}
+                </button>
+              }
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Price Range -->
+      <div class="plp-filter">
+        <button class="plp-filter__toggle" (click)="_tog('price')" type="button">
+          <span>Price Range</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+            [class.rotated]="_isOpen('price')">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </button>
+        @if (_isOpen('price')) {
+          <div class="plp-filter__body">
+            <div class="plp-filter__list">
+              @for (range of priceRanges; track range.id) {
+                <label class="plp-option">
+                  <input type="radio" name="priceRange" [checked]="selectedPriceRange() === range.id" (change)="selectPriceRange(range.id)" />
+                  <span class="plp-option__check"></span>
+                  <span class="plp-option__label">{{ range.label }}</span>
+                </label>
+              }
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Brand -->
+      <div class="plp-filter">
+        <button class="plp-filter__toggle" (click)="_tog('brand')" type="button">
+          <span>Brand</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+            [class.rotated]="_isOpen('brand')">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </button>
+        @if (_isOpen('brand')) {
+          <div class="plp-filter__body">
+            <div class="plp-filter__chips">
+              @for (brand of brands; track brand.id) {
+                <button class="plp-chip" [class.active]="selectedBrands().includes(brand.id)" (click)="toggleBrand(brand.id)" type="button">
+                  {{ brand.label }}
+                  @if (brand.count) {
+                    <span class="plp-chip__count">({{ brand.count }})</span>
+                  }
+                </button>
+              }
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Rating -->
+      <div class="plp-filter">
+        <button class="plp-filter__toggle" (click)="_tog('rating')" type="button">
+          <span>Rating</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+            [class.rotated]="_isOpen('rating')">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </button>
+        @if (_isOpen('rating')) {
+          <div class="plp-filter__body">
+            <div class="plp-filter__list">
+              @for (opt of ratingOptions; track opt.id) {
+                <label class="plp-option">
+                  <input type="radio" name="rating" [checked]="selectedRating() === opt.id" (change)="selectRating(opt.id)" />
+                  <span class="plp-option__check"></span>
+                  <span class="plp-option__label">{{ opt.label }}</span>
+                </label>
+              }
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Color -->
+      <div class="plp-filter">
+        <button class="plp-filter__toggle" (click)="_tog('color')" type="button">
+          <span>Color</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+            [class.rotated]="_isOpen('color')">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </button>
+        @if (_isOpen('color')) {
+          <div class="plp-filter__body">
+            <div class="plp-filter__colors">
+              @for (c of colors; track c.id) {
+                <button class="plp-swatch" [class.active]="selectedColors().includes(c.id)" [attr.data-color]="c.id" (click)="toggleColor(c.id)"
+                  [attr.aria-label]="c.label" type="button">
+                  <span class="plp-swatch__dot" [style.--swatch-color]="'var(--color-' + c.id + ')'"></span>
+                </button>
+              }
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Availability -->
+      <div class="plp-filter">
+        <button class="plp-filter__toggle" (click)="_tog('avail')" type="button">
+          <span>Availability</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+            [class.rotated]="_isOpen('avail')">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </button>
+        @if (_isOpen('avail')) {
+          <div class="plp-filter__body">
+            <div class="plp-filter__list">
+              @for (opt of availabilityOptions; track opt.id) {
+                <label class="plp-option">
+                  <input type="checkbox" [checked]="selectedAvailability().includes(opt.id)" (change)="toggleAvailability(opt.id)" />
+                  <span class="plp-option__check"></span>
+                  <span class="plp-option__label">{{ opt.label }}</span>
+                </label>
+              }
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Discount -->
+      <div class="plp-filter">
+        <button class="plp-filter__toggle" (click)="_tog('disc')" type="button">
+          <span>Discount</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+            [class.rotated]="_isOpen('disc')">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </button>
+        @if (_isOpen('disc')) {
+          <div class="plp-filter__body">
+            <div class="plp-filter__list">
+              @for (opt of discountOptions; track opt.id) {
+                <label class="plp-option">
+                  <input type="radio" name="discount" [checked]="selectedDiscount() === opt.id" (change)="selectDiscount(opt.id)" />
+                  <span class="plp-option__check"></span>
+                  <span class="plp-option__label">{{ opt.label }}</span>
+                </label>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </aside>
+
+    <!-- ═══ MAIN CONTENT ═══ -->
+    <main class="plp-main">
+      <!-- Sticky Toolbar -->
+      <div class="plp-toolbar">
+        <div class="plp-toolbar__left">
+          <span class="plp-toolbar__back" role="button" tabindex="0" routerLink="/">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 19 5 12 12 5" />
             </svg>
-          </button>
-          <button class="view-btn" [class.active]="viewMode() === 'list'" (click)="viewMode.set('list')"
-            aria-label="List view">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="8" y1="6" x2="21" y2="6" /><line x1="8" y1="12" x2="21" y2="12" />
-              <line x1="8" y1="18" x2="21" y2="18" />
-              <line x1="3" y1="6" x2="3.01" y2="6" /><line x1="3" y1="12" x2="3.01" y2="12" />
-              <line x1="3" y1="18" x2="3.01" y2="18" />
+          </span>
+          <span class="plp-toolbar__count">{{ totalCount() }} Products</span>
+        </div>
+        <div class="plp-toolbar__center">
+          <div class="plp-search">
+            <svg class="plp-search__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
+            <input class="plp-search__input" type="text" placeholder="Search products..." [value]="searchQuery()" (input)="searchQuery.set($any($event.target).value)" />
+            @if (searchQuery()) {
+              <button class="plp-search__clear" (click)="searchQuery.set('')" type="button">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            }
+          </div>
+        </div>
+        <div class="plp-toolbar__right">
+          <div class="plp-sort">
+            <select class="plp-sort__select" [value]="sortBy()" (change)="onSortChange($any($event.target).value)">
+              <option value="most-popular">Most Popular</option>
+              <option value="newest">Newest</option>
+              <option value="highest-rated">Highest Rated</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+            </select>
+          </div>
+          <div class="plp-view-toggle">
+            <button class="plp-view-toggle__btn" [class.active]="viewMode() === 'grid'" (click)="viewMode.set('grid')" aria-label="Grid view">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" />
+                <rect x="3" y="14" width="7" height="7" /><rect x="14" y="14" width="7" height="7" />
+              </svg>
+            </button>
+            <button class="plp-view-toggle__btn" [class.active]="viewMode() === 'list'" (click)="viewMode.set('list')" aria-label="List view">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="8" y1="6" x2="21" y2="6" /><line x1="8" y1="12" x2="21" y2="12" />
+                <line x1="8" y1="18" x2="21" y2="18" /><line x1="3" y1="6" x2="3.01" y2="6" />
+                <line x1="3" y1="12" x2="3.01" y2="12" /><line x1="3" y1="18" x2="3.01" y2="18" />
+              </svg>
+            </button>
+          </div>
+          <button class="plp-theme-toggle" (click)="layout.toggleTheme()" [attr.aria-label]="'Switch to ' + (layout.isDark() ? 'light' : 'dark') + ' mode'">
+            @if (layout.isDark()) {
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" /><line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+              </svg>
+            } @else {
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+              </svg>
+            }
           </button>
         </div>
       </div>
-    </div>
 
-    <!-- Active filter tags -->
-    @if (selectedCategories().length || selectedPriceRange()) {
-      <div class="active-filters">
-        @for (cat of selectedCategories(); track cat) {
-          <span class="filter-tag">
-            {{ cat }}
-            <button class="tag-remove" (click)="toggleCategory(cat)" aria-label="Remove filter">×</button>
-          </span>
-        }
-        @if (selectedPriceRange()) {
-          <span class="filter-tag">
-            {{ getPriceRangeLabel(selectedPriceRange()!) }}
-            <button class="tag-remove" (click)="selectPriceRange(null)" aria-label="Remove filter">×</button>
-          </span>
-        }
-      </div>
-    }
+      <!-- Active Filters -->
+      @if (activeFilterCount()) {
+        <div class="plp-active-filters">
+          @for (cat of selectedCategories(); track cat) {
+            <span class="plp-active-tag">
+              {{ cat }}
+              <button (click)="toggleCategory(cat)" aria-label="Remove filter">&times;</button>
+            </span>
+          }
+          @if (selectedPriceRange(); as r) {
+            <span class="plp-active-tag">
+              {{ getPriceRangeLabel(r) }}
+              <button (click)="selectPriceRange(null)" aria-label="Remove filter">&times;</button>
+            </span>
+          }
+          @for (b of selectedBrands(); track b) {
+            <span class="plp-active-tag">
+              {{ b }}
+              <button (click)="toggleBrand(b)" aria-label="Remove filter">&times;</button>
+            </span>
+          }
+        </div>
+      }
 
-    <!-- Loading State -->
-    @if (isLoading()) {
-      <div class="loading-state">
-        <div class="skeleton-grid" [class.list-mode]="viewMode() === 'list'">
+      <!-- Background API Loading Indicator -->
+      @if (isLoading() && facade.products()) {
+        <div class="plp-loading-bar"></div>
+      }
+
+      <!-- Full Loading State (only on first load before fallback) -->
+      @if (isLoading() && !facade.products()) {
+        <div class="plp-skeleton">
           @for (i of skeletonItems; track i) {
-            <div class="skeleton-card">
-              <div class="skeleton-image shimmer"></div>
-              <div class="skeleton-info">
-                <div class="skeleton-line short shimmer"></div>
-                <div class="skeleton-line wide shimmer"></div>
-                <div class="skeleton-line medium shimmer"></div>
+            <div class="plp-skeleton__card">
+              <div class="plp-skeleton__image"></div>
+              <div class="plp-skeleton__body">
+                <div class="plp-skeleton__line short"></div>
+                <div class="plp-skeleton__line wide"></div>
+                <div class="plp-skeleton__line medium"></div>
               </div>
             </div>
           }
         </div>
-      </div>
-    }
+      }
 
-    <!-- Fallback / Offline Banner -->
-    @if (usingFallback() && !fallbackDismissed()) {
-      <div class="fallback-banner">
-        <div class="fallback-banner__icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
-            <line x1="12" y1="9" x2="12" y2="13" />
-            <line x1="12" y1="17" x2="12.01" y2="17" />
-          </svg>
-        </div>
-        <div class="fallback-banner__body">
-          <strong class="fallback-banner__title">You're viewing sample products</strong>
-          <p class="fallback-banner__desc">{{ loadError() }} Live catalog will appear once the server is back online.</p>
-        </div>
-        <div class="fallback-banner__actions">
-          <button class="fallback-banner__retry" (click)="retryLoad()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="23 4 23 10 17 10" />
-              <path d="M20.49 15a9 9 0 11-2.12-9.36L23 10" />
+      <!-- Fallback Banner -->
+      @if (usingFallback() && !fallbackDismissed()) {
+        <div class="plp-fallback">
+          <div class="plp-fallback__icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+              <line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" />
             </svg>
-            Retry
-          </button>
-          <button class="fallback-banner__dismiss" (click)="dismissFallbackBanner()" aria-label="Dismiss">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
-          </button>
+          </div>
+          <div class="plp-fallback__body">
+            <strong>You're viewing sample products</strong>
+            <p>{{ loadError() }} Live catalog will appear once the server is back online.</p>
+          </div>
+          <div class="plp-fallback__actions">
+            <button class="plp-fallback__retry" (click)="retryLoad()">Retry</button>
+            <button class="plp-fallback__dismiss" (click)="dismissFallbackBanner()" aria-label="Dismiss">&times;</button>
+          </div>
         </div>
-      </div>
-    }
+      }
 
-    <!-- Empty State -->
-    @if (facade.products() && facade.products()!.length >= 0 && filteredProducts().length === 0 && !isLoading()) {
-      <app-empty-state
-        title="No products found"
-        description="Try adjusting your filters or browse all products."
-      >
-        <button slot="actions" type="button" class="empty-cta" (click)="resetFilters()">
-          Clear All Filters
-        </button>
-      </app-empty-state>
-    }
+      <!-- Empty State -->
+      @if (facade.products() && facade.products()!.length >= 0 && filteredProducts().length === 0 && !isLoading()) {
+        <div class="plp-empty">
+          <span class="plp-empty__emoji">🎈</span>
+          <h2 class="plp-empty__title">Nothing matched your search</h2>
+          <p class="plp-empty__desc">Try adjusting your filters or browse all products.</p>
+          <button class="plp-empty__cta" (click)="resetFilters()">Clear Filters</button>
+          <a routerLink="/" class="plp-empty__link">Continue Shopping</a>
+        </div>
+      }
 
-    @if (facade.products() && filteredProducts().length > 0) {
-      <div class="product-grid" [class.list-mode]="viewMode() === 'list'">
-        @for (p of filteredProducts(); track p.id) {
-          <app-product-card
-            [product]="p"
-            [adding]="addingProductId() === p.id"
-            [showSku]="false"
-            (addToCart)="addToCart($event)"
-          />
+      <!-- Product Grid (shows immediately with fallback data, even while loading) -->
+      @if (facade.products() && displayedProducts().length > 0) {
+        <div class="plp-grid" [class.plp-grid--list]="viewMode() === 'list'">
+          @for (p of displayedProducts(); track p.id) {
+            <app-product-card
+              [product]="p"
+              [adding]="addingProductId() === p.id"
+              [showSku]="false"
+              [showFeatures]="false"
+              [showWishlist]="true"
+              [showBadge]="true"
+              [showOldPrice]="true"
+              [showDiscount]="true"
+              (addToCart)="addToCart($event)"
+            />
+          }
+        </div>
+
+        <!-- Load More -->
+        @if (hasMore()) {
+          <div class="plp-load-more">
+            <button class="plp-load-more__btn" (click)="loadMore()">
+              Load More
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </button>
+            <span class="plp-load-more__info">{{ visibleCount() }} of {{ totalCount() }} products shown</span>
+          </div>
         }
-      </div>
-    }
-  </main>
+      }
+    </main>
+  </div>
 </div>

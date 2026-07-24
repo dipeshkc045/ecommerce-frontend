@@ -55,10 +55,12 @@
               formControlName="emailOrPhone"
               placeholder="you&#64;example.com"
               autocomplete="username"
+              [attr.aria-invalid]="showError('emailOrPhone') ? true : null"
+              [attr.aria-describedby]="showError('emailOrPhone') ? 'emailOrPhone-error' : null"
             />
           </div>
           @if (showError('emailOrPhone')) {
-            <span class="field-error">Email or phone is required</span>
+            <span id="emailOrPhone-error" class="field-error" role="alert">Email or phone is required</span>
           }
         </div>
 
@@ -78,8 +80,16 @@
               formControlName="password"
               placeholder="Enter your password"
               autocomplete="current-password"
+              [attr.aria-invalid]="showError('password') ? true : null"
+              [attr.aria-describedby]="showError('password') ? 'password-error' : null"
             />
-            <button type="button" class="toggle-pw" (click)="togglePassword()" aria-label="Toggle password visibility">
+            <button
+              type="button"
+              class="toggle-pw"
+              (click)="togglePassword()"
+              [attr.aria-pressed]="passwordVisible()"
+              [attr.aria-label]="passwordVisible() ? 'Hide password' : 'Show password'"
+            >
               @if (passwordVisible()) {
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/>
@@ -93,13 +103,13 @@
             </button>
           </div>
           @if (showError('password')) {
-            <span class="field-error">Password is required</span>
+            <span id="password-error" class="field-error" role="alert">Password is required</span>
           }
         </div>
 
         <!-- Error Message -->
         @if (error()) {
-          <div class="alert-error">
+          <div class="alert-error" role="alert" aria-live="assertive">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
             </svg>
@@ -113,9 +123,10 @@
           class="btn-submit"
           [class.loading]="submitting()"
           [disabled]="form.invalid || submitting()"
+          [attr.aria-busy]="submitting()"
         >
           @if (submitting()) {
-            <span class="spinner"></span>
+            <span class="spinner" aria-hidden="true"></span>
             <span>Signing in…</span>
           } @else {
             <span>Sign in</span>

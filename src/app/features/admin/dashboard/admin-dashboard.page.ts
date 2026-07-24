@@ -31,7 +31,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
       padding: 24px 20px;
       background: var(--bg-surface);
       border: 1px solid var(--border-color);
-      border-radius: var(--border-radius-lg);
+      border-radius: var(--radius-lg);
       text-align: center;
       box-shadow: var(--shadow-sm);
     }

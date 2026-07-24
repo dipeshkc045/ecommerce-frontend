@@ -1,0 +1,18 @@
+:root {
+  --header-height: 72px;
+  --sidebar-width: 260px;
+  --sidebar-collapsed: 72px;
+  --footer-height: auto;
+  --page-max-width: 1440px;
+  --content-max-width: 1200px;
+
+  --z-base: 0;
+  --z-raised: 10;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-fixed: 300;
+  --z-overlay: 400;
+  --z-modal: 500;
+  --z-toast: 600;
+  --z-tooltip: 700;
+}

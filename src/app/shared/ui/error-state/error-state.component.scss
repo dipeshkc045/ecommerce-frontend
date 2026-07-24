@@ -29,23 +29,23 @@
 }
 
 .error-description {
-  font-size: var(--text-md);
+  font-size: var(--text-base);
   color: var(--text-secondary);
   max-width: 360px;
   margin: 0;
-  line-height: var(--line-height-relaxed);
+  line-height: var(--leading-relaxed);
 }
 
 .retry-btn {
   margin-top: 8px;
   padding: 10px 24px;
   background: var(--color-danger);
-  color: #fff;
+    color: var(--color-text-inverse);
   border: none;
-  border-radius: var(--border-radius-pill);
+  border-radius: var(--radius-full);
   font-size: var(--text-sm);
   font-weight: 600;
   cursor: pointer;
   transition: background var(--transition-fast);
-  &:hover { background: #dc2626; }
+  &:hover { filter: brightness(1.15); }
 }
