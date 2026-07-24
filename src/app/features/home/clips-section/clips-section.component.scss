@@ -1,5 +1,4 @@
-@use 'sass:color';
-@use '../../../../scss/variables' as *;
+@use 'scss/mixins' as *;
 
 :host {
     display: block;
@@ -17,10 +16,9 @@
 }
 
 .section-title {
-    font-family: $font-primary;
     font-size: 22px;
     font-weight: 700;
-    color: $color-text-strong;
+    color: var(--color-text-primary);
     margin: 0;
     letter-spacing: -0.01em;
 }
@@ -29,8 +27,7 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    color: $color-primary;
-    font-family: $font-primary;
+    color: var(--color-primary);
     font-size: 14px;
     font-weight: 600;
     text-decoration: none;
@@ -38,7 +35,7 @@
 
     &:hover {
         gap: 10px;
-        color: color.adjust($color-primary, $lightness: 10%);
+        filter: brightness(1.1);
     }
 }
 
@@ -51,7 +48,7 @@
 .clip-card {
     display: block;
     text-decoration: none;
-    border-radius: $radius-xl;
+    border-radius: var(--radius-xl);
     overflow: hidden;
     background: var(--bg-surface);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
@@ -71,7 +68,7 @@
     width: 100%;
     aspect-ratio: 3 / 4;
     overflow: hidden;
-    border-radius: $radius-xl;
+    border-radius: var(--radius-xl);
 
     img {
         width: 100%;
@@ -94,21 +91,20 @@
 }
 
 .clip-title {
-    font-family: $font-primary;
     font-size: 14px;
     font-weight: 600;
-    color: $color-text-strong;
+    color: var(--color-text-primary);
     margin: 12px 14px 14px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-@media (max-width: $bp-lg) {
+@media (max-width: 1024px) {
     .clips-grid { gap: 14px; }
 }
 
-@media (max-width: $bp-md) {
+@media (max-width: 768px) {
     .clips-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 14px;
@@ -116,7 +112,7 @@
     .section-title { font-size: 18px; }
 }
 
-@media (max-width: $bp-sm) {
+@media (max-width: 480px) {
     .clips-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 10px;

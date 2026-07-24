@@ -8,7 +8,7 @@
   );
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--radius-sm);
 }
 
 :host.app-skeleton--text {

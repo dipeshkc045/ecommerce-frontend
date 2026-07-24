@@ -34,7 +34,7 @@ import { AuthService } from '../../core/auth/auth.service';
       padding: 20px;
       background: var(--bg-surface);
       border: 1px solid var(--border-color);
-      border-radius: var(--border-radius-lg);
+      border-radius: var(--radius-lg);
       max-width: 400px;
     }
     .avatar {

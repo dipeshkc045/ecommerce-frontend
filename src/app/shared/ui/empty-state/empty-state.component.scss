@@ -30,11 +30,11 @@
 }
 
 .empty-description {
-  font-size: var(--text-md);
+  font-size: var(--text-base);
   color: var(--text-secondary);
   max-width: 360px;
   margin: 0;
-  line-height: var(--line-height-relaxed);
+  line-height: var(--leading-relaxed);
 }
 
 .empty-actions {

@@ -1,5 +1,4 @@
-@use '../../../scss/variables' as *;
-@use 'sass:color';
+@use 'scss/mixins' as *;
 
 /* ================================================================
    Orders Page
@@ -14,21 +13,21 @@
 /* ── Page Header ──────────────────────────────────────────────── */
 .page-header {
   margin-bottom: 2.5rem;
-  border-bottom: 1px solid $color-border;
+  border-bottom: 1px solid var(--color-border);
   padding-bottom: 1.5rem;
 }
 
 .page-title {
-  font-family: $font-primary;
+  font-family: var(--font-family);
   font-size: 1.75rem;
   font-weight: 700;
-  color: $color-text-strong;
+  color: var(--color-text-primary);
   margin: 0 0 0.35rem;
 }
 
 .page-subtitle {
   font-size: 0.925rem;
-  color: $color-text-muted;
+  color: var(--color-text-muted);
   margin: 0;
   line-height: 1.6;
 }
@@ -39,7 +38,7 @@
   padding: 5rem 2rem;
 
   .auth-icon {
-    color: $color-text-muted;
+    color: var(--color-text-muted);
     margin-bottom: 1.5rem;
     opacity: 0.45;
   }
@@ -47,12 +46,12 @@
   h2 {
     font-size: 1.35rem;
     font-weight: 700;
-    color: $color-text-strong;
+    color: var(--color-text-primary);
     margin: 0 0 0.5rem;
   }
 
   p {
-    color: $color-text-muted;
+    color: var(--color-text-muted);
     font-size: 0.925rem;
     margin: 0 0 2rem;
   }
@@ -61,16 +60,16 @@
 .btn-primary {
   display: inline-block;
   padding: 0.75rem 2rem;
-  background: $color-accent;
-  color: #fff;
+  background: var(--color-accent);
+  color: var(--color-text-inverse);
   font-weight: 600;
   font-size: 0.9rem;
-  border-radius: $radius-sm;
+  border-radius: var(--radius-sm);
   text-decoration: none;
   transition: background 0.2s, transform 0.15s;
 
   &:hover {
-    background: color.adjust($color-accent, $lightness: -8%);
+    background: var(--color-accent-hover);
     transform: translateY(-1px);
   }
 }
@@ -83,8 +82,8 @@
 }
 
 .skeleton-order {
-  border: 1px solid $color-border;
-  border-radius: $radius-md;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   overflow: hidden;
 }
 
@@ -102,7 +101,7 @@
 .skeleton-image {
   width: 160px;
   height: 160px;
-  border-radius: $radius-sm;
+  border-radius: var(--radius-sm);
   background: var(--bg-surface-secondary);
   flex-shrink: 0;
 }
@@ -128,7 +127,7 @@
 .skeleton-progress {
   height: 48px;
   margin: 0 1.5rem 1.5rem;
-  border-radius: $radius-sm;
+  border-radius: var(--radius-sm);
   background: var(--bg-surface-secondary);
 }
 
@@ -156,7 +155,7 @@
   padding: 5rem 2rem;
 
   .empty-icon {
-    color: $color-text-muted;
+    color: var(--color-text-muted);
     opacity: 0.35;
     margin-bottom: 1.5rem;
   }
@@ -165,12 +164,12 @@
 .empty-title {
   font-size: 1.35rem;
   font-weight: 700;
-  color: $color-text-body;
+  color: var(--color-text-secondary);
   margin: 0 0 0.5rem;
 }
 
 .empty-desc {
-  color: $color-text-muted;
+  color: var(--color-text-muted);
   font-size: 0.925rem;
   margin: 0 0 2rem;
 }
@@ -182,7 +181,7 @@
   gap: 0.75rem;
   background: var(--bg-surface-secondary);
   border: 1px solid var(--border-color);
-  border-radius: $radius-md;
+  border-radius: var(--radius-md);
   padding: 1rem 1.25rem;
   margin-bottom: 2rem;
 
@@ -215,7 +214,7 @@
     cursor: pointer;
     color: var(--text-secondary);
     padding: 2px;
-    border-radius: $radius-xs;
+    border-radius: var(--radius-xs);
     transition: color 0.15s;
 
     &:hover {
@@ -226,8 +225,8 @@
 
 /* ── Order Card ───────────────────────────────────────────────── */
 .order-card {
-  border: 1px solid $color-border;
-  border-radius: $radius-md;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   overflow: hidden;
   margin-bottom: 2rem;
   background: var(--bg-surface);
@@ -240,7 +239,7 @@
   align-items: center;
   padding: 1.25rem 1.5rem;
   background: var(--bg-surface-secondary);
-  border-bottom: 1px solid $color-border;
+  border-bottom: 1px solid var(--color-border);
   flex-wrap: wrap;
   gap: 1rem;
 }
@@ -254,7 +253,7 @@
 .order-number {
   font-size: 1rem;
   font-weight: 700;
-  color: $color-text-body;
+  color: var(--color-text-secondary);
   margin: 0;
 }
 
@@ -264,12 +263,12 @@
   gap: 0.3rem;
   font-size: 0.825rem;
   font-weight: 600;
-  color: $color-accent;
+  color: var(--color-accent);
   text-decoration: none;
   transition: color 0.15s;
 
   &:hover {
-    color: color.adjust($color-accent, $lightness: -10%);
+    color: var(--color-accent-hover);
   }
 }
 
@@ -283,14 +282,14 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: $color-text-muted;
+  color: var(--color-text-muted);
   margin-bottom: 0.1rem;
 }
 
 .order-date {
   font-size: 0.9rem;
   font-weight: 500;
-  color: $color-text-body;
+  color: var(--color-text-secondary);
 }
 
 /* ── Order Item Row ───────────────────────────────────────────── */
@@ -299,7 +298,7 @@
   grid-template-columns: 160px 1fr 1fr 1fr;
   gap: 1.5rem;
   padding: 1.5rem;
-  border-bottom: 1px solid $color-border;
+  border-bottom: 1px solid var(--color-border);
 
   &:last-of-type {
     border-bottom: none;
@@ -309,7 +308,7 @@
 .order-item-image {
   width: 160px;
   height: 160px;
-  border-radius: $radius-sm;
+  border-radius: var(--radius-sm);
   overflow: hidden;
   background: var(--bg-surface-secondary);
 
@@ -324,7 +323,7 @@
   .item-name {
     font-size: 0.95rem;
     font-weight: 600;
-    color: $color-text-body;
+    color: var(--color-text-secondary);
     margin: 0 0 0.35rem;
     line-height: 1.4;
   }
@@ -332,13 +331,13 @@
   .item-price {
     font-size: 0.9rem;
     font-weight: 700;
-    color: $color-text-body;
+    color: var(--color-text-secondary);
     margin: 0 0 0.65rem;
   }
 
   .item-desc {
     font-size: 0.825rem;
-    color: $color-text-muted;
+    color: var(--color-text-muted);
     line-height: 1.65;
     margin: 0;
     display: -webkit-box;
@@ -353,7 +352,7 @@
   h4 {
     font-size: 0.8rem;
     font-weight: 700;
-    color: $color-text-body;
+    color: var(--color-text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.03em;
     margin: 0 0 0.6rem;
@@ -361,7 +360,7 @@
 
   p {
     font-size: 0.85rem;
-    color: $color-text-muted;
+    color: var(--color-text-muted);
     margin: 0 0 0.2rem;
     line-height: 1.55;
   }
@@ -371,26 +370,26 @@
   display: inline-block;
   font-size: 0.825rem;
   font-weight: 600;
-  color: $color-accent;
+  color: var(--color-accent);
   text-decoration: none;
   margin-top: 0.35rem;
   transition: color 0.15s;
 
   &:hover {
-    color: color.adjust($color-accent, $lightness: -10%);
+    color: var(--color-accent-hover);
   }
 }
 
 /* ── Progress Tracker ─────────────────────────────────────────── */
 .progress-section {
   padding: 1.25rem 1.5rem 1.5rem;
-  border-bottom: 1px solid $color-border;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .progress-label {
   font-size: 0.875rem;
   font-weight: 600;
-  color: $color-text-body;
+  color: var(--color-text-secondary);
   margin: 0 0 0.75rem;
 }
 
@@ -408,7 +407,7 @@
   top: 0;
   left: 0;
   height: 100%;
-  background: $color-accent;
+  background: var(--color-accent);
   border-radius: 99px;
   transition: width 0.6s ease;
 }
@@ -419,11 +418,11 @@
 
   span {
     font-size: 0.75rem;
-    color: $color-text-muted;
+    color: var(--color-text-muted);
     font-weight: 500;
 
     &.active {
-      color: $color-accent;
+      color: var(--color-accent);
       font-weight: 600;
     }
   }
@@ -436,7 +435,7 @@
   gap: 2rem;
   padding: 1.5rem;
   background: var(--bg-surface-secondary);
-  border-top: 1px solid $color-border;
+  border-top: 1px solid var(--color-border);
 }
 
 .footer-billing,
@@ -446,13 +445,13 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.03em;
-    color: $color-text-body;
+    color: var(--color-text-secondary);
     margin: 0 0 0.6rem;
   }
 
   p {
     font-size: 0.85rem;
-    color: $color-text-muted;
+    color: var(--color-text-muted);
     margin: 0 0 0.2rem;
     line-height: 1.55;
   }
@@ -469,8 +468,8 @@
   align-items: center;
   justify-content: center;
   padding: 0.3rem 0.5rem;
-  background: linear-gradient(135deg, #1a1f71, #2b3990);
-  color: #fff;
+  background: linear-gradient(135deg, #1a1f71, #2b3990); /* stylelint-disable-line */
+  color: var(--color-text-inverse);
   font-size: 0.65rem;
   font-weight: 800;
   letter-spacing: 0.06em;
@@ -481,7 +480,7 @@
 .payment-details {
   p {
     font-size: 0.85rem;
-    color: $color-text-muted;
+    color: var(--color-text-muted);
     margin: 0;
     line-height: 1.55;
   }
@@ -502,14 +501,14 @@
   display: flex;
   justify-content: space-between;
   font-size: 0.85rem;
-  color: $color-text-muted;
+  color: var(--color-text-muted);
 
   &.order-total {
-    border-top: 1px solid $color-border;
+    border-top: 1px solid var(--color-border);
     padding-top: 0.55rem;
     margin-top: 0.2rem;
     font-weight: 700;
-    color: $color-text-body;
+    color: var(--color-text-secondary);
     font-size: 0.95rem;
   }
 }
@@ -537,7 +536,7 @@
 
   .footer-totals {
     grid-column: 1 / -1;
-    border-top: 1px solid $color-border;
+    border-top: 1px solid var(--color-border);
     padding-top: 1rem;
   }
 }

@@ -1,0 +1,14 @@
+{
+  "customSyntax": "postcss-scss",
+  "plugins": ["stylelint-declaration-strict-value"],
+  "rules": {
+    "scale-unlimited/declaration-strict-value": [
+      ["color", "background-color", "background", "border-color", "border-top-color", "border-right-color", "border-bottom-color", "border-left-color", "outline-color", "fill", "stroke"],
+      {
+        "ignoreValues": ["currentColor", "transparent", "inherit", "initial", "unset"],
+        "ignoreKeywords": ["/^var\\(--/", "none", "/^rgba\\(/", "/^rgb\\(/"],
+        "message": "Use a CSS custom property (--color-*, --bg-*, --text-*, --border-*) instead of a raw color value."
+      }
+    ]
+  }
+}

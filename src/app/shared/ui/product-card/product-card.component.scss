@@ -15,7 +15,7 @@
   flex-direction: column;
   background: var(--color-bg-card);
   border: 1px solid var(--color-border);
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow-card);
   transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
@@ -53,7 +53,7 @@
   position: absolute;
   top: 12px;
   left: 12px;
-  z-index: 3;
+  z-index: var(--z-raised);
   font-family: var(--font-body, inherit);
   font-size: 10.5px;
   font-weight: 700;
@@ -63,10 +63,10 @@
   text-transform: uppercase;
   line-height: 1;
 
-  &--hot { background: linear-gradient(135deg, #FF7A59, #F0483E); color: #fff; }
-  &--sale { background: #F5384F; color: #fff; }
-  &--new { background: var(--color-success); color: #06281F; }
-  &--bestseller { background: linear-gradient(135deg, #FFD873, #F0B429); color: #3A2A00; }
+  &--hot { background: linear-gradient(135deg, #FF7A59, #F0483E); color: var(--color-text-inverse); }
+  &--sale { background: var(--color-danger); color: var(--color-text-inverse); }
+  &--new { background: var(--color-success); color: var(--color-text-primary); }
+  &--bestseller { background: linear-gradient(135deg, #FFD873, #F0B429); color: var(--color-text-primary); }
 }
 
 // ─── Wishlist ────────────────────────────────────────────────
@@ -74,10 +74,10 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  z-index: 3;
+  z-index: var(--z-raised);
   width: 32px;
   height: 32px;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   border: none;
   background: var(--color-bg-card);
   display: flex;
@@ -86,6 +86,12 @@
   cursor: pointer;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   transition: transform 0.2s ease;
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--shadow-focus);
+    border-radius: 50%;
+  }
 
   &:hover {
     transform: scale(1.1);
@@ -176,6 +182,12 @@
     &:hover {
       color: var(--color-accent);
     }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
+      border-radius: 2px;
+    }
   }
 }
 
@@ -235,7 +247,7 @@
   color: var(--color-success);
   background: var(--color-success-light);
   padding: 2px 6px;
-  border-radius: 5px;
+  border-radius: var(--radius-xs);
 }
 
 // ─── Delivery ────────────────────────────────────────────────
@@ -258,9 +270,9 @@
   margin-top: 10px;
   width: 100%;
   border: none;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   background: var(--color-accent);
-  color: #fff;
+  color: var(--color-text-inverse);
   font-family: var(--font-body, inherit);
   font-weight: 700;
   font-size: 13.5px;
@@ -271,6 +283,11 @@
   gap: 7px;
   cursor: pointer;
   transition: background 0.2s ease, transform 0.15s ease;
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--shadow-focus);
+  }
 
   &:hover {
     background: var(--color-accent-strong, var(--color-accent-hover));
@@ -306,7 +323,7 @@
   position: relative;
   width: 280px;
   height: 490px;
-  border-radius: 20px;
+  border-radius: var(--radius-xl);
   overflow: hidden;
   box-shadow: var(--shadow-xl);
   color: var(--showcase-text);
@@ -323,14 +340,14 @@
   position: absolute;
   top: 0;
   right: 0;
-  z-index: 2;
+  z-index: var(--z-raised);
   min-width: 72px;
   min-height: 36px;
   padding: 7px 12px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-weight: var(--font-weight-black);
+  font-weight: var(--weight-black);
   font-size: var(--text-sm);
   color: var(--color-text-primary);
   background: var(--showcase-accent);
@@ -367,8 +384,8 @@
 .pc__name {
   margin: 0 0 12px;
   font-size: var(--text-lg);
-  font-weight: var(--font-weight-black);
-  line-height: var(--line-height-tight);
+  font-weight: var(--weight-black);
+  line-height: var(--leading-tight);
   letter-spacing: 0.5px;
   text-transform: uppercase;
   white-space: pre-line;
@@ -405,7 +422,7 @@
 
 .pc__feature-title {
   font-size: 9px;
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--weight-bold);
   text-transform: uppercase;
   letter-spacing: 0.4px;
   color: var(--showcase-accent);

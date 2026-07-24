@@ -12,6 +12,11 @@
   font-family: inherit;
   color: inherit;
   font-size: inherit;
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--shadow-focus);
+  }
 }
 
 .dropdown-chevron {
@@ -27,7 +32,7 @@
   min-width: 200px;
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
-  border-radius: var(--border-radius-md);
+  border-radius: var(--radius-md);
   box-shadow: var(--shadow-lg);
   z-index: var(--z-dropdown);
   padding: 6px;
@@ -46,12 +51,13 @@
   color: var(--text-primary);
   font-size: var(--text-sm);
   font-family: inherit;
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--radius-sm);
   cursor: pointer;
   text-align: left;
   transition: background var(--transition-fast);
 
   &:hover {   background: var(--bg-surface-secondary); }
+  &:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
   &:disabled { opacity: 0.5; cursor: not-allowed; }
 }
 

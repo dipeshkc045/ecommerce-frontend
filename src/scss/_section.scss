@@ -3,19 +3,19 @@
 // Only use --surface variants when there is a clear UX reason.
 
 .section {
-  padding-block: var(--space-16);
+  padding-block: var(--space-4xl);
 
   @media (max-width: 768px) {
-    padding-block: var(--space-12);
+    padding-block: var(--space-3xl);
   }
 }
 
 .section--sm {
-  padding-block: var(--space-10);
+  padding-block: var(--space-2xl);
 }
 
 .section--lg {
-  padding-block: var(--space-20);
+  padding-block: var(--space-5xl);
 }
 
 .section--surface {

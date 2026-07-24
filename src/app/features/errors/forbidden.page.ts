@@ -44,7 +44,7 @@ import { RouterLink } from '@angular/router';
       padding: 12px 28px;
       background: var(--color-accent);
       color: #fff;
-      border-radius: var(--border-radius-pill);
+      border-radius: var(--radius-full);
       font-weight: 600;
       transition: background var(--transition-fast);
       &:hover { background: var(--color-accent-hover); }
@@ -53,7 +53,7 @@ import { RouterLink } from '@angular/router';
       padding: 12px 28px;
       border: 1.5px solid var(--border-color);
       color: var(--text-primary);
-      border-radius: var(--border-radius-pill);
+      border-radius: var(--radius-full);
       font-weight: 600;
       background: transparent;
       cursor: pointer;
