@@ -83,7 +83,7 @@ export const routes: Routes = [
             path: '',
             data: { breadcrumb: 'Dashboard' },
             loadComponent: () =>
-              import('./features/account/profile.page').then(m => m.ProfilePage),
+              import('./features/account/dashboard.page').then(m => m.DashboardPage),
           },
           {
             path: 'profile',

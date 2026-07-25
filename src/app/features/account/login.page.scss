@@ -273,13 +273,13 @@
   font-size: 0.925rem;
   font-weight: 700;
   cursor: pointer;
-  color: var(--color-text-inverse);
-  background: var(--color-primary);
+  color: #ffffff;
+  background: var(--color-accent);
   transition: background 0.2s, opacity 0.2s, transform 0.15s;
   margin-top: 0.25rem;
 
   &:hover:not(:disabled) {
-    background: var(--color-accent);
+    background: var(--color-accent-hover);
     transform: translateY(-1px);
   }
 

@@ -1,0 +1,472 @@
+<div class="dash-stage">
+
+  <!-- ================= TOP COMMAND BAR ================= -->
+  <header class="dash-header">
+    <div class="dash-brand">
+      <span class="dash-mark"></span>
+      <span class="dash-brand-title">NIMBUS</span>
+    </div>
+
+    <div class="user-block">
+      <div class="user-avatar">JT</div>
+      <div class="user-meta">
+        <div class="user-name">John Thien</div>
+        <div class="user-tier">
+          {{ userTier() }}
+          <span class="pts-val">{{ pointsCurrent() }} pts</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="dash-search">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+        <circle cx="11" cy="11" r="7"/>
+        <line x1="21" y1="21" x2="16.6" y2="16.6"/>
+      </svg>
+      <input
+        #searchInput
+        type="text"
+        [ngModel]="searchQuery()"
+        (ngModelChange)="searchQuery.set($event)"
+        placeholder="Search orders, invoices, shipments…"
+        aria-label="Search dashboard and reorder items"
+      />
+      <span class="dash-kbd">⌘K</span>
+    </div>
+
+    <div class="dash-status-pill">
+      <span class="live-dot"></span>
+      <span>Live Data Connected</span>
+    </div>
+
+    <div
+      class="dash-attn-pill"
+      role="button"
+      tabindex="0"
+      (click)="showAlerts()"
+      (keydown.enter)="showAlerts()"
+      (keydown.space)="showAlerts()"
+      aria-label="View attention items"
+    >
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6">
+        <path d="M12 9v4M12 17h.01M10.3 3.9L2.8 17a2 2 0 001.7 3h15a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/>
+      </svg>
+      <span>2 need attention</span>
+    </div>
+
+    <div class="dash-header-right">
+      <button
+        class="dash-icon-btn"
+        type="button"
+        aria-label="View 3 unread notifications"
+        (click)="showAlerts()"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 01-3.46 0"/>
+        </svg>
+        <span class="dash-badge">3</span>
+      </button>
+
+      <button
+        class="dash-icon-btn"
+        type="button"
+        aria-label="Calendar view"
+        (click)="notifications.info('Calendar View', 'Order dispatch timeline synchronized.')"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2"/>
+          <line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+      </button>
+
+      <button
+        class="dash-theme-toggle"
+        type="button"
+        [attr.aria-label]="isDark() ? 'Switch to light theme' : 'Switch to dark theme'"
+        (click)="toggleTheme()"
+      >
+        <div class="knob" [class.knob--light]="!isDark()">
+          @if (isDark()) {
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6">
+              <path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/>
+            </svg>
+          } @else {
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6">
+              <circle cx="12" cy="12" r="5"/>
+              <line x1="12" y1="1" x2="12" y2="3"/>
+              <line x1="12" y1="21" x2="12" y2="23"/>
+            </svg>
+          }
+        </div>
+      </button>
+    </div>
+  </header>
+
+  <!-- ================= MAIN GRID ================= -->
+  <div class="dash-main">
+
+    <!-- LEFT COLUMN: LOGISTICS TRIAGE -->
+    <div class="dash-card dash-card--triage">
+      <div class="dash-card-head">
+        <div>
+          <div class="dash-card-title">Active Orders Triage</div>
+          <div class="dash-card-sub">1 shipment in transit</div>
+        </div>
+      </div>
+
+      <div class="order-id-row">
+        <span>ORDER</span>
+        <b>{{ activeOrderId() }}</b>
+      </div>
+
+      <div class="dash-stepper">
+        @for (step of orderSteps(); track step.id) {
+          <div
+            class="dash-step"
+            [class.done]="step.status === 'done'"
+            [class.active]="step.status === 'active'"
+          >
+            <div class="line"></div>
+            <div class="node">
+              @if (step.status === 'done') { ✓ } @else if (step.status === 'active') { ● } @else { {{ step.id }} }
+            </div>
+            <div class="label">{{ step.label }}<br>{{ step.sublabel }}</div>
+          </div>
+        }
+      </div>
+
+      <div class="attn-chip">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+          <path d="M12 9v4M12 17h.01M10.3 3.9L2.8 17a2 2 0 001.7 3h15a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/>
+        </svg>
+        <div class="txt">
+          <b>Confirm delivery instructions</b>
+          @if (savedNote(); as note) {
+            <span class="saved-note-preview">Note: "{{ note }}"</span>
+          } @else {
+            Courier arrives in ~3 hrs · <a (click)="openNoteModal()" role="button" tabindex="0">Add note</a>
+          }
+        </div>
+      </div>
+
+      <div class="qa-btns">
+        <button class="qa-btn primary" type="button" (click)="contactCarrier()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+            <path d="M20.4 6.5a1.7 1.7 0 00-1.5-.9H16V4a1 1 0 00-1-1H5a1 1 0 00-1 1v13a1 1 0 001 1h1"/>
+            <circle cx="7.5" cy="18.5" r="1.8"/>
+            <circle cx="17.5" cy="18.5" r="1.8"/>
+            <path d="M9.3 18.5h6.4M16 5.6h2.6l2 3.4v5.5h-2"/>
+          </svg>
+          Contact Carrier
+        </button>
+        <button class="qa-btn" type="button" (click)="openNoteModal()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+            <path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+          Change Address
+        </button>
+      </div>
+    </div>
+
+    <!-- CENTER COLUMN -->
+    <div class="center-col">
+
+      <!-- PACKAGE JOURNEY CARD -->
+      <div class="dash-card journey-card">
+        <div class="dash-card-head">
+          <div>
+            <div class="dash-card-title">Your Package Journey</div>
+            <div class="dash-card-sub">Order {{ activeOrderId() }} · {{ activeOrderProduct() }}</div>
+          </div>
+          <div class="dash-card-tag">LIVE</div>
+        </div>
+
+        <div class="eta-hero">
+          <span class="big">{{ etaTime() }}</span>
+          <span class="small">estimated arrival today · {{ etaRemaining() }}</span>
+        </div>
+
+        <div class="journey-wrap">
+          <svg viewBox="0 0 1000 200" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <linearGradient id="routegrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#10B981"/>
+                <stop offset="34%" stop-color="#10B981"/>
+                <stop offset="34%" stop-color="#22D3EE"/>
+                <stop offset="100%" stop-color="#22D3EE"/>
+              </linearGradient>
+              <radialGradient id="pinglow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#22D3EE" stop-opacity="0.9"/>
+                <stop offset="100%" stop-color="#22D3EE" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+
+            <!-- base track -->
+            <line x1="70" y1="110" x2="930" y2="110" stroke="var(--border-hi)" stroke-width="4" stroke-linecap="round"/>
+            <!-- completed + active progress -->
+            <line x1="70" y1="110" x2="700" y2="110" stroke="url(#routegrad)" stroke-width="4" stroke-linecap="round"/>
+            <line x1="700" y1="110" x2="820" y2="110" stroke="#22D3EE" stroke-width="4" stroke-linecap="round" opacity="0.85">
+              <animate attributeName="opacity" values="0.4;0.9;0.4" dur="1.8s" repeatCount="indefinite"/>
+            </line>
+
+            <!-- stop 1: warehouse -->
+            <g class="journey-stop" (click)="selectStop(journeyStops()[0])" role="button" tabindex="0">
+              <circle cx="70" cy="110" r="7" fill="#10B981"/>
+              <text x="70" y="90" text-anchor="middle" class="stop-city">Shenzhen</text>
+              <text x="70" y="140" text-anchor="middle" class="stop-tag">Warehouse · Jul 21</text>
+            </g>
+
+            <!-- stop 2: customs -->
+            <g class="journey-stop" (click)="selectStop(journeyStops()[1])" role="button" tabindex="0">
+              <circle cx="360" cy="110" r="7" fill="#10B981"/>
+              <text x="360" y="90" text-anchor="middle" class="stop-city">Los Angeles</text>
+              <text x="360" y="140" text-anchor="middle" class="stop-tag">Customs Cleared · Jul 23</text>
+            </g>
+
+            <!-- stop 3: regional hub -->
+            <g class="journey-stop" (click)="selectStop(journeyStops()[2])" role="button" tabindex="0">
+              <circle cx="700" cy="110" r="7" fill="#10B981"/>
+              <text x="700" y="90" text-anchor="middle" class="stop-city">Newark Hub</text>
+              <text x="700" y="140" text-anchor="middle" class="stop-tag">Departed · 8:12 AM</text>
+            </g>
+
+            <!-- current position: pulsing on the active leg -->
+            <g class="journey-stop active" (click)="selectStop(journeyStops()[3])" role="button" tabindex="0">
+              <circle cx="820" cy="110" r="18" fill="url(#pinglow)"/>
+              <circle cx="820" cy="110" r="6" fill="#22D3EE" stroke="var(--bg)" stroke-width="2"/>
+              <circle cx="820" cy="110" r="6" fill="none" stroke="#22D3EE" stroke-width="1.6">
+                <animate attributeName="r" values="6;16;6" dur="2s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0.8;0;0.8" dur="2s" repeatCount="indefinite"/>
+              </circle>
+              <text x="820" y="85" text-anchor="middle" class="stop-city" fill="#22D3EE">On the road</text>
+              <text x="820" y="140" text-anchor="middle" class="stop-tag">2.4 mi away</text>
+            </g>
+
+            <!-- stop 4: home -->
+            <g class="journey-stop" opacity="0.6" (click)="selectStop(journeyStops()[4])" role="button" tabindex="0">
+              <circle cx="930" cy="110" r="7" fill="none" stroke="var(--text-low)" stroke-width="2"/>
+              <text x="930" y="90" text-anchor="middle" class="stop-city" fill="var(--text-mid)">Your Door</text>
+              <text x="930" y="140" text-anchor="middle" class="stop-tag">ETA {{ etaTime() }}</text>
+            </g>
+          </svg>
+        </div>
+
+        @if (selectedStop(); as stop) {
+          <div class="stop-banner">
+            <span class="stop-banner-city">📍 {{ stop.city }}:</span>
+            <span class="stop-banner-desc">{{ stop.status }} ({{ stop.tag }})</span>
+          </div>
+        }
+      </div>
+
+      <!-- FINANCE + LOYALTY INSIGHT CARD -->
+      <div class="dash-card">
+        <div class="dash-card-head">
+          <div>
+            <div class="dash-card-title">Spend vs. Loyalty Points, Trailing 12 Months</div>
+            <div class="dash-card-sub">Dashed line marks your $650/mo budget goal</div>
+          </div>
+          <div class="fin-legend">
+            <div class="legend-item"><span class="legend-dot" style="background:#818CF8"></span>Spend</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#EFC275"></span>Earned</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#3A4560"></span>Redeemed</div>
+          </div>
+        </div>
+
+        <div class="fin-chart">
+          <div class="insight-badge">
+            <b>On pace for Platinum</b>
+            $1,180 more in spend gets you there by December.
+          </div>
+          <svg viewBox="0 0 1000 220" preserveAspectRatio="none" style="width:100%; height:100%;">
+            <defs>
+              <linearGradient id="areafill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#6366F1" stop-opacity="0.45"/>
+                <stop offset="100%" stop-color="#6366F1" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <g stroke="var(--border)" stroke-width="1">
+              <line x1="0" y1="30" x2="1000" y2="30"/>
+              <line x1="0" y1="80" x2="1000" y2="80"/>
+              <line x1="0" y1="130" x2="1000" y2="130"/>
+              <line x1="0" y1="180" x2="1000" y2="180"/>
+            </g>
+
+            <!-- budget goal line -->
+            <line x1="0" y1="95" x2="1000" y2="95" stroke="var(--text-low)" stroke-width="1.4" stroke-dasharray="5 5"/>
+            <text x="8" y="90" class="axis-label" fill="var(--text-mid)">$650 goal</text>
+
+            <!-- Earned Points Bars (Gold) -->
+            <g fill="#EFC275" opacity="0.85">
+              <rect x="24"  y="150" width="10" height="30"/><rect x="106" y="140" width="10" height="40"/><rect x="188" y="145" width="10" height="35"/>
+              <rect x="270" y="130" width="10" height="50"/><rect x="352" y="120" width="10" height="60"/><rect x="434" y="110" width="10" height="70"/>
+              <rect x="516" y="118" width="10" height="62"/><rect x="598" y="100" width="10" height="80"/><rect x="680" y="95"  width="10" height="85"/>
+              <rect x="762" y="80"  width="10" height="100"/><rect x="844" y="70" width="10" height="110"/><rect x="926" y="60" width="10" height="120"/>
+            </g>
+
+            <!-- Redeemed Points Bars (Slate) -->
+            <g fill="#3A4560">
+              <rect x="36"  y="165" width="10" height="15"/><rect x="118" y="160" width="10" height="20"/><rect x="200" y="162" width="10" height="18"/>
+              <rect x="282" y="155" width="10" height="25"/><rect x="364" y="150" width="10" height="30"/><rect x="446" y="145" width="10" height="35"/>
+              <rect x="528" y="150" width="10" height="30"/><rect x="610" y="140" width="10" height="40"/><rect x="692" y="135" width="10" height="45"/>
+              <rect x="774" y="130" width="10" height="50"/><rect x="856" y="122" width="10" height="58"/><rect x="938" y="115" width="10" height="65"/>
+            </g>
+
+            <!-- Spend Gradient Curve -->
+            <path d="M30 140 L112 130 L194 135 L276 120 L358 105 L440 95 L522 100 L604 78 L686 65 L768 48 L850 35 L932 20 L932 220 L30 220 Z" fill="url(#areafill)"/>
+            <path d="M30 140 L112 130 L194 135 L276 120 L358 105 L440 95 L522 100 L604 78 L686 65 L768 48 L850 35 L932 20" fill="none" stroke="#818CF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+            <circle cx="850" cy="35" r="4.5" fill="var(--bg)" stroke="#818CF8" stroke-width="2.4"/>
+            <text x="850" y="20" text-anchor="middle" class="axis-label" fill="#818CF8" font-size="11" font-weight="700">$8.9k</text>
+
+            <g class="axis-label">
+              <text x="35"  y="212">J</text><text x="117" y="212">F</text><text x="199" y="212">M</text><text x="281" y="212">A</text>
+              <text x="363" y="212">M</text><text x="445" y="212">J</text><text x="527" y="212">J</text><text x="609" y="212">A</text>
+              <text x="691" y="212">S</text><text x="773" y="212">O</text><text x="855" y="212">N</text><text x="937" y="212">D</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="right-col">
+
+      <!-- REWARDS & LOYALTY CARD -->
+      <div class="dash-card">
+        <div class="dash-card-head">
+          <div>
+            <div class="dash-card-title">Rewards &amp; Loyalty</div>
+            <div class="dash-card-sub">{{ userTier() }} tier</div>
+          </div>
+        </div>
+
+        <div class="rewards-top">
+          <div class="pts-ring">
+            <svg width="72" height="72" viewBox="0 0 72 72">
+              <circle cx="36" cy="36" r="30" fill="none" stroke="var(--border-hi)" stroke-width="8"/>
+              <circle cx="36" cy="36" r="30" fill="none" stroke="url(#ringgrad)" stroke-width="8"
+                stroke-dasharray="141.4 188.5" stroke-linecap="round" transform="rotate(-90 36 36)"/>
+              <defs>
+                <linearGradient id="ringgrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#6366F1"/>
+                  <stop offset="100%" stop-color="#EFC275"/>
+                </linearGradient>
+              </defs>
+            </svg>
+            <div class="val">
+              <b>{{ pointsPct() }}%</b>
+              <span>TO GOLD+</span>
+            </div>
+          </div>
+
+          <div class="rewards-copy">
+            <div class="to-next"><b>{{ pointsToNextTier() }} pts</b> to Platinum</div>
+            <div class="progress-track">
+              <div class="progress-fill" [style.width.%]="pointsPct()"></div>
+            </div>
+            <div class="progress-caption">{{ pointsCurrent() }} / {{ pointsTarget() }} pts this cycle</div>
+          </div>
+        </div>
+
+        <div class="expiring-chip">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M12 7v5l3 3"/>
+          </svg>
+          <div class="txt">
+            @if (pointsToExpire() > 0) {
+              <b>{{ pointsToExpire() }} pts</b> expire in {{ daysToExpire() }} days
+            } @else {
+              <b>All points active</b> · No expiration
+            }
+          </div>
+          @if (pointsToExpire() > 0) {
+            <a (click)="redeemPoints()" role="button" tabindex="0">Redeem</a>
+          }
+        </div>
+
+        <div class="cat-bars">
+          @for (cat of categoryBreakdown(); track cat.label) {
+            <div class="cat-row">
+              <span class="lbl">{{ cat.label }}</span>
+              <div class="track">
+                <div class="fill" [style.width.%]="cat.pct" [style.background]="cat.color"></div>
+              </div>
+              <span class="pct">{{ cat.pct }}%</span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- SMART REORDER & PRICE WATCH CARD -->
+      <div class="dash-card">
+        <div class="dash-card-head">
+          <div>
+            <div class="dash-card-title">Smart Reorder &amp; Price Watch</div>
+            <div class="dash-card-sub">Running low, plus deals on saved items</div>
+          </div>
+        </div>
+
+        <div class="plist">
+          @for (item of filteredReorderItems(); track item.id) {
+            <div class="prow">
+              <div
+                class="pthumb"
+                [style]="'--p1:' + item.gradientColors[0] + '; --p2:' + item.gradientColors[1] + ';'"
+              ></div>
+              <div class="pinfo">
+                <div class="pname">{{ item.name }}</div>
+                <div class="pmeta" [class]="item.metaType">{{ item.metaText }}</div>
+              </div>
+              <button
+                class="cta"
+                [class.deal]="item.ctaType === 'deal'"
+                type="button"
+                (click)="onReorderClick(item)"
+              >
+                {{ item.ctaText }}
+              </button>
+            </div>
+          } @empty {
+            <div class="pempty">
+              No matching items found for "{{ searchQuery() }}"
+            </div>
+          }
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ================= DELIVERY NOTE MODAL ================= -->
+  @if (showNoteModal()) {
+    <div class="modal-backdrop" (click)="closeNoteModal()">
+      <div class="modal-card" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>Delivery Instructions</h3>
+          <button class="modal-close" type="button" (click)="closeNoteModal()">✕</button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-desc">
+            Provide special instructions for your courier driver arriving today (Order {{ activeOrderId() }}).
+          </p>
+          <textarea
+            class="modal-input"
+            rows="3"
+            [ngModel]="deliveryNoteText()"
+            (ngModelChange)="deliveryNoteText.set($event)"
+            placeholder="e.g. Leave at front porch behind planter box. Gate code is #4029."
+          ></textarea>
+        </div>
+        <div class="modal-actions">
+          <button class="qa-btn" type="button" (click)="closeNoteModal()">Cancel</button>
+          <button class="qa-btn primary" type="button" (click)="saveDeliveryNote()">Save Note</button>
+        </div>
+      </div>
+    </div>
+  }
+
+</div>
