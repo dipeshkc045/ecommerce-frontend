@@ -1,8 +1,13 @@
 <div class="orders-page">
   <!-- Page Header -->
   <header class="page-header">
-    <h1 class="page-title">Order history</h1>
-    <p class="page-subtitle">Check the status of recent orders, manage returns, and discover similar products.</p>
+    <div class="page-header__content">
+      <h1 class="page-title">Order history</h1>
+      <p class="page-subtitle">Check the status of recent orders, manage returns, and discover similar products.</p>
+    </div>
+    @if (auth.isLoggedIn()) {
+      <button type="button" class="page-logout-btn" (click)="logout()">Logout</button>
+    }
   </header>
 
   <!-- Not Logged In -->

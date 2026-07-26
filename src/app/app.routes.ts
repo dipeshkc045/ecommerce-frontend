@@ -12,9 +12,6 @@ import { adminGuard } from './core/guards/admin.guard';
  * - No feature page renders its own header/footer/sidebar
  */
 export const routes: Routes = [
-  // ─────────────────────────────────────────────────────────────────
-  // 1. PUBLIC LAYOUT — Header + CategoryNav + Footer, no auth required
-  // ─────────────────────────────────────────────────────────────────
   {
     path: '',
     loadComponent: () =>
@@ -41,9 +38,6 @@ export const routes: Routes = [
     ],
   },
 
-  // ─────────────────────────────────────────────────────────────────
-  // 2. CUSTOMER LAYOUT — Header + Sidebar + Footer, requires auth
-  // ─────────────────────────────────────────────────────────────────
   {
     path: '',
     canActivate: [authGuard],
@@ -96,9 +90,6 @@ export const routes: Routes = [
     ],
   },
 
-  // ─────────────────────────────────────────────────────────────────
-  // 3. ADMIN LAYOUT — Compact topbar + Admin Sidebar, requires admin role
-  // ─────────────────────────────────────────────────────────────────
   {
     path: 'admin',
     canActivate: [authGuard, adminGuard],
@@ -124,9 +115,6 @@ export const routes: Routes = [
     ],
   },
 
-  // ─────────────────────────────────────────────────────────────────
-  // 4. AUTH LAYOUT — Centered card, dark gradient background, no chrome
-  // ─────────────────────────────────────────────────────────────────
   {
     path: '',
     loadComponent: () =>
@@ -149,9 +137,6 @@ export const routes: Routes = [
     ],
   },
 
-  // ─────────────────────────────────────────────────────────────────
-  // 5. ERROR LAYOUT — Full-page error states
-  // ─────────────────────────────────────────────────────────────────
   {
     path: '',
     loadComponent: () =>
@@ -172,7 +157,6 @@ export const routes: Routes = [
     ],
   },
 
-  // Wildcard 404
   {
     path: '**',
     loadComponent: () =>

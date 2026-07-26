@@ -232,6 +232,7 @@ export class ProductDetailsPage implements OnInit {
   private readonly cart = inject(CartFacade);
   private readonly route = inject(ActivatedRoute);
 
+
   readonly product = this.facade.selectedProduct;
   readonly loadError = this.facade.error;
   readonly usingFallback = this.facade.usingFallback;

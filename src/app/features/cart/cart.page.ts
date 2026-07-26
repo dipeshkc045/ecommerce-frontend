@@ -6,7 +6,6 @@ import { catchError, combineLatest, map, of, switchMap } from 'rxjs';
 
 import { CartService } from '../../core/cart/cart.service';
 import { ProductApi, type ProductResponse } from '../../core/api/product.api';
-import { AuthRequiredService } from '../../core/auth/auth-required.service';
 import { FALLBACK_PRODUCTS } from '../products/fallback-products.data';
 
 type CartLine = {
@@ -30,7 +29,6 @@ const FREE_SHIPPING_THRESHOLD = 150;
 export class CartPage {
   protected readonly cart = inject(CartService);
   private readonly products = inject(ProductApi);
-  private readonly authRequired = inject(AuthRequiredService);
   private readonly router = inject(Router);
 
   readonly fallbackImage =
@@ -109,7 +107,6 @@ export class CartPage {
   }
 
   goToCheckout(): void {
-    if (!this.authRequired.guard()) return;
     this.router.navigateByUrl('/checkout');
   }
 

@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject, signal, computed } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 
 import { UserApi } from '../../core/api/user.api';
+import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
   standalone: true,
@@ -15,6 +16,7 @@ import { UserApi } from '../../core/api/user.api';
 export class RegisterPage {
   private readonly fb = inject(FormBuilder);
   private readonly api = inject(UserApi);
+  private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
 
   readonly submitting = signal(false);

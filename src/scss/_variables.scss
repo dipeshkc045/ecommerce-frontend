@@ -1,0 +1,82 @@
+// ─── Typography ──────────────────────────────────────────────────
+$font-primary: 'Inter', system-ui, -apple-system, sans-serif;
+
+// ─── Colors ─────────────────────────────────────────────────────
+$color-primary: #1a1a2e;
+$color-accent: #ff6f61;
+$color-teal: #009688;
+$color-teal-dark: #00796b;
+$color-blue-dark: #0d1b3e;
+$color-blue-mid: #1a2d5a;
+
+$color-text-strong: #0f172a;
+$color-text-body: #1a1a2e;
+$color-text-muted: #64748b;
+$color-text-light: #94a3b8;
+
+$color-bg-page: #ffffff;
+$color-bg-light: #f6f7fb;
+$color-bg-gray: #eef2f7;
+$color-border: #e5e7eb;
+$color-border-light: #eef0f4;
+
+// ─── Radius ─────────────────────────────────────────────────────
+$radius-xs: 4px;
+$radius-sm: 8px;
+$radius-md: 12px;
+$radius-lg: 16px;
+$radius-xl: 20px;
+$radius-pill: 999px;
+
+// ─── Shadows ────────────────────────────────────────────────────
+$shadow-soft: 0 12px 32px rgba(15, 23, 42, 0.06);
+$shadow-card: 0 18px 44px rgba(15, 23, 42, 0.08);
+$shadow-hover: 0 24px 56px rgba(15, 23, 42, 0.12);
+
+// ─── Spacing ────────────────────────────────────────────────────
+$spacing-page: 24px;
+$spacing-section: 64px;
+$spacing-gutter: 28px;
+
+// ─── Layout ─────────────────────────────────────────────────────
+$max-width: 1360px;
+$header-height: 76px;
+$navbar-height: 48px;
+
+// ─── Breakpoints ────────────────────────────────────────────────
+$bp-xl: 1440px;
+$bp-lg: 1024px;
+$bp-md: 768px;
+$bp-sm: 480px;
+
+// ─── Mixins ─────────────────────────────────────────────────────
+@mixin container {
+  width: 100%;
+  max-width: $max-width;
+  margin-inline: auto;
+  padding-left: $spacing-page;
+  padding-right: $spacing-page;
+
+  @media (max-width: $bp-sm) {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

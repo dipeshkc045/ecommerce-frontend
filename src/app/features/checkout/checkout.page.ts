@@ -15,6 +15,7 @@ import { CartService } from '../../core/cart/cart.service';
 import { ProductApi, type ProductResponse } from '../../core/api/product.api';
 import { OrderApi, type CreateOrderRequest } from '../../core/api/order.api';
 import { AuthService } from '../../core/auth/auth.service';
+import { AuthRequiredService } from '../../core/auth/auth-required.service';
 
 @Component({
   standalone: true,
@@ -70,8 +71,9 @@ import { AuthService } from '../../core/auth/auth.service';
       <mat-card class="actions-card">
         <mat-card-header>
           <mat-card-title>Checkout</mat-card-title>
-          <mat-card-subtitle *ngIf="!canSubmit()">Login required to place order.</mat-card-subtitle>
-          <mat-card-subtitle *ngIf="canSubmit()">Ready to place your order.</mat-card-subtitle>
+          <mat-card-subtitle *ngIf="!auth.isLoggedIn()">Sign in will be required before payment is completed.</mat-card-subtitle>
+          <mat-card-subtitle *ngIf="auth.isLoggedIn() && !canSubmit()">We couldn't load some product details. Please review your cart.</mat-card-subtitle>
+          <mat-card-subtitle *ngIf="auth.isLoggedIn() && canSubmit()">Ready to place your order.</mat-card-subtitle>
         </mat-card-header>
 
         <mat-card-content>
@@ -86,9 +88,10 @@ import { AuthService } from '../../core/auth/auth.service';
             color="primary"
             type="button"
             (click)="placeOrder()"
-            [disabled]="submitting() || !canSubmit()"
+            [disabled]="submitting() || lines().length === 0 || hasMissingProductDetails()"
           >
-            <span *ngIf="!submitting()">Place order</span>
+            <span *ngIf="!submitting() && auth.isLoggedIn()">Place order</span>
+            <span *ngIf="!submitting() && !auth.isLoggedIn()">Sign in to pay</span>
             <span *ngIf="submitting()">Placing…</span>
           </button>
         </mat-card-actions>
@@ -141,7 +144,8 @@ export class CheckoutPage {
   private readonly cart = inject(CartService);
   private readonly products = inject(ProductApi);
   private readonly orders = inject(OrderApi);
-  private readonly auth = inject(AuthService);
+  readonly auth = inject(AuthService);
+  private readonly authRequired = inject(AuthRequiredService);
   private readonly router = inject(Router);
   private readonly snack = inject(MatSnackBar);
 
@@ -178,17 +182,22 @@ export class CheckoutPage {
   });
 
   readonly canSubmit = computed(() => {
-    const userId = this.auth.userId();
-    if (!userId) return false;
     const lines = this.lines();
     if (lines.length === 0) return false;
     return lines.every((l) => !!l.product);
   });
 
+  readonly hasMissingProductDetails = computed(() => !this.canSubmit());
+
   placeOrder(): void {
     if (this.submitting()) return;
+    if (!this.auth.isLoggedIn()) {
+      this.authRequired.guard();
+      return;
+    }
+
     if (!this.canSubmit()) {
-      this.snack.open('Missing product details or login.', 'OK', { duration: 2500 });
+      this.snack.open('Missing product details. Please review your cart and try again.', 'OK', { duration: 2500 });
       return;
     }
 
