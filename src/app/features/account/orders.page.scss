@@ -46,19 +46,19 @@
   justify-content: center;
   min-width: 110px;
   padding: 0.75rem 1rem;
-  border: 1px solid $color-border;
-  border-radius: $radius-sm;
-  background: #fff;
-  color: $color-text-body;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-surface);
+  color: var(--color-text-primary);
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s, border-color 0.2s, color 0.2s;
 
   &:hover {
-    background: $color-bg-light;
-    border-color: $color-accent;
-    color: $color-accent;
+    background: var(--color-bg-surface);
+    border-color: var(--color-accent);
+    color: var(--color-accent);
   }
 }
 

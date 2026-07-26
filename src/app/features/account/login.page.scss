@@ -359,17 +359,16 @@
   gap: 0.6rem;
   width: 100%;
   min-height: 44px;
-  border: 1.5px solid $color-border;
-  border-radius: $radius-sm;
-  background: #fff;
-  color: $color-text-body;
-  font-family: $font-primary;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-surface);
+  color: var(--color-text-primary);
   font-size: 0.85rem;
   font-weight: 600;
 }
 
 .google-shell__visual--loading {
-  color: $color-text-muted;
+  color: var(--color-text-muted);
 }
 
 .google-shell__logo {
@@ -399,7 +398,7 @@
 .social-hint {
   margin: 0;
   font-size: 0.8rem;
-  color: $color-text-muted;
+  color: var(--color-text-muted);
   text-align: center;
 }
 
