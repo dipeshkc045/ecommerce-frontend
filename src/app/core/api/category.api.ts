@@ -22,7 +22,7 @@ export class CategoryApi {
 
   getAll(): Observable<CategoryResponse[]> {
     return this.http
-      .get<GlobalApiResponse<CategoryResponse[]>>('/api/categories')
+      .get<GlobalApiResponse<CategoryResponse[]>>('/product-service/api/categories')
       .pipe(map((res) => res.data ?? []));
   }
 }

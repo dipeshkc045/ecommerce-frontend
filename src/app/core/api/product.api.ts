@@ -121,18 +121,18 @@ export class ProductApi {
 
   /** POST search endpoint with request body payload */
   searchWithFilters(payload: ProductSearchFilterPayload): Observable<any> {
-    return this.http.post<any>('/api/products/search', payload);
+    return this.http.post<any>('/product-service/api/products/search', payload);
   }
 
   getFeatured(): Observable<ProductCardApiItem[]> {
     return this.http
-      .get<GlobalApiResponse<ProductCardApiItem[]>>('/api/products/featured')
+      .get<GlobalApiResponse<ProductCardApiItem[]>>('/product-service/api/products/featured')
       .pipe(map((res) => res.data ?? []));
   }
 
   getTrending(): Observable<ProductCardApiItem[]> {
     return this.http
-      .get<GlobalApiResponse<ProductCardApiItem[]>>('/api/products/trending')
+      .get<GlobalApiResponse<ProductCardApiItem[]>>('/product-service/api/products/trending')
       .pipe(map((res) => res.data ?? []));
   }
 

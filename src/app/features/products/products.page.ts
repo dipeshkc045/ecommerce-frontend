@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { LayoutService } from '../../core/layout/layout.service';
 import { ProductsFacade } from '../../core/facades/products.facade';
@@ -39,6 +39,7 @@ export class ProductsPage implements OnInit {
   readonly layout = inject(LayoutService);
   private readonly cart = inject(CartFacade);
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
 
   readonly categories = [...PRODUCT_CATEGORIES];
   readonly priceRanges = PRICE_RANGES;
@@ -195,6 +196,10 @@ export class ProductsPage implements OnInit {
     this.selectedCategories.update((cats) =>
       cats.includes(cat) ? cats.filter((c) => c !== cat) : [...cats, cat],
     );
+    if (this.selectedCategories().length === 0) {
+      this.router.navigate([], { queryParams: { category: undefined }, queryParamsHandling: 'merge' });
+      this.loadProducts();
+    }
   }
 
   toggleBrand(brand: string): void {
@@ -237,6 +242,8 @@ export class ProductsPage implements OnInit {
     this.selectedDiscount.set(null);
     this.sortBy.set('most-popular');
     this.searchQuery.set('');
+    this.router.navigate([], { queryParams: { category: undefined }, queryParamsHandling: 'merge' });
+    this.loadProducts();
   }
 
   onSortChange(value: string): void {
