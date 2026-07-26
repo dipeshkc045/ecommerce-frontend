@@ -288,6 +288,13 @@ export class ProductDetailsPage implements OnInit {
   }
 
   addToCart(productId: number): void {
-    this.cart.addProduct(productId, this.quantity());
+    const p = this.product();
+    this.cart.addProduct(productId, this.quantity(), p ? {
+      name: p.name,
+      price: Number(p.price),
+      imageUrl: p.imageUrl ?? undefined,
+      categoryName: p.categoryName ?? undefined,
+      sku: p.sku,
+    } : undefined);
   }
 }

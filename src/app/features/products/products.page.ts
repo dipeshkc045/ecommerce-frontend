@@ -260,7 +260,13 @@ export class ProductsPage implements OnInit {
 
   addToCart(product: ProductCardModel): void {
     this.addingProductId.set(product.id);
-    this.cart.addProduct(product.id, 1);
+    this.cart.addProduct(product.id, 1, {
+      name: product.name,
+      price: product.price,
+      imageUrl: product.imageUrl,
+      categoryName: product.categoryName ?? undefined,
+      sku: product.sku,
+    });
     setTimeout(() => this.addingProductId.set(null), 600);
   }
 }

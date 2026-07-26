@@ -38,14 +38,31 @@ export class CartPage {
 
   private readonly cartItems$ = toObservable(this.cart.items);
 
-  // ─── Cart lines (product enriched) ──────────────────────────────
+  // ─── Cart lines (product enriched & API fallback) ────────────────
   readonly lines = toSignal(
     this.cartItems$.pipe(
       switchMap((items) => {
         if (items.length === 0) return of([] as CartLine[]);
 
-        const lines$ = items.map((item) =>
-          this.products.getByIdCached(Number(item.productId)).pipe(
+        const lines$ = items.map((item) => {
+          if (item.price != null && item.productName) {
+            const product: ProductResponse = {
+              id: Number(item.productId) || 0,
+              name: item.productName,
+              description: null,
+              price: String(item.price),
+              sku: item.sku ?? item.productId,
+              categoryId: null,
+              categoryName: item.categoryName ?? null,
+              active: true,
+              imageUrl: item.imageUrl ?? null,
+              createdAt: null,
+              updatedAt: null,
+            };
+            return of({ productId: item.productId, quantity: item.quantity, product });
+          }
+
+          return this.products.getByIdCached(Number(item.productId)).pipe(
             map((product) => ({
               productId: item.productId,
               quantity: item.quantity,
@@ -58,8 +75,8 @@ export class CartPage {
                 product: this.lookupFallback(item.productId),
               })
             )
-          )
-        );
+          );
+        });
 
         return combineLatest(lines$);
       })

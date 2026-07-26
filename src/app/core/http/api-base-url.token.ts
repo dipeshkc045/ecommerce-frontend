@@ -4,7 +4,7 @@ export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
 function resolveDefaultApiBaseUrl(): string {
   if (typeof window === 'undefined') {
-    return 'http://localhost:6000';
+    return 'http://localhost:8080';
   }
 
   return '';

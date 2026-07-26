@@ -195,7 +195,10 @@ export class DashboardPage {
       this.router.navigate(['/products']);
       this.notifications.info('Product Deal', `Navigating to deals for ${item.name}`);
     } else {
-      this.cart.add(item.id, 1);
+      this.cart.add(item.id, 1, {
+        name: item.name,
+        price: item.price,
+      });
       this.notifications.success('Added to Cart', `${item.name} has been added to your cart.`);
     }
   }

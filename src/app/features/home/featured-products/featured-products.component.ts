@@ -40,6 +40,12 @@ export class FeaturedProductsComponent {
   readonly addToCart = output<ProductCardModel>();
 
   onAddToCart(product: ProductCardModel): void {
-    this.cart.addProduct(product.id, 1);
+    this.cart.addProduct(product.id, 1, {
+      name: product.name,
+      price: product.price,
+      imageUrl: product.imageUrl,
+      categoryName: product.categoryName ?? undefined,
+      sku: product.sku,
+    });
   }
 }

@@ -12,16 +12,19 @@ export class CartFacade {
 
   readonly items = this.cart.items;
   readonly totalItems = this.cart.totalItems;
+  readonly loading = this.cart.loading;
+  readonly error = this.cart.error;
 
-  addProduct(productId: number | string, quantity = 1): boolean {
+  addProduct(productId: number | string, quantity = 1, product?: { name?: string; price?: number; imageUrl?: string; categoryName?: string; sku?: string }): boolean {
     if (!this.authRequired.guard()) return false;
-    this.cart.add(String(productId), quantity);
+    this.cart.add(String(productId), quantity, product);
     this.notify.success('Added to cart');
     return true;
   }
 
   removeProduct(productId: string): void {
     this.cart.remove(productId);
+    this.notify.info('Item removed from cart');
   }
 
   updateQuantity(productId: string, quantity: number): void {
@@ -30,5 +33,10 @@ export class CartFacade {
 
   clear(): void {
     this.cart.clear();
+    this.notify.info('Cart cleared');
+  }
+
+  refreshCart(): void {
+    this.cart.loadCartFromServer();
   }
 }
