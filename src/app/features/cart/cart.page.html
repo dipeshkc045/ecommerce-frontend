@@ -27,12 +27,14 @@
     <div class="cart-layout">
       <!-- ═══ LEFT: Cart Items ═══ -->
       <section class="cart-items-section">
+        <div class="cart-items-header">
           <span class="items-count">
             {{ lines().length }} {{ lines().length === 1 ? 'item' : 'items' }}
             @if (cart.totalItems() !== lines().length) {
               ({{ cart.totalItems() }} total units)
             }
           </span>
+          <button class="clear-cart-btn" (click)="cart.clear()">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="3 6 5 6 21 6" />

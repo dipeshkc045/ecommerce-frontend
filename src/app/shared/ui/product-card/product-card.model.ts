@@ -5,6 +5,7 @@ export type StockStatus = 'inStock' | 'lowStock' | 'outOfStock';
 export interface ProductFeature {
   title: string;
   detail: string;
+  color?: string;
 }
 
 export interface ProductCardModel {

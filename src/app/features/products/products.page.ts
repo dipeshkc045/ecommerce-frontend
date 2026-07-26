@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { LayoutService } from '../../core/layout/layout.service';
 import { ProductsFacade } from '../../core/facades/products.facade';
 import { CartFacade } from '../../core/facades/cart.facade';
+import type { ProductSearchFilterPayload } from '../../core/api/product.api';
 import {
   PRICE_RANGES,
   PRODUCT_CATEGORIES,
@@ -13,6 +14,7 @@ import {
   RATING_OPTIONS,
   AVAILABILITY_OPTIONS,
   DISCOUNT_OPTIONS,
+  CATEGORY_NAME_TO_ID,
 } from '../../core/models/product.model';
 import { ProductCardComponent } from '../../shared/ui/product-card/product-card.component';
 import { toProductCardModelList } from '../../shared/ui/product-card/product-card.adapter';
@@ -36,6 +38,7 @@ export class ProductsPage implements OnInit {
   readonly facade = inject(ProductsFacade);
   readonly layout = inject(LayoutService);
   private readonly cart = inject(CartFacade);
+  private readonly route = inject(ActivatedRoute);
 
   readonly categories = [...PRODUCT_CATEGORIES];
   readonly priceRanges = PRICE_RANGES;
@@ -140,12 +143,44 @@ export class ProductsPage implements OnInit {
   });
 
   ngOnInit(): void {
-    this.facade.loadAll();
+    const categoryParam = this.route.snapshot.queryParamMap.get('category');
+    if (categoryParam) {
+      this.selectedCategories.set([categoryParam]);
+      const categoryId = CATEGORY_NAME_TO_ID[categoryParam];
+      if (categoryId) {
+        this.facade.loadByCategory(categoryId, categoryParam);
+        return;
+      }
+    }
+    this.loadProducts();
   }
 
   loadProducts(): void {
     this.fallbackDismissed.set(false);
-    this.facade.loadAll();
+    this.fetchServerProducts();
+  }
+
+  fetchServerProducts(): void {
+    const selectedRange = this.priceRanges.find((r) => r.id === this.selectedPriceRange());
+    const payload: ProductSearchFilterPayload = {
+      query: this.searchQuery() || undefined,
+      categories: this.selectedCategories().length > 0 ? this.selectedCategories() : undefined,
+      priceRange: selectedRange
+        ? { min: selectedRange.min, max: selectedRange.max }
+        : undefined,
+      brands: this.selectedBrands().length > 0 ? this.selectedBrands() : undefined,
+      colors: this.selectedColors().length > 0 ? this.selectedColors() : undefined,
+      minRating: this.selectedRating() ? Number.parseFloat(this.selectedRating()!) : undefined,
+      availability: this.selectedAvailability().length > 0 ? this.selectedAvailability() : undefined,
+      minDiscount: this.selectedDiscount() ? Number.parseInt(this.selectedDiscount()!, 10) : undefined,
+      sortBy: this.sortBy(),
+      pagination: {
+        page: 1,
+        size: this.visibleCount(),
+      },
+    };
+
+    this.facade.searchWithFilters(payload);
   }
 
   dismissFallbackBanner(): void {

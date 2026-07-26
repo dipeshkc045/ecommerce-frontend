@@ -39,6 +39,15 @@ export const PRODUCT_CATEGORIES = [
 
 export type ProductCategory = (typeof PRODUCT_CATEGORIES)[number];
 
+export const CATEGORY_NAME_TO_ID: Record<string, number> = {
+  Men: 1,
+  Women: 2,
+  Accessories: 3,
+  Footwear: 4,
+  Electronics: 5,
+  Home: 6,
+};
+
 export interface PriceRange {
   id: string;
   label: string;

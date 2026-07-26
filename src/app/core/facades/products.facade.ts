@@ -2,6 +2,7 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import { finalize, map } from 'rxjs';
 
 import { ProductApi } from '../api/product.api';
+import type { ProductSearchFilterPayload } from '../api/product.api';
 import { InventoryApi } from '../api/inventory.api';
 import { ProductMapper } from '../mappers/product.mapper';
 import { InventoryMapper } from '../mappers/inventory.mapper';
@@ -59,6 +60,87 @@ export class ProductsFacade {
         error: (err) => {
           const message = this.resolveErrorMessage(err);
           this._error.set(message);
+        },
+      });
+  }
+
+  searchWithFilters(payload: ProductSearchFilterPayload): void {
+    this._loading.set(true);
+    this._error.set(null);
+
+    this.api
+      .searchWithFilters(payload)
+      .pipe(
+        map((res: any) => {
+          const data = res?.data ?? res;
+          const rawItems = Array.isArray(data)
+            ? data
+            : (data?.items ?? data?.content ?? data?.products ?? []);
+
+          return rawItems.map((item: any) => {
+            if ('price' in item && (typeof item.price === 'number' || typeof item.price === 'string')) {
+              return {
+                id: item.id,
+                name: item.name,
+                description: item.description ?? '',
+                price: typeof item.price === 'string' ? Number.parseFloat(item.price) || 0 : item.price,
+                sku: item.sku ?? '',
+                categoryId: item.categoryId ?? null,
+                categoryName: item.categoryName ?? null,
+                isActive: true,
+                imageUrl: item.imageUrl ?? '/images/headphones.svg',
+                createdAt: item.createdAt ? new Date(item.createdAt) : null,
+                updatedAt: item.updatedAt ? new Date(item.updatedAt) : null,
+              };
+            }
+            return this.productMapper.toDomain(item);
+          });
+        }),
+        finalize(() => this._loading.set(false)),
+      )
+      .subscribe({
+        next: (products) => {
+          this._products.set(products);
+          this._usingFallback.set(false);
+          this._error.set(null);
+        },
+        error: (err) => {
+          const message = this.resolveErrorMessage(err);
+          this._error.set(message);
+        },
+      });
+  }
+
+  loadByCategory(categoryId: number, categoryName: string, page = 1, size = 12): void {
+    this._loading.set(true);
+    this._error.set(null);
+    this._usingFallback.set(false);
+
+    this.api
+      .getByCategory(categoryId, page, size)
+      .pipe(finalize(() => this._loading.set(false)))
+      .subscribe({
+        next: (res) => {
+          const products = res.content.map((dto) => ({
+            id: dto.id,
+            name: dto.name,
+            description: dto.description ?? '',
+            price: typeof dto.price === 'string' ? Number.parseFloat(dto.price) || 0 : 0,
+            sku: dto.sku ?? '',
+            categoryId: dto.categoryId ?? null,
+            categoryName: dto.categoryName ?? null,
+            isActive: true,
+            imageUrl: dto.imageUrl ?? '/images/headphones.svg',
+            createdAt: dto.createdAt ? new Date(dto.createdAt) : null,
+            updatedAt: dto.updatedAt ? new Date(dto.updatedAt) : null,
+          }));
+          this._products.set(products);
+          this._error.set(null);
+        },
+        error: (err) => {
+          const message = this.resolveErrorMessage(err);
+          this._error.set(message);
+          this._products.set(null);
         },
       });
   }

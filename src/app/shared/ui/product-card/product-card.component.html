@@ -13,21 +13,12 @@
           @if (showDescription() && product().description) {
             <div class="pc__column">
               <p class="pc__description">{{ product().description }}</p>
-              @if (showRating()) {
-                <div class="pc__stars">
-                  @for (star of [1,2,3,4,5]; track star) {
-                    <svg class="pc__star" [class.pc__star--filled]="star <= Math.round(product().rating)" width="12" height="12" viewBox="0 0 20 20" fill="currentColor">
-                      <path d="M10 1.5l2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.1-5.4 3.1 1.3-6L1.3 7.7l6.1-.6z"/>
-                    </svg>
-                  }
-                </div>
-              }
             </div>
           }
           <div class="pc__column" [class.pc__column--full]="!showDescription() || !product().description">
             @for (feature of product().features; track feature.title) {
               <div class="pc__feature">
-                <span class="pc__feature-title">{{ feature.title }}</span>
+                <span class="pc__feature-title" [style.color]="feature.color">{{ feature.title }}</span>
                 <span class="pc__feature-detail">{{ feature.detail }}</span>
               </div>
             }
@@ -36,6 +27,18 @@
       } @else if (showDescription() && product().description) {
         <p class="pc__description">{{ product().description }}</p>
       }
+
+      <!-- moved out of the column, now its own row -->
+      @if (showRating()) {
+        <div class="pc__stars pc__stars--row">
+          @for (star of [1,2,3,4,5]; track star) {
+            <svg class="pc__star" [class.pc__star--filled]="star <= Math.round(product().rating)" width="12" height="12" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M10 1.5l2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.1-5.4 3.1 1.3-6L1.3 7.7l6.1-.6z"/>
+            </svg>
+          }
+        </div>
+      }
+
       <button class="pc__action-btn" (click)="onAddToCart($event)">Add to cart</button>
     </div>
   </article>

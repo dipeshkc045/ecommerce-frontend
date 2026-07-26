@@ -11,14 +11,32 @@
       </a>
     </div>
 
-    <div class="cards-scroll">
-      @for (cat of categories; track cat.name) {
-        <app-category-card
-          [name]="cat.name"
-          [icon]="cat.icon"
-          [color]="cat.color"
-        />
-      }
-    </div>
+    @if (loading()) {
+      <div class="cards-scroll">
+        @for (_ of skeletonItems; track $index) {
+          <div class="skeleton-card" aria-hidden="true">
+            <div class="skeleton-circle"></div>
+            <div class="skeleton-label"></div>
+          </div>
+        }
+      </div>
+    } @else if (error()) {
+      <div class="categories-error" role="alert">
+        <span>⚠️ Could not load categories —</span>
+        <button (click)="loadCategories()" class="retry-btn">Retry</button>
+      </div>
+    } @else {
+      <div class="cards-scroll">
+        @for (cat of categories(); track cat.id) {
+          <app-category-card
+            [name]="cat.name"
+            [icon]="cat.icon"
+            [color]="cat.bgColor"
+            [href]="'/products'"
+            [queryParams]="{category: cat.name}"
+          />
+        }
+      </div>
+    }
   </div>
 </section>

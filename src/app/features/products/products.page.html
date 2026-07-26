@@ -6,10 +6,12 @@
       <polyline points="9 18 15 12 9 6" />
     </svg>
     <span class="plp-breadcrumb__current">Shop</span>
-    <svg class="plp-breadcrumb__chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-      <polyline points="9 18 15 12 9 6" />
-    </svg>
-    <span class="plp-breadcrumb__current">Electronics</span>
+    @if (selectedCategories()[0]; as cat) {
+      <svg class="plp-breadcrumb__chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 18 15 12 9 6" />
+      </svg>
+      <span class="plp-breadcrumb__current">{{ cat }}</span>
+    }
   </nav>
 
   <!-- ═══ HERO BANNER ═══ -->
@@ -17,8 +19,8 @@
     <div class="plp-hero__bg"></div>
     <div class="plp-hero__content">
       <span class="plp-hero__eyebrow">Premium Collection</span>
-      <h1 class="plp-hero__title">Premium Electronics</h1>
-      <p class="plp-hero__desc">Discover devices designed for work, play, and everyday life</p>
+      <h1 class="plp-hero__title">{{ selectedCategories()[0] ? selectedCategories()[0] : 'All Products' }}</h1>
+      <p class="plp-hero__desc">{{ selectedCategories()[0] ? 'Explore our ' + selectedCategories()[0] + ' collection' : 'Discover our full range of premium products' }}</p>
       <a routerLink="/products" class="plp-hero__cta">
         Explore All
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">

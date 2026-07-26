@@ -45,6 +45,74 @@
   padding-bottom: 12px;
 }
 
+/* ── Skeleton loaders ──────────────────────────────────── */
+.skeleton-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 88px;
+}
+
+.skeleton-circle {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  animation: cat-shimmer 1.4s infinite linear;
+  background-size: 400% 100%;
+  background-image: linear-gradient(
+    90deg,
+    var(--color-bg-card) 25%,
+    var(--color-bg-muted) 50%,
+    var(--color-bg-card) 75%
+  );
+}
+
+.skeleton-label {
+  width: 60px;
+  height: 12px;
+  border-radius: 4px;
+  animation: cat-shimmer 1.4s infinite linear;
+  background-size: 400% 100%;
+  background-image: linear-gradient(
+    90deg,
+    var(--color-bg-card) 25%,
+    var(--color-bg-muted) 50%,
+    var(--color-bg-card) 75%
+  );
+}
+
+@keyframes cat-shimmer {
+  0%   { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+/* ── Error state ───────────────────────────────────────── */
+.categories-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 0;
+  color: var(--color-danger);
+  font-size: 14px;
+}
+
+.retry-btn {
+  background: none;
+  border: none;
+  color: var(--color-accent);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: underline;
+  padding: 0;
+
+  &:hover {
+    color: var(--color-accent-hover);
+  }
+}
+
+/* ── Responsive ────────────────────────────────────────── */
 @media (max-width: 768px) {
   .section-title { font-size: 18px; }
   .cards-scroll { gap: 14px; }

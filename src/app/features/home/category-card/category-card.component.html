@@ -1,6 +1,6 @@
-<a class="category-card" routerLink="/products" aria-label="{{ name }}">
-  <div class="card-circle" [style.background]="color">
-    <span class="card-icon" aria-hidden="true">{{ icon }}</span>
+<a class="category-card" [routerLink]="href" [queryParams]="queryParams" aria-label="{{ name }}">
+  <div class="card-circle" [style.background]="resolvedColor">
+    <span class="card-icon" aria-hidden="true">{{ resolvedIcon }}</span>
   </div>
   <span class="card-label">{{ name }}</span>
 </a>

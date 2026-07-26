@@ -1,16 +1,27 @@
-import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
-import { NgIf, NgFor, CurrencyPipe } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import {ChangeDetectionStrategy, Component, computed, inject, OnInit, signal} from '@angular/core';
+import {CurrencyPipe, NgFor, NgIf} from '@angular/common';
+import {ActivatedRoute, RouterLink} from '@angular/router';
 
-import { MatButtonModule } from '@angular/material/button';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatTabsModule } from '@angular/material/tabs';
+import {MatButtonModule} from '@angular/material/button';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatTabsModule} from '@angular/material/tabs';
 
-import { LucideCloudOff, LucideRefreshCw, LucideInfo, LucideMinus, LucidePlus, LucideCheckCircle, LucideShoppingBag, LucideHeart, LucideTruck, LucideShieldCheck } from '@lucide/angular';
+import {
+  LucideCheckCircle,
+  LucideCloudOff,
+  LucideHeart,
+  LucideInfo,
+  LucideMinus,
+  LucidePlus,
+  LucideRefreshCw,
+  LucideShieldCheck,
+  LucideShoppingBag,
+  LucideTruck
+} from '@lucide/angular';
 
-import { ProductsFacade } from '../../core/facades/products.facade';
-import { CartFacade } from '../../core/facades/cart.facade';
-import { PRODUCT_PLACEHOLDER_IMAGE } from '../../core/models/product.model';
+import {ProductsFacade} from '../../core/facades/products.facade';
+import {CartFacade} from '../../core/facades/cart.facade';
+import {PRODUCT_PLACEHOLDER_IMAGE} from '../../core/models';
 
 @Component({
   standalone: true,
@@ -46,8 +57,8 @@ import { PRODUCT_PLACEHOLDER_IMAGE } from '../../core/models/product.model';
     <div class="product-detail" *ngIf="product() as p">
       <!-- BREADCRUMB -->
       <nav class="breadcrumb">
-        <a routerLink="/">Home</a> / 
-        <a routerLink="/products">Products</a> / 
+        <a routerLink="/">Home</a> /
+        <a routerLink="/products">Products</a> /
         <span>{{ p.name }}</span>
       </nav>
 
