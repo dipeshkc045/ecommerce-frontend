@@ -15,6 +15,7 @@ export type CategoryResponse = {
   description: string | null;
 };
 
+
 @Injectable({ providedIn: 'root' })
 export class CategoryApi {
   private readonly http = inject(HttpClient);
