@@ -32,3 +32,23 @@ export function jwtSubject(token: string | null | undefined): string | null {
     return null;
   }
 }
+
+export function isJwtExpired(token: string | null | undefined): boolean {
+  if (!token) return true;
+
+  const parts = token.split('.');
+  if (parts.length < 2) return true;
+
+  try {
+    const json = base64UrlDecode(parts[1]);
+    const payload = JSON.parse(json) as { exp?: number };
+    if (typeof payload.exp === 'number') {
+      // Return true if expired (with 5-second buffer for clock skew)
+      return Date.now() >= (payload.exp - 5) * 1000;
+    }
+    return false;
+  } catch {
+    return true;
+  }
+}
+

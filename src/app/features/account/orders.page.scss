@@ -3,40 +3,58 @@
    Design language: a shipping manifest reimagined for the web.
    Order numbers and tracking codes run in mono, like a waybill;
    the shipment tracker reads as a route line, not a progress bar.
+
+   Theming: tokens are semantic (--bg, --surface, --text…) and are
+   reassigned under [data-theme='dark']. Nothing below the token
+   block should ever reference a raw hex value.
    ───────────────────────────────────────────────────────────── */
 
+/* Move this @import to your global styles.scss if other pages also
+   use these faces, to avoid duplicate font loads. */
 :host {
-  /* ── Tokens ─────────────────────────────────────────────── */
-  --ink: #14171f;
-  --ink-soft: #565c66;
-  --ink-faint: #8a8f98;
-  --paper: #f6f6f3;
-  --surface: #ffffff;
-  --line: #e3e3de;
-  --line-soft: #edede9;
+  /* ── Synchronized with Global Design System Tokens ─────────────── */
+  --bg: var(--color-bg-page);
+  --surface: var(--color-bg-card);
+  --surface-raised: var(--color-bg-elevated);
+  --text: var(--color-text-primary);
+  --text-soft: var(--color-text-secondary);
+  --text-faint: var(--color-text-muted);
+  --line: var(--color-border);
+  --line-soft: var(--color-border-light);
 
-  --pine: #2b5d4f;
-  --pine-soft: #e4eee9;
-  --amber: #a06a1f;
-  --amber-soft: #f8ecd8;
-  --blue: #33587e;
-  --blue-soft: #e5edf5;
-  --rust: #9a4530;
-  --rust-soft: #f6e6e0;
+  --pine: var(--color-success);
+  --pine-soft: var(--color-success-light);
+  --amber: var(--color-warning);
+  --amber-soft: var(--color-warning-light);
+  --blue: var(--color-accent);
+  --blue-soft: var(--color-accent-light);
+  --rust: var(--color-danger);
+  --rust-soft: var(--color-danger-light);
 
-  --font-display: 'Fraunces', Georgia, serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
+  --chip-fixed-bg: var(--color-primary);
+  --chip-fixed-text: var(--color-text-inverse);
 
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --shadow-card: 0 1px 2px rgba(20, 23, 31, 0.04), 0 8px 24px -16px rgba(20, 23, 31, 0.18);
+  --shadow-card: var(--shadow-card);
+  --rail-pattern: var(--color-border);
+
+  --font-display: 'Space Grotesk', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-body: 'Space Grotesk', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Space Grotesk', monospace;
+
+  --radius-sm: var(--radius-sm, 6px);
+  --radius-md: var(--radius-md, 10px);
 
   display: block;
   font-family: var(--font-body);
-  color: var(--ink);
-  background: var(--paper);
+  color: var(--text);
+  background: var(--bg);
 }
+
+
+/* Dark & other themes are handled automatically through the global
+   design-system tokens that :host aliases above (--color-bg-page, etc.).
+   No per-theme override block is needed here. */
+
 
 * {
   box-sizing: border-box;
@@ -46,6 +64,7 @@
   max-width: 960px;
   margin: 0 auto;
   padding: 48px 24px 96px;
+  transition: background 0.2s ease;
 }
 
 a {
@@ -69,6 +88,14 @@ button {
   border-bottom: 1px solid var(--line);
 }
 
+.page-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+  flex-shrink: 0;
+}
+
 .page-eyebrow {
   margin: 0 0 6px;
   font-family: var(--font-mono);
@@ -86,6 +113,7 @@ button {
   font-weight: 600;
   letter-spacing: -0.01em;
   line-height: 1.1;
+  color: var(--text);
 }
 
 .page-subtitle {
@@ -93,7 +121,7 @@ button {
   max-width: 46ch;
   font-size: 14.5px;
   line-height: 1.5;
-  color: var(--ink-soft);
+  color: var(--text-soft);
 }
 
 /* ── Shared buttons ─────────────────────────────────────────── */
@@ -103,15 +131,15 @@ button {
   gap: 8px;
   padding: 11px 22px;
   border-radius: var(--radius-sm);
-  background: var(--ink);
-  color: var(--surface);
+  background: var(--chip-fixed-bg);
+  color: var(--chip-fixed-text);
   font-size: 14px;
   font-weight: 600;
-  border: 1px solid var(--ink);
-  transition: background 0.15s ease, transform 0.1s ease;
+  border: 1px solid var(--chip-fixed-bg);
+  transition: opacity 0.15s ease, transform 0.1s ease;
 
   &:hover {
-    background: #262b36;
+    opacity: 0.88;
   }
   &:active {
     transform: translateY(1px);
@@ -125,7 +153,7 @@ button {
   padding: 9px 16px;
   border-radius: var(--radius-sm);
   background: transparent;
-  color: var(--ink);
+  color: var(--text);
   font-size: 13.5px;
   font-weight: 600;
   border: 1px solid var(--line);
@@ -133,14 +161,32 @@ button {
   transition: border-color 0.15s ease, background 0.15s ease;
 
   &:hover {
-    border-color: var(--ink-faint);
+    border-color: var(--text-faint);
     background: var(--surface);
+  }
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text-soft);
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid var(--line);
+  transition: border-color 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    border-color: var(--text-faint);
+    color: var(--text);
   }
 }
 
 .btn-logout {
   flex-shrink: 0;
-  margin-bottom: 4px;
 }
 
 /* ── Auth prompt ────────────────────────────────────────────── */
@@ -151,18 +197,18 @@ button {
   text-align: center;
   gap: 6px;
   padding: 80px 24px;
-  color: var(--ink-soft);
+  color: var(--text-soft);
 
   .auth-icon {
     margin-bottom: 10px;
-    color: var(--ink-faint);
+    color: var(--text-faint);
   }
 
   h2 {
     margin: 0;
     font-family: var(--font-display);
     font-size: 22px;
-    color: var(--ink);
+    color: var(--text);
   }
 
   p {
@@ -200,7 +246,7 @@ button {
 
   &__icon {
     flex-shrink: 0;
-    color: var(--ink-faint);
+    color: var(--text-faint);
   }
 
   input {
@@ -209,11 +255,11 @@ button {
     outline: none;
     background: transparent;
     font-size: 13.5px;
-    color: var(--ink);
+    color: var(--text);
     font-family: var(--font-body);
 
     &::placeholder {
-      color: var(--ink-faint);
+      color: var(--text-faint);
     }
   }
 }
@@ -234,27 +280,28 @@ button {
   background: var(--surface);
   font-size: 13px;
   font-weight: 600;
-  color: var(--ink-soft);
+  color: var(--text-soft);
   transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
 
   &__count {
     font-family: var(--font-mono);
     font-size: 11px;
     font-weight: 600;
-    color: var(--ink-faint);
+    color: var(--text-faint);
   }
 
   &:hover {
-    border-color: var(--ink-faint);
+    border-color: var(--text-faint);
   }
 
   &.is-active {
-    background: var(--ink);
-    border-color: var(--ink);
-    color: var(--surface);
+    background: var(--chip-fixed-bg);
+    border-color: var(--chip-fixed-bg);
+    color: var(--chip-fixed-text);
 
     .chip__count {
-      color: rgba(255, 255, 255, 0.65);
+      color: var(--chip-fixed-text);
+      opacity: 0.65;
     }
   }
 }
@@ -267,21 +314,21 @@ button {
   text-align: center;
   gap: 6px;
   padding: 88px 24px;
-  color: var(--ink-soft);
+  color: var(--text-soft);
   border: 1px dashed var(--line);
   border-radius: var(--radius-md);
   background: var(--surface);
 
   .empty-icon {
     margin-bottom: 12px;
-    color: var(--ink-faint);
+    color: var(--text-faint);
   }
 
   .empty-title {
     margin: 0;
     font-family: var(--font-display);
     font-size: 21px;
-    color: var(--ink);
+    color: var(--text);
   }
 
   .empty-desc {
@@ -302,29 +349,10 @@ button {
   border: 1px solid var(--line);
   border-radius: var(--radius-sm);
   font-size: 13.5px;
-  color: var(--ink-soft);
+  color: var(--text-soft);
 
   strong {
-    color: var(--ink);
-  }
-}
-
-/* ── Error state ──────────────────────────────────────────── */
-.error-state {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 16px 20px;
-  margin-bottom: 24px;
-  background: var(--rust-soft);
-  border: 1px solid #e0b8ad;
-  border-radius: var(--radius-sm);
-  font-size: 13.5px;
-  color: var(--rust);
-
-  p {
-    margin: 0;
+    color: var(--text);
   }
 }
 
@@ -336,7 +364,7 @@ button {
   padding: 14px 16px;
   margin-bottom: 24px;
   background: var(--amber-soft);
-  border: 1px solid #e8cfa1;
+  border: 1px solid var(--amber);
   border-radius: var(--radius-sm);
 
   &__icon {
@@ -351,14 +379,14 @@ button {
     strong {
       display: block;
       font-size: 13.5px;
-      color: #6b4515;
+      color: var(--amber);
       margin-bottom: 2px;
     }
 
     p {
       margin: 0;
       font-size: 13px;
-      color: #7a5620;
+      color: var(--text-soft);
     }
   }
 
@@ -372,7 +400,7 @@ button {
     border-radius: 4px;
 
     &:hover {
-      background: rgba(160, 106, 31, 0.12);
+      background: var(--amber-soft);
     }
   }
 }
@@ -434,7 +462,7 @@ button {
 }
 
 .shimmer {
-  background: linear-gradient(90deg, var(--line-soft) 25%, #f7f7f5 37%, var(--line-soft) 63%);
+  background: linear-gradient(90deg, var(--line-soft) 25%, var(--surface-raised) 37%, var(--line-soft) 63%);
   background-size: 400% 100%;
   animation: shimmer 1.4s ease infinite;
 }
@@ -452,6 +480,7 @@ button {
   box-shadow: var(--shadow-card);
   margin-bottom: 20px;
   overflow: hidden;
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .order-header {
@@ -475,7 +504,7 @@ button {
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--ink-faint);
+  color: var(--text-faint);
 }
 
 .order-number {
@@ -484,6 +513,7 @@ button {
   font-size: 17px;
   font-weight: 600;
   letter-spacing: 0.01em;
+  color: var(--text);
 }
 
 .tracking-code {
@@ -496,7 +526,7 @@ button {
   margin-top: 2px;
   font-family: var(--font-mono);
   font-size: 11.5px;
-  color: var(--ink-faint);
+  color: var(--text-faint);
 
   span {
     letter-spacing: 0.03em;
@@ -511,7 +541,7 @@ button {
   }
 
   &:hover {
-    color: var(--ink-soft);
+    color: var(--text-soft);
 
     em {
       opacity: 1;
@@ -528,8 +558,8 @@ button {
   font-weight: 600;
   white-space: nowrap;
 
-  &.is-placed { background: var(--line-soft); color: var(--ink-soft); }
-  &.is-processing { background: var(--amber-soft); color: #7a5620; }
+  &.is-placed { background: var(--line-soft); color: var(--text-soft); }
+  &.is-processing { background: var(--amber-soft); color: var(--amber); }
   &.is-shipped { background: var(--blue-soft); color: var(--blue); }
   &.is-delivered { background: var(--pine-soft); color: var(--pine); }
 }
@@ -552,13 +582,13 @@ button {
     font-weight: 600;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: var(--ink-faint);
+    color: var(--text-faint);
   }
 
   &__value {
     font-size: 13.5px;
     font-weight: 600;
-    color: var(--ink);
+    color: var(--text);
 
     &--total {
       font-family: var(--font-mono);
@@ -573,7 +603,7 @@ button {
 /* ── Shipment tracker (signature element) ──────────────────── */
 .tracker {
   padding: 20px 24px 24px;
-  background: var(--paper);
+  background: var(--bg);
   border-bottom: 1px solid var(--line-soft);
 }
 
@@ -581,7 +611,7 @@ button {
   margin: 0 0 16px;
   font-size: 13px;
   font-weight: 600;
-  color: var(--ink);
+  color: var(--text);
 }
 
 .tracker__route {
@@ -594,8 +624,8 @@ button {
   border-radius: 3px;
   background: repeating-linear-gradient(
     90deg,
-    var(--line) 0,
-    var(--line) 5px,
+    var(--rail-pattern) 0,
+    var(--rail-pattern) 5px,
     transparent 5px,
     transparent 10px
   );
@@ -637,7 +667,7 @@ button {
   &__label {
     font-size: 11px;
     font-weight: 600;
-    color: var(--ink-faint);
+    color: var(--text-faint);
     text-align: center;
     letter-spacing: 0.01em;
   }
@@ -650,7 +680,7 @@ button {
     }
 
     .waypoint__label {
-      color: var(--ink);
+      color: var(--text);
     }
   }
 }
@@ -677,11 +707,8 @@ button {
   height: 64px;
   border-radius: var(--radius-sm);
   overflow: hidden;
-  background: var(--paper);
+  background: var(--bg);
   border: 1px solid var(--line-soft);
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
   img {
     width: 100%;
@@ -689,10 +716,6 @@ button {
     object-fit: cover;
     display: block;
   }
-}
-
-.order-item-placeholder {
-  color: var(--ink-faint);
 }
 
 .order-item-info {
@@ -704,13 +727,13 @@ button {
   margin: 0 0 3px;
   font-size: 14.5px;
   font-weight: 600;
-  color: var(--ink);
+  color: var(--text);
 }
 
 .item-desc {
   margin: 0 0 4px;
   font-size: 12.5px;
-  color: var(--ink-soft);
+  color: var(--text-soft);
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -721,7 +744,7 @@ button {
 .item-qty {
   margin: 0;
   font-size: 12px;
-  color: var(--ink-faint);
+  color: var(--text-faint);
 }
 
 .order-item-price {
@@ -729,7 +752,7 @@ button {
   font-family: var(--font-mono);
   font-size: 13.5px;
   font-weight: 600;
-  color: var(--ink);
+  color: var(--text);
 }
 
 /* ── Delivery / contact / payment details ──────────────────── */
@@ -738,7 +761,7 @@ button {
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   padding: 20px 24px;
-  background: var(--paper);
+  background: var(--bg);
   border-top: 1px solid var(--line-soft);
   border-bottom: 1px solid var(--line-soft);
 }
@@ -750,13 +773,13 @@ button {
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--ink-faint);
+    color: var(--text-faint);
   }
 
   p {
     margin: 0 0 2px;
     font-size: 13px;
-    color: var(--ink-soft);
+    color: var(--text-soft);
     line-height: 1.5;
   }
 }
@@ -780,16 +803,15 @@ button {
   gap: 10px;
 }
 
-.visa-badge,
-.payment-badge {
+.visa-badge {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 40px;
   height: 26px;
   border-radius: 4px;
-  background: var(--ink);
-  color: var(--surface);
+  background: var(--chip-fixed-bg);
+  color: var(--chip-fixed-text);
   font-size: 9.5px;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -800,12 +822,12 @@ button {
   p {
     margin: 0;
     font-size: 13px;
-    color: var(--ink-soft);
+    color: var(--text-soft);
   }
 
   .payment-sub {
     font-size: 11.5px;
-    color: var(--ink-faint);
+    color: var(--text-faint);
   }
 }
 
@@ -825,13 +847,13 @@ button {
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--ink-faint);
+    color: var(--text-faint);
   }
 
   p {
     margin: 0;
     font-size: 12.5px;
-    color: var(--ink-soft);
+    color: var(--text-soft);
     max-width: 34ch;
   }
 }
@@ -847,7 +869,7 @@ button {
   gap: 24px;
   padding: 4px 0;
   font-size: 12.5px;
-  color: var(--ink-soft);
+  color: var(--text-soft);
 
   span:last-child {
     font-family: var(--font-mono);
@@ -859,7 +881,7 @@ button {
     border-top: 1px solid var(--line);
     font-size: 14px;
     font-weight: 700;
-    color: var(--ink);
+    color: var(--text);
   }
 }
 
@@ -872,6 +894,11 @@ button {
   .page-header {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .page-header__actions {
+    width: 100%;
+    justify-content: space-between;
   }
 
   .order-header {
@@ -887,10 +914,6 @@ button {
 
   .order-meta {
     text-align: left;
-  }
-
-  .tracker__waypoints {
-    margin-top: -6px;
   }
 
   .waypoint__label {
@@ -919,7 +942,9 @@ button {
 
 @media (prefers-reduced-motion: reduce) {
   .tracker__fill,
-  .shimmer {
+  .shimmer,
+  .orders-page,
+  .order-card {
     animation: none;
     transition: none;
   }

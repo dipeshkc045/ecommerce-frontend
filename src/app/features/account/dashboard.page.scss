@@ -2,44 +2,30 @@
   display: block;
   width: 100%;
   min-height: 100%;
-  --bg: #0F172A;
-  --bg-deep: #0A1120;
-  --surface: rgba(255, 255, 255, 0.045);
-  --surface-hi: rgba(255, 255, 255, 0.075);
-  --border: rgba(148, 163, 184, 0.14);
-  --border-hi: rgba(148, 163, 184, 0.26);
-  --indigo: #6366F1;
-  --indigo-glow: #818CF8;
-  --gold: #EFC275;
-  --gold-dim: #8A6E3D;
-  --cyan: #22D3EE;
-  --emerald: #10B981;
-  --amber: #F59E0B;
-  --text-hi: #E7ECF6;
-  --text-mid: #A7B2C6;
-  --text-low: #5F6B82;
-  --font-mono: 'SF Mono', ui-monospace, 'Roboto Mono', Menlo, Consolas, monospace;
+
+  /* ── Synchronized with Global Design System Tokens ──────────────── */
+  --bg:        var(--color-bg-page);
+  --bg-deep:   var(--color-bg-muted);
+  --surface:   var(--color-bg-glass);
+  --surface-hi:var(--color-bg-elevated);
+  --border:    var(--color-border);
+  --border-hi: var(--color-border, rgba(148, 163, 184, 0.26));
+
+  --indigo:      var(--color-accent);
+  --indigo-glow: var(--color-accent-hover);
+  --gold:        var(--color-star);
+  --gold-dim:    var(--color-text-muted);
+  --cyan:        var(--color-accent);
+  --emerald:     var(--color-success);
+  --amber:       var(--color-warning);
+
+  --text-hi:  var(--color-text-primary);
+  --text-mid: var(--color-text-secondary);
+  --text-low: var(--color-text-muted);
+
+  --font-mono: 'Space Grotesk', ui-monospace, monospace;
 }
 
-[data-theme='light'] :host,
-:host-context([data-theme='light']) {
-  --bg: #F3F5FA;
-  --bg-deep: #E7EBF3;
-  --surface: rgba(255, 255, 255, 0.75);
-  --surface-hi: rgba(255, 255, 255, 0.92);
-  --border: rgba(51, 65, 102, 0.12);
-  --border-hi: rgba(51, 65, 102, 0.22);
-  --indigo: #5457E5;
-  --indigo-glow: #6366F1;
-  --gold: #B7862E;
-  --gold-dim: #D9B87A;
-  --cyan: #0891B2;
-  --emerald: #059669;
-  --amber: #D97706;
-  --text-hi: #111827;
-  --text-mid: #4B5567;
-  --text-low: #8891A3;
-}
 
 .dash-stage {
   width: 100%;

@@ -2,7 +2,7 @@ import { Injectable, PLATFORM_ID, computed, inject, signal } from '@angular/core
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 
-import { jwtSubject } from './jwt.util';
+import { jwtSubject, isJwtExpired } from './jwt.util';
 import { GoogleAuthService } from './google-auth.service';
 
 const ACCESS_TOKEN_KEY = 'ecommerce.accessToken';
@@ -17,8 +17,22 @@ export class AuthService {
   private readonly accessTokenSignal = signal<string | null>(this.isBrowser ? this.safeRead() : null);
 
   readonly accessToken = this.accessTokenSignal.asReadonly();
-  readonly isLoggedIn = computed(() => !!this.accessTokenSignal());
+  readonly isLoggedIn = computed(() => {
+    const token = this.accessTokenSignal();
+    return !!token && !isJwtExpired(token);
+  });
   readonly userId = computed(() => jwtSubject(this.accessTokenSignal()));
+
+  constructor() {
+    if (this.isBrowser) {
+      window.addEventListener('storage', (event) => {
+        if (event.key === ACCESS_TOKEN_KEY) {
+          const newToken = this.safeRead();
+          this.accessTokenSignal.set(newToken);
+        }
+      });
+    }
+  }
 
   setAccessToken(token: string): void {
     this.accessTokenSignal.set(token);
@@ -43,8 +57,14 @@ export class AuthService {
   }
 
   private safeRead(): string | null {
+    if (!this.isBrowser) return null;
     try {
-      return localStorage.getItem(ACCESS_TOKEN_KEY);
+      const token = localStorage.getItem(ACCESS_TOKEN_KEY);
+      if (token && isJwtExpired(token)) {
+        localStorage.removeItem(ACCESS_TOKEN_KEY);
+        return null;
+      }
+      return token;
     } catch {
       return null;
     }
@@ -60,3 +80,4 @@ export class AuthService {
     }
   }
 }
+

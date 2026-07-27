@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
+  OnInit,
   computed,
   effect,
   inject,
@@ -27,29 +28,15 @@ import { ProductApi, type ProductResponse } from '../../core/api/product.api';
 import { OrderApi, type CreateOrderRequest } from '../../core/api/order.api';
 import { AuthService } from '../../core/auth/auth.service';
 import { PromotionApi } from '../../core/api/promotion.api';
+import { UserAddressApi, type UserAddress } from '../../core/api/user-address.api';
+import { UserPaymentApi, type UserPaymentMethod } from '../../core/api/user-payment.api';
 
 type CheckoutLine = { productId: string; quantity: number; product: ProductResponse | null };
 type AccordionSection = 'delivery' | 'payment' | 'review';
 
-interface Address {
-  id: string;
-  label: string;
-  name: string;
-  street: string;
-  city: string;
-  state: string;
-  zip: string;
-  country: string;
-  phone: string;
-}
+type Address = UserAddress;
+type PaymentCard = UserPaymentMethod;
 
-interface PaymentCard {
-  id: string;
-  brand: string;
-  last4: string;
-  exp: string;
-  name: string;
-}
 
 @Component({
   standalone: true,
@@ -156,7 +143,7 @@ interface PaymentCard {
               <div class="co-section__body" id="delivery-panel" role="region" aria-label="Delivery options" @accordionExpand>
                 <!-- Address cards -->
                 <div class="co-cards" role="radiogroup" aria-label="Choose a delivery address" @listStagger>
-                  @for (addr of addresses; track addr.id) {
+                  @for (addr of addresses(); track addr.id) {
                     <button
                       class="co-card"
                       [class.co-card--selected]="selectedAddressId() === addr.id"
@@ -177,6 +164,7 @@ interface PaymentCard {
                       </div>
                     </button>
                   }
+
 
                   <!-- Add new address -->
                   <button
@@ -313,7 +301,7 @@ interface PaymentCard {
 
                 <!-- Saved cards -->
                 <div class="co-cards" role="radiogroup" aria-label="Choose a saved card" @listStagger>
-                  @for (card of cards; track card.id) {
+                  @for (card of cards(); track card.id) {
                     <button
                       class="co-card"
                       [class.co-card--selected]="selectedCardId() === card.id"
@@ -332,6 +320,7 @@ interface PaymentCard {
                       </div>
                     </button>
                   }
+
 
                   <!-- Add new card -->
                   <button
@@ -1648,11 +1637,13 @@ interface PaymentCard {
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CheckoutPage {
+export class CheckoutPage implements OnInit {
   private readonly cart = inject(CartService);
   private readonly products = inject(ProductApi);
   private readonly orders = inject(OrderApi);
   private readonly promotions = inject(PromotionApi);
+  private readonly addressApi = inject(UserAddressApi);
+  private readonly paymentApi = inject(UserPaymentApi);
   private readonly destroyRef = inject(DestroyRef);
   readonly auth = inject(AuthService);
   private readonly router = inject(Router);
@@ -1667,13 +1658,7 @@ export class CheckoutPage {
   readonly expandedSection = signal<AccordionSection>('delivery');
   readonly completedSections = signal(new Set<AccordionSection>());
 
-  /* ── Cart lines ──────────────────────────────────────────
-     `loading` is derived directly from the same pipeline that
-     produces `lines`, via `tap` side-effects — no synthetic
-     setTimeout, and no effect() created outside an injection
-     context (that combination was throwing NG0203 at runtime,
-     which silently broke reactivity for everything downstream,
-     including the totals in the rail). */
+  /* ── Cart lines ────────────────────────────────────────── */
   private readonly cartItems$ = toObservable(this.cart.items);
   readonly loading = signal(false);
   readonly lines = toSignal(
@@ -1706,21 +1691,88 @@ export class CheckoutPage {
   );
 
   /* ── Delivery ────────────────────────────────────────── */
+  readonly addresses = signal<Address[]>([]);
+  readonly loadingAddresses = signal(false);
   readonly selectedAddressId = signal<string | null>(null);
   readonly showNewAddress = signal(false);
-  readonly selectedAddress = computed(() => this.addresses.find(a => a.id === this.selectedAddressId()) ?? null);
+  readonly selectedAddress = computed(() => this.addresses().find(a => a.id === this.selectedAddressId()) ?? null);
   readonly estimatedDelivery = computed(() => {
     const d = new Date();
     d.setDate(d.getDate() + 5);
     return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
   });
 
-  readonly addresses: Address[] = [
-    { id: 'a1', label: 'Home', name: 'John Doe', street: '742 Evergreen Terrace', city: 'Springfield', state: 'IL', zip: '62704', country: 'United States', phone: '+1 (555) 123-4567' },
-    { id: 'a2', label: 'Office', name: 'John Doe', street: '1600 Pennsylvania Ave NW', city: 'Washington', state: 'DC', zip: '20500', country: 'United States', phone: '+1 (555) 987-6543' },
-    { id: 'a3', label: 'Parents', name: 'John Doe', street: '42 Wallaby Way', city: 'Sydney', state: 'NSW', zip: '2000', country: 'United States', phone: '+1 (555) 000-1111' },
-  ];
   newAddress: Address = { id: '', label: '', name: '', street: '', city: '', state: '', zip: '', country: 'United States', phone: '' };
+
+  /* ── Payment ─────────────────────────────────────────── */
+  readonly cards = signal<PaymentCard[]>([]);
+  readonly loadingCards = signal(false);
+  readonly selectedCardId = signal<string | null>(null);
+  readonly selectedExpressPay = signal<string | null>(null);
+  readonly showNewCard = signal(false);
+  readonly b2bMode = signal(false);
+  readonly poNumber = signal('');
+
+  newCard = { number: '', exp: '', cvc: '', name: '' };
+
+  readonly expressPayOptions = [
+    { id: 'apple', label: 'Apple Pay', icon: '🍎' },
+    { id: 'google', label: 'Google Pay', icon: 'G' },
+    { id: 'paypal', label: 'PayPal', icon: 'P' },
+  ];
+
+  ngOnInit(): void {
+    this.loadUserAddresses();
+    this.loadUserPaymentMethods();
+  }
+
+  loadUserAddresses(): void {
+    if (!this.auth.isLoggedIn()) {
+      this.showNewAddress.set(true);
+      return;
+    }
+    this.loadingAddresses.set(true);
+    this.addressApi
+      .getAddresses()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (list) => {
+          this.addresses.set(list);
+          this.loadingAddresses.set(false);
+          if (list.length > 0) {
+            const defaultAddr = list.find((a) => a.isDefault) ?? list[0];
+            this.selectedAddressId.set(defaultAddr.id);
+          } else {
+            this.showNewAddress.set(true);
+          }
+        },
+        error: () => {
+          this.loadingAddresses.set(false);
+          this.showNewAddress.set(true);
+        },
+      });
+  }
+
+  loadUserPaymentMethods(): void {
+    if (!this.auth.isLoggedIn()) return;
+    this.loadingCards.set(true);
+    this.paymentApi
+      .getPaymentMethods()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (list) => {
+          this.cards.set(list);
+          this.loadingCards.set(false);
+          if (list.length > 0) {
+            const defaultCard = list.find((c) => c.isDefault) ?? list[0];
+            this.selectedCardId.set(defaultCard.id);
+          }
+        },
+        error: () => {
+          this.loadingCards.set(false);
+        },
+      });
+  }
 
   selectAddress(addr: Address): void {
     this.selectedAddressId.set(addr.id);
@@ -1749,35 +1801,51 @@ export class CheckoutPage {
 
   saveNewAddress(): void {
     if (!this.newAddress.label || !this.newAddress.name || !this.newAddress.street) return;
-    const id = 'new-' + Date.now();
-    const addr = { ...this.newAddress, id };
-    this.addresses.push(addr);
-    this.selectedAddressId.set(id);
-    this.showNewAddress.set(false);
-    this.newAddress = { id: '', label: '', name: '', street: '', city: '', state: '', zip: '', country: 'United States', phone: '' };
+
+    const payload = {
+      label: this.newAddress.label,
+      name: this.newAddress.name,
+      street: this.newAddress.street,
+      city: this.newAddress.city,
+      state: this.newAddress.state,
+      zip: this.newAddress.zip,
+      country: this.newAddress.country || 'United States',
+      phone: this.newAddress.phone,
+    };
+
+    if (this.auth.isLoggedIn()) {
+      this.addressApi
+        .createAddress(payload)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: (saved) => {
+            this.addresses.update((current) => [...current, saved]);
+            this.selectedAddressId.set(saved.id);
+            this.showNewAddress.set(false);
+            this.resetNewAddressForm();
+          },
+          error: () => {
+            const id = 'addr-' + Date.now();
+            const localAddr = { ...payload, id };
+            this.addresses.update((current) => [...current, localAddr]);
+            this.selectedAddressId.set(id);
+            this.showNewAddress.set(false);
+            this.resetNewAddressForm();
+          },
+        });
+    } else {
+      const id = 'guest-' + Date.now();
+      const localAddr = { ...payload, id };
+      this.addresses.update((current) => [...current, localAddr]);
+      this.selectedAddressId.set(id);
+      this.showNewAddress.set(false);
+      this.resetNewAddressForm();
+    }
   }
 
-  /* ── Payment ─────────────────────────────────────────── */
-  readonly selectedCardId = signal<string | null>(null);
-  readonly selectedExpressPay = signal<string | null>(null);
-  readonly showNewCard = signal(false);
-  readonly b2bMode = signal(false);
-  /** Was [(ngModel)] on a signal — Angular assigns rather than calls, which silently
-   *  replaces the signal with a string and breaks every computed() that reads it.
-   *  Fixed to one-way bind + explicit .set() on change everywhere below. */
-  readonly poNumber = signal('');
-
-  readonly cards: PaymentCard[] = [
-    { id: 'c1', brand: 'Visa', last4: '4242', exp: '12/26', name: 'John Doe' },
-    { id: 'c2', brand: 'Mastercard', last4: '8888', exp: '09/27', name: 'John Doe' },
-  ];
-  newCard = { number: '', exp: '', cvc: '', name: '' };
-
-  readonly expressPayOptions = [
-    { id: 'apple', label: 'Apple Pay', icon: '🍎' },
-    { id: 'google', label: 'Google Pay', icon: 'G' },
-    { id: 'paypal', label: 'PayPal', icon: 'P' },
-  ];
+  private resetNewAddressForm(): void {
+    this.newAddress = { id: '', label: '', name: '', street: '', city: '', state: '', zip: '', country: 'United States', phone: '' };
+  }
 
   selectCard(id: string): void {
     this.selectedCardId.set(id);
@@ -1793,7 +1861,7 @@ export class CheckoutPage {
   }
 
   getCard(id: string): PaymentCard | undefined {
-    return this.cards.find(c => c.id === id);
+    return this.cards().find((c) => c.id === id);
   }
 
   readonly canCompletePayment = computed(() => {
@@ -1811,13 +1879,51 @@ export class CheckoutPage {
     if (!this.newCard.number || !this.newCard.exp || !this.newCard.name) return;
     const last4 = this.newCard.number.replace(/\s/g, '').slice(-4);
     const brand = this.newCard.number.startsWith('4') ? 'Visa' : 'Mastercard';
-    const id = 'nc-' + Date.now();
-    this.cards.push({ id, brand, last4, exp: this.newCard.exp, name: this.newCard.name });
-    this.selectedCardId.set(id);
-    this.selectedExpressPay.set(null);
-    this.showNewCard.set(false);
+
+    const payload = {
+      brand,
+      last4,
+      exp: this.newCard.exp,
+      name: this.newCard.name,
+    };
+
+    if (this.auth.isLoggedIn()) {
+      this.paymentApi
+        .createPaymentMethod(payload)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: (saved) => {
+            this.cards.update((current) => [...current, saved]);
+            this.selectedCardId.set(saved.id);
+            this.selectedExpressPay.set(null);
+            this.showNewCard.set(false);
+            this.resetNewCardForm();
+          },
+          error: () => {
+            const id = 'card-' + Date.now();
+            const localCard = { ...payload, id };
+            this.cards.update((current) => [...current, localCard]);
+            this.selectedCardId.set(id);
+            this.selectedExpressPay.set(null);
+            this.showNewCard.set(false);
+            this.resetNewCardForm();
+          },
+        });
+    } else {
+      const id = 'nc-' + Date.now();
+      const localCard = { ...payload, id };
+      this.cards.update((current) => [...current, localCard]);
+      this.selectedCardId.set(id);
+      this.selectedExpressPay.set(null);
+      this.showNewCard.set(false);
+      this.resetNewCardForm();
+    }
+  }
+
+  private resetNewCardForm(): void {
     this.newCard = { number: '', exp: '', cvc: '', name: '' };
   }
+
 
   formatCardNumber(): void {
     let v = this.newCard.number.replace(/\D/g, '').slice(0, 16);

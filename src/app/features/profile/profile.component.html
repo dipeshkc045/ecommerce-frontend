@@ -1,140 +1,98 @@
-<div class="max-w-4xl mx-auto p-6 space-y-8">
+<div class="profile-page">
+
   <!-- Page Header -->
-  <div>
-    <h1 class="text-2xl font-bold text-gray-900">My Profile</h1>
-    <p class="text-sm text-gray-500">Manage your personal information, password, and account settings.</p>
+  <div class="profile-page__header">
+    <h1 class="profile-page__title">My Profile</h1>
+    <p class="profile-page__subtitle">Manage your personal information, password, and account settings.</p>
   </div>
 
   <!-- User Overview Card -->
-  <div class="flex items-center justify-between p-6 bg-white rounded-xl border border-gray-200 shadow-sm">
-    <div class="flex items-center space-x-4">
-      <div class="relative">
+  <div class="profile-card profile-card--overview">
+    <div class="profile-overview">
+      <div class="profile-overview__avatar-wrap">
         <img
           [src]="user.avatarUrl || 'assets/default-avatar.png'"
           alt="Profile Avatar"
-          class="w-20 h-20 rounded-full object-cover border-2 border-pink-500"
+          class="profile-overview__avatar"
         />
-        <label for="avatar-upload" class="absolute bottom-0 right-0 p-1.5 bg-pink-600 text-white rounded-full shadow hover:bg-pink-700 cursor-pointer transition">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+        <label for="avatar-upload" class="profile-overview__avatar-btn" title="Change photo">
+          <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
           </svg>
         </label>
-        <input id="avatar-upload" type="file" (change)="onAvatarChange($event)" class="hidden" accept="image/*" />
+        <input id="avatar-upload" type="file" (change)="onAvatarChange($event)" class="profile-overview__avatar-input" accept="image/*" />
       </div>
-      <div>
-        <h2 class="text-lg font-semibold text-gray-800">{{ user.firstName }} {{ user.lastName }}</h2>
-        <p class="text-xs text-gray-400 font-mono">User ID: {{ user.id }}</p>
-        <p class="text-sm text-gray-500 mt-1">{{ user.email }}</p>
+      <div class="profile-overview__info">
+        <h2 class="profile-overview__name">{{ user.firstName }} {{ user.lastName }}</h2>
+        <p class="profile-overview__uid">User ID: {{ user.id }}</p>
+        <p class="profile-overview__email">{{ user.email }}</p>
       </div>
     </div>
   </div>
 
   <!-- Profile Edit Form -->
-  <form [formGroup]="profileForm" (ngSubmit)="onSaveProfile()" class="space-y-6">
+  <form [formGroup]="profileForm" (ngSubmit)="onSaveProfile()" class="profile-form">
 
     <!-- Section: Personal Information -->
-    <div class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm space-y-6">
-      <h3 class="text-lg font-semibold text-gray-800 border-b pb-3">Personal Information</h3>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
-          <input
-            type="text"
-            formControlName="firstName"
-            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-pink-500 outline-none transition text-sm text-gray-800"
-            placeholder="John"
-          />
+    <div class="profile-card">
+      <div class="profile-card__header">
+        <h3 class="profile-card__title">Personal Information</h3>
+      </div>
+      <div class="profile-grid profile-grid--2">
+        <div class="profile-field">
+          <label class="profile-field__label">First Name</label>
+          <input type="text" formControlName="firstName" class="profile-field__input" placeholder="John" />
         </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
-          <input
-            type="text"
-            formControlName="lastName"
-            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-pink-500 outline-none transition text-sm text-gray-800"
-            placeholder="Doe"
-          />
+        <div class="profile-field">
+          <label class="profile-field__label">Last Name</label>
+          <input type="text" formControlName="lastName" class="profile-field__input" placeholder="Doe" />
         </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-          <input
-            type="email"
-            formControlName="email"
-            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-pink-500 outline-none transition text-sm text-gray-800"
-            placeholder="john.doe@example.com"
-          />
+        <div class="profile-field">
+          <label class="profile-field__label">Email Address</label>
+          <input type="email" formControlName="email" class="profile-field__input" placeholder="john.doe@example.com" />
         </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-          <input
-            type="tel"
-            formControlName="phone"
-            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-pink-500 outline-none transition text-sm text-gray-800"
-            placeholder="+1 (555) 000-0000"
-          />
+        <div class="profile-field">
+          <label class="profile-field__label">Phone Number</label>
+          <input type="tel" formControlName="phone" class="profile-field__input" placeholder="+1 (555) 000-0000" />
         </div>
       </div>
     </div>
 
     <!-- Section: Change Password -->
-    <div class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm space-y-6">
-      <h3 class="text-lg font-semibold text-gray-800 border-b pb-3">Change Password</h3>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
-          <input
-            type="password"
-            formControlName="currentPassword"
-            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-pink-500 outline-none transition text-sm text-gray-800"
-            placeholder="••••••••"
-          />
+    <div class="profile-card">
+      <div class="profile-card__header">
+        <h3 class="profile-card__title">Change Password</h3>
+      </div>
+      <div class="profile-grid profile-grid--3">
+        <div class="profile-field">
+          <label class="profile-field__label">Current Password</label>
+          <input type="password" formControlName="currentPassword" class="profile-field__input" placeholder="••••••••" />
         </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">New Password</label>
-          <input
-            type="password"
-            formControlName="newPassword"
-            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-pink-500 outline-none transition text-sm text-gray-800"
-            placeholder="••••••••"
-          />
+        <div class="profile-field">
+          <label class="profile-field__label">New Password</label>
+          <input type="password" formControlName="newPassword" class="profile-field__input" placeholder="••••••••" />
         </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
-          <input
-            type="password"
-            formControlName="confirmPassword"
-            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-pink-500 outline-none transition text-sm text-gray-800"
-            placeholder="••••••••"
-          />
+        <div class="profile-field">
+          <label class="profile-field__label">Confirm New Password</label>
+          <input type="password" formControlName="confirmPassword" class="profile-field__input" placeholder="••••••••" />
         </div>
       </div>
     </div>
 
     <!-- Actions -->
-    <div class="flex items-center justify-end space-x-4 pt-2">
-      <button
-        type="button"
-        (click)="onCancel()"
-        class="px-6 py-2.5 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 text-sm font-medium transition"
-      >
+    <div class="profile-actions">
+      <button type="button" (click)="onCancel()" class="profile-btn profile-btn--ghost">
         Cancel
       </button>
-
-      <button
-        type="submit"
-        [disabled]="profileForm.invalid || isLoading"
-        class="px-6 py-2.5 rounded-lg bg-pink-600 text-white hover:bg-pink-700 focus:ring-4 focus:ring-pink-200 text-sm font-medium transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-      >
-        <span *ngIf="isLoading" class="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span>
+      <button type="submit" [disabled]="profileForm.invalid || isLoading" class="profile-btn profile-btn--primary">
+        @if (isLoading) {
+          <span class="profile-btn__spinner"></span>
+        }
         Save Changes
       </button>
     </div>
+
   </form>
 </div>
