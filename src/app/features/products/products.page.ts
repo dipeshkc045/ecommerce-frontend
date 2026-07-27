@@ -5,16 +5,17 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { LayoutService } from '../../core/layout/layout.service';
 import { ProductsFacade } from '../../core/facades/products.facade';
 import { CartFacade } from '../../core/facades/cart.facade';
+import { FavouriteFacade } from '../../core/facades/favourite.facade';
+import { CategoryApi } from '../../core/api/category.api';
+import type { CategoryResponse } from '../../core/api/category.api';
 import type { ProductSearchFilterPayload } from '../../core/api/product.api';
 import {
   PRICE_RANGES,
-  PRODUCT_CATEGORIES,
   BRANDS,
   COLORS,
   RATING_OPTIONS,
   AVAILABILITY_OPTIONS,
   DISCOUNT_OPTIONS,
-  CATEGORY_NAME_TO_ID,
 } from '../../core/models/product.model';
 import { ProductCardComponent } from '../../shared/ui/product-card/product-card.component';
 import { toProductCardModelList } from '../../shared/ui/product-card/product-card.adapter';
@@ -38,10 +39,12 @@ export class ProductsPage implements OnInit {
   readonly facade = inject(ProductsFacade);
   readonly layout = inject(LayoutService);
   private readonly cart = inject(CartFacade);
+  private readonly favouriteFacade = inject(FavouriteFacade);
+  private readonly categoryApi = inject(CategoryApi);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
-  readonly categories = [...PRODUCT_CATEGORIES];
+  readonly categories = signal<CategoryResponse[]>([]);
   readonly priceRanges = PRICE_RANGES;
   readonly brands = BRANDS;
   readonly colors = COLORS;
@@ -144,16 +147,20 @@ export class ProductsPage implements OnInit {
   });
 
   ngOnInit(): void {
+    this.loadCategories();
+
     const categoryParam = this.route.snapshot.queryParamMap.get('category');
     if (categoryParam) {
       this.selectedCategories.set([categoryParam]);
-      const categoryId = CATEGORY_NAME_TO_ID[categoryParam];
-      if (categoryId) {
-        this.facade.loadByCategory(categoryId, categoryParam);
-        return;
-      }
     }
     this.loadProducts();
+  }
+
+  loadCategories(): void {
+    this.categoryApi.getAll().subscribe({
+      next: (data) => this.categories.set(data),
+      error: () => this.categories.set([]),
+    });
   }
 
   loadProducts(): void {
@@ -268,5 +275,9 @@ export class ProductsPage implements OnInit {
       sku: product.sku,
     });
     setTimeout(() => this.addingProductId.set(null), 600);
+  }
+
+  onWishlistToggle(product: ProductCardModel): void {
+    this.favouriteFacade.toggleFavourite(product.id);
   }
 }

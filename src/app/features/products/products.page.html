@@ -61,9 +61,9 @@
         @if (_isOpen('cat')) {
           <div class="plp-filter__body">
             <div class="plp-filter__chips">
-              @for (cat of categories; track cat) {
-                <button class="plp-chip" [class.active]="selectedCategories().includes(cat)" (click)="toggleCategory(cat)" type="button">
-                  {{ cat }}
+              @for (cat of categories(); track cat.id) {
+                <button class="plp-chip" [class.active]="selectedCategories().includes(cat.name)" (click)="toggleCategory(cat.name)" type="button">
+                  {{ cat.name }}
                 </button>
               }
             </div>
@@ -375,6 +375,7 @@
               [showOldPrice]="true"
               [showDiscount]="true"
               (addToCart)="addToCart($event)"
+              (wishlistToggle)="onWishlistToggle($event)"
             />
           }
         </div>

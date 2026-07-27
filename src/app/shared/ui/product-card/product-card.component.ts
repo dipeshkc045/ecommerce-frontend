@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
 import type { ProductCardModel, ProductCardVariant } from './product-card.model';
+import { FavouriteFacade } from '../../../core/facades/favourite.facade';
 
 @Component({
   standalone: true,
@@ -13,6 +14,7 @@ import type { ProductCardModel, ProductCardVariant } from './product-card.model'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductCardComponent {
+  private readonly favouriteFacade = inject(FavouriteFacade);
   readonly Math = Math;
   readonly product = input.required<ProductCardModel>();
   readonly variant = input<ProductCardVariant>('grid');
@@ -38,6 +40,10 @@ export class ProductCardComponent {
   readonly wishlistToggle = output<ProductCardModel>();
   readonly quickView = output<ProductCardModel>();
   readonly compare = output<ProductCardModel>();
+
+  readonly effectiveWished = computed(() =>
+    this.wished() || this.product().wishlisted || this.favouriteFacade.favouriteIds().has(this.product().id),
+  );
 
   readonly detailLink = computed(() => ['/products', String(this.product().id)]);
 

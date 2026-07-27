@@ -21,6 +21,7 @@ import {
 
 import {ProductsFacade} from '../../core/facades/products.facade';
 import {CartFacade} from '../../core/facades/cart.facade';
+import {FavouriteFacade} from '../../core/facades/favourite.facade';
 import {PRODUCT_PLACEHOLDER_IMAGE} from '../../core/models';
 
 @Component({
@@ -155,9 +156,9 @@ import {PRODUCT_PLACEHOLDER_IMAGE} from '../../core/models';
               <svg lucideShoppingBag></svg>
               Add to Cart
             </button>
-            <button class="btn-outline" (click)="addToCart(p.id)">
+            <button class="btn-outline" [class.active]="isWishlisted()" (click)="toggleWishlist()">
               <svg lucideHeart></svg>
-              Wishlist
+              {{ isWishlisted() ? 'Wishlisted' : 'Wishlist' }}
             </button>
           </div>
 
@@ -230,6 +231,7 @@ import {PRODUCT_PLACEHOLDER_IMAGE} from '../../core/models';
 export class ProductDetailsPage implements OnInit {
   readonly facade = inject(ProductsFacade);
   private readonly cart = inject(CartFacade);
+  private readonly favouriteFacade = inject(FavouriteFacade);
   private readonly route = inject(ActivatedRoute);
 
 
@@ -279,6 +281,10 @@ export class ProductDetailsPage implements OnInit {
   readonly selectedColor = signal('Black');
   readonly quantity = signal(1);
 
+  readonly isWishlisted = computed(() => {
+    return this.favouriteFacade.isFavourite(this.productId);
+  });
+
   incrementQty(): void {
     this.quantity.update(q => q + 1);
   }
@@ -296,5 +302,12 @@ export class ProductDetailsPage implements OnInit {
       categoryName: p.categoryName ?? undefined,
       sku: p.sku,
     } : undefined);
+  }
+
+  toggleWishlist(): void {
+    const p = this.product();
+    if (p) {
+      this.favouriteFacade.toggleFavourite(p.id);
+    }
   }
 }

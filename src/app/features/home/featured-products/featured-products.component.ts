@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
 
-import { ProductSectionComponent } from '../../../shared/ui/product-section/product-section.component';
+import { ProductSectionComponent } from '../../../shared';
 import { CartFacade } from '../../../core/facades/cart.facade';
 import type { ProductCardModel } from '../../../shared/ui/product-card/product-card.model';
 
@@ -38,6 +38,7 @@ export class FeaturedProductsComponent {
   readonly showStock = input(false);
 
   readonly addToCart = output<ProductCardModel>();
+  readonly wishlistToggle = output<ProductCardModel>();
 
   onAddToCart(product: ProductCardModel): void {
     this.cart.addProduct(product.id, 1, {
@@ -47,5 +48,9 @@ export class FeaturedProductsComponent {
       categoryName: product.categoryName ?? undefined,
       sku: product.sku,
     });
+  }
+
+  onWishlistToggle(product: ProductCardModel): void {
+    this.wishlistToggle.emit(product);
   }
 }

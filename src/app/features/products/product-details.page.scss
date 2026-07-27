@@ -334,6 +334,17 @@
   color: var(--color-accent);
 }
 
+.btn-outline.active {
+  background: var(--color-danger);
+  color: var(--color-text-inverse);
+  border-color: var(--color-danger);
+}
+
+.btn-outline.active:hover {
+  background: var(--color-danger);
+  opacity: 0.9;
+}
+
 .trust-badges {
   display: flex;
   gap: 24px;

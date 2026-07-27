@@ -14,6 +14,7 @@ import { AdvertisementSectionComponent } from './advertisement-section/advertise
 import { ProductApi } from '../../core/api/product.api';
 import type { ProductCardApiItem } from '../../core/api/product.api';
 import type { ProductCardModel } from '../../shared/ui/product-card/product-card.model';
+import { FavouriteFacade } from '../../core/facades/favourite.facade';
 
 const PLACEHOLDER_IMAGE = '/images/headphones.svg';
 const ACCENT_CYCLE = ['blue', 'pink', 'orange', 'teal', 'purple'] as const;
@@ -79,6 +80,8 @@ function toProductCardModel(item: ProductCardApiItem, index: number): ProductCar
         [showFeatures]="true"
         [showDescription]="true"
         [showBadge]="false"
+        [showWishlist]="true"
+        (wishlistToggle)="onWishlistToggle($event)"
       />
     }
 
@@ -109,6 +112,7 @@ function toProductCardModel(item: ProductCardApiItem, index: number): ProductCar
         [showDiscount]="true"
         [showWishlist]="true"
         [animated]="true"
+        (wishlistToggle)="onWishlistToggle($event)"
       />
     }
 
@@ -198,6 +202,7 @@ function toProductCardModel(item: ProductCardApiItem, index: number): ProductCar
 })
 export class HomePage implements OnInit {
   private readonly productApi = inject(ProductApi);
+  private readonly favouriteFacade = inject(FavouriteFacade);
 
   // ── Featured ──────────────────────────────────────────────────────
   private readonly _featuredRaw = signal<ProductCardApiItem[]>([]);
@@ -250,5 +255,9 @@ export class HomePage implements OnInit {
         this.trendingLoading.set(false);
       },
     });
+  }
+
+  onWishlistToggle(product: ProductCardModel): void {
+    this.favouriteFacade.toggleFavourite(product.id);
   }
 }
