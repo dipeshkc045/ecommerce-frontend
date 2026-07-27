@@ -15,7 +15,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
 import { CartService } from '../../core/cart/cart.service';
 import { LayoutService } from '../../core/layout/layout.service';
-import { NotificationService } from '../../core/services/notification.service';
+import { NotificationService } from '../../core/services';
 
 export interface OrderStep {
   id: number;

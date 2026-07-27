@@ -51,18 +51,6 @@ interface PaymentCard {
   name: string;
 }
 
-/**
- * Extends the shared CreateOrderRequest with fields this page needs
- * that the order service doesn't have wired up yet. If/when
- * order.api.ts adds guestEmail/idempotencyKey to CreateOrderRequest
- * directly, this local interface (and the `as` no longer being
- * needed) can be deleted.
- */
-interface CreateOrderRequestExt extends CreateOrderRequest {
-  guestEmail?: string;
-  idempotencyKey: string;
-}
-
 @Component({
   standalone: true,
   selector: 'app-checkout-page',
@@ -1979,21 +1967,76 @@ export class CheckoutPage {
 
     const userId = this.auth.userId();
 
-    const req: CreateOrderRequestExt = {
-      userId: userId ?? undefined,
-      guestEmail: this.isGuest() ? this.guestEmail().trim() : undefined,
-      idempotencyKey: this.idempotencyKey,
-      currency: 'USD',
-      items: this.lines().map((l) => {
-        const product = l.product!; // safe: guarded by hasUnavailableItems above
-        return {
-          productId: l.productId,
-          productName: product.name,
-          quantity: l.quantity,
-          unitPrice: String(product.price),
-        };
-      }),
-    } as CreateOrderRequestExt;
+    // ── Resolve shipping address ──
+    const addr = this.selectedAddress();
+    if (!addr) {
+      this.submitError.set('Please select a delivery address.');
+      return;
+    }
+
+    // ── Resolve payment info ──
+    let paymentMethodType = 'CARD';
+    let paymentLast4 = '';
+    let paymentExpiry = '';
+    if (this.b2bMode()) {
+      paymentMethodType = 'PO';
+      paymentLast4 = this.poNumber();
+    } else if (this.selectedCardId()) {
+      const card = this.getCard(this.selectedCardId()!);
+      paymentMethodType = 'CARD';
+      paymentLast4 = card?.last4 ?? '';
+      paymentExpiry = card?.exp ?? '';
+    } else if (this.selectedExpressPay()) {
+      paymentMethodType = this.selectedExpressPay()!.toUpperCase();
+    }
+
+    // ── Build contact info ──
+    const contactEmail = this.isGuest()
+      ? this.guestEmail().trim()
+      : (addr.phone || '');
+
+    let req: CreateOrderRequest;
+    try {
+      req = {
+        userId: userId ?? undefined,
+        guestEmail: this.isGuest() ? this.guestEmail().trim() : undefined,
+        idempotencyKey: this.idempotencyKey,
+        currency: 'USD',
+        items: this.lines().map((l) => {
+          const product = l.product!;
+          const price = Number(product.price);
+          if (!Number.isFinite(price) || price <= 0) {
+            throw new Error(`Invalid price for product ${l.productId}: ${product.price}`);
+          }
+          return {
+            productId: l.productId,
+            productName: product.name,
+            quantity: l.quantity,
+            unitPrice: String(price.toFixed(2)),
+          };
+        }),
+        shippingAddress: {
+          name: addr.name,
+          addressLine1: addr.street,
+          city: addr.city,
+          state: addr.state,
+          postalCode: addr.zip,
+          country: addr.country,
+        },
+        contactInfo: {
+          email: contactEmail,
+          phone: addr.phone,
+        },
+        paymentInfo: {
+          methodType: paymentMethodType,
+          last4: paymentLast4,
+          expiry: paymentExpiry,
+        },
+      };
+    } catch (e: any) {
+      this.submitError.set(e?.message ?? 'Could not prepare order. Please refresh and try again.');
+      return;
+    }
 
     this.submitting.set(true);
     this.submitError.set(null);

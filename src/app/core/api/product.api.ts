@@ -90,18 +90,22 @@ export class ProductApi {
 
 
   getAll() {
-    return this.http.get<ProductResponse[]>('/product-service/api/products');
+    return this.http
+      .get<GlobalApiResponse<ProductResponse[]>>('/product-service/api/products')
+      .pipe(map((res) => ('data' in res && res.data ? res.data : (res as unknown as ProductResponse[]))));
   }
 
   getById(id: number) {
-    return this.http.get<ProductResponse>(`/product-service/api/products/${id}`);
+    return this.http
+      .get<GlobalApiResponse<ProductResponse>>(`/product-service/api/products/${id}`)
+      .pipe(map((res) => ('data' in res && res.data ? res.data : (res as unknown as ProductResponse))));
   }
 
   getByCategory(categoryId: number, page = 1, size = 12) {
-    return this.http.get<ProductCategoryPageResponse>(
+    return this.http.get<GlobalApiResponse<ProductCategoryPageResponse>>(
       `/product-service/api/products/category/${categoryId}`,
       { params: { page, size } },
-    );
+    ).pipe(map((res) => ('data' in res && res.data ? res.data : (res as unknown as ProductCategoryPageResponse))));
   }
 
   getByIdCached(id: number) {
