@@ -8,8 +8,9 @@ import {
 import { RouterLink } from '@angular/router';
 
 import { CategoryApi } from '../../../core/api/category.api';
-import type { CategoryResponse } from '../../../core/api/category.api';
+
 import { CategoryCardComponent } from '../category-card/category-card.component';
+import {CategoryResponse} from '../../../core/api/types';
 
 @Component({
   standalone: true,

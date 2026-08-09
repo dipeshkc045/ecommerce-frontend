@@ -173,7 +173,7 @@
 
         <!-- Shipment Tracker (signature) -->
         <div class="tracker">
-          <p class="tracker__label">{{ getProgressLabel(order.status, order.updatedAt) }}</p>
+
           <div class="tracker__route">
             <div class="tracker__rail">
               <div class="tracker__fill" [style.width.%]="getProgressPercent(order.status)"></div>

@@ -3,84 +3,12 @@ import { inject, Injectable } from '@angular/core';
 import { map, shareReplay } from 'rxjs';
 import type { Observable } from 'rxjs';
 
-import type { GlobalApiResponse } from './types';
-
-export type ProductResponse = {
-  id: number;
-  name: string;
-  description: string | null;
-  price: string; // BigDecimal serialized as string
-  sku: string;
-  categoryId: number | null;
-  categoryName: string | null;
-  active: boolean | null;
-  imageUrl: string | null;
-  createdAt: string | null;
-  updatedAt: string | null;
-};
-
-export type ProductCategoryPageResponse = {
-  content: ProductResponse[];
-  page: {
-    number: number;
-    size: number;
-    totalElements: number;
-    totalPages: number;
-    first: boolean;
-    last: boolean;
-  };
-};
-
-/** Shape returned by /api/products/featured and /api/products/trending */
-export type ProductCardApiItem = {
-  id: number;
-  name: string;
-  description: string | null;
-  price: number;
-  oldPrice: number | null;
-  discountPercentage: number | null;
-  imageUrl: string | null;
-  badge: 'bestseller' | 'new' | 'sale' | 'hot' | null;
-  rating: number;
-  reviewCount: number;
-  categoryName: string | null;
-  sku: string;
-  accent: 'blue' | 'pink' | 'orange' | 'teal' | 'purple' | null;
-  features: Array<{ title: string; detail: string; color?: string }>;
-  stockStatus: 'inStock' | 'lowStock' | 'outOfStock';
-  stockQuantity: number;
-  wishlisted: boolean;
-  tags: string[];
-};
-
-export type ProductPayload = {
-  name: string;
-  description?: string | null;
-  price: string;
-  sku: string;
-  categoryId?: number | null;
-  active?: boolean | null;
-  imageUrl?: string | null;
-};
-
-export type ProductSearchFilterPayload = {
-  query?: string;
-  categories?: string[];
-  priceRange?: {
-    min?: number;
-    max?: number;
-  };
-  brands?: string[];
-  colors?: string[];
-  minRating?: number;
-  availability?: string[];
-  minDiscount?: number;
-  sortBy?: string;
-  pagination?: {
-    page?: number;
-    size?: number;
-  };
-};
+import type {
+  GlobalApiResponse, PageResponse, ProductCardApiItem,
+  ProductCategoryPageResponse, ProductPayload,
+  ProductResponse,
+  ProductSearchFilterPayload
+} from './types';
 
 @Injectable({ providedIn: 'root' })
 export class ProductApi {
@@ -130,14 +58,14 @@ export class ProductApi {
 
   getFeatured(): Observable<ProductCardApiItem[]> {
     return this.http
-      .get<GlobalApiResponse<ProductCardApiItem[]>>('/product-service/api/products/featured')
-      .pipe(map((res) => res.data ?? []));
+      .post<GlobalApiResponse<PageResponse<ProductCardApiItem>>>('/product-service/api/products/featured', {})
+      .pipe(map((res) => res.data?.content ?? []));
   }
 
   getTrending(): Observable<ProductCardApiItem[]> {
     return this.http
-      .get<GlobalApiResponse<ProductCardApiItem[]>>('/product-service/api/products/trending')
-      .pipe(map((res) => res.data ?? []));
+      .post<GlobalApiResponse<PageResponse<ProductCardApiItem>>>('/product-service/api/products/trending', {})
+      .pipe(map((res) => res.data?.content ?? []));
   }
 
   create(payload: ProductPayload) {

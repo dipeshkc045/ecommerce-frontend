@@ -1,19 +1,18 @@
-import { Injectable, computed, inject, signal } from '@angular/core';
-import { finalize, map } from 'rxjs';
+import {computed, inject, Injectable, signal} from '@angular/core';
+import {finalize, map} from 'rxjs';
 
-import { ProductApi } from '../api/product.api';
-import type { ProductSearchFilterPayload } from '../api/product.api';
-import { InventoryApi } from '../api/inventory.api';
-import { ProductMapper } from '../mappers/product.mapper';
-import { InventoryMapper } from '../mappers/inventory.mapper';
-import { NotificationService } from '../services/notification.service';
-import type { Inventory } from '../models/inventory.model';
-import type { Product } from '../models/product.model';
-import { FALLBACK_PRODUCTS } from '../../features/products/fallback-products.data';
+
+import {ProductApi} from '../api/product.api';
+import {InventoryApi} from '../api/inventory.api';
+import {ProductMapper} from '../mappers/product.mapper';
+import {InventoryMapper} from '../mappers/inventory.mapper';
+import {NotificationService} from '../services';
+import type {Inventory, Product} from '../models';
+import {ProductSearchFilterPayload} from '../api/types';
 
 type InventoryLoadState = Inventory | 'loading' | 'error';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class ProductsFacade {
   private readonly api = inject(ProductApi);
   private readonly inventoryApi = inject(InventoryApi);
@@ -40,7 +39,7 @@ export class ProductsFacade {
   readonly hasProducts = computed(() => (this._products()?.length ?? 0) > 0);
 
   loadAll(): void {
-    this._products.set(this.productMapper.toDomainList(FALLBACK_PRODUCTS));
+    this._products.set(this.productMapper.toDomainList([]));
     this._usingFallback.set(true);
     this._loading.set(true);
     this._error.set(null);
@@ -164,7 +163,7 @@ export class ProductsFacade {
         },
         error: (err) => {
           const fallback = this.productMapper
-            .toDomainList(FALLBACK_PRODUCTS)
+            .toDomainList([])
             .find((product) => product.id === id);
 
           if (fallback) {
@@ -188,7 +187,7 @@ export class ProductsFacade {
     this.api
       .search(term)
       .pipe(
-        map((dtos) => this.productMapper.toDomainList(dtos)),
+        map((dos) => this.productMapper.toDomainList(dos)),
         finalize(() => this._loading.set(false)),
       )
       .subscribe({
@@ -238,17 +237,17 @@ export class ProductsFacade {
   loadInventory(productId: number): void {
     if (this._inventoryMap()[productId] !== undefined) return;
 
-    this._inventoryMap.update((map) => ({ ...map, [productId]: 'loading' }));
+    this._inventoryMap.update((map) => ({...map, [productId]: 'loading'}));
 
     this.inventoryApi.getInventory(productId).subscribe({
       next: (response) => {
         const inventory = response.data
           ? this.inventoryMapper.toDomain(response.data)
           : 'error';
-        this._inventoryMap.update((map) => ({ ...map, [productId]: inventory }));
+        this._inventoryMap.update((map) => ({...map, [productId]: inventory}));
       },
       error: () => {
-        this._inventoryMap.update((map) => ({ ...map, [productId]: 'error' }));
+        this._inventoryMap.update((map) => ({...map, [productId]: 'error'}));
       },
     });
   }
@@ -266,7 +265,11 @@ export class ProductsFacade {
     this._error.set(null);
   }
 
-  private resolveErrorMessage(err: { status?: number; error?: { message?: string }; message?: string }, fallback = 'Something went wrong. Showing sample products.'): string {
+  private resolveErrorMessage(err: {
+    status?: number;
+    error?: { message?: string };
+    message?: string
+  }, fallback = 'Something went wrong. Showing sample products.'): string {
     if (err?.status === 0) {
       return 'Unable to connect to the server. Showing sample products.';
     }

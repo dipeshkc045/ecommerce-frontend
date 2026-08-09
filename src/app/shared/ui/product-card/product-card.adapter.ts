@@ -1,6 +1,7 @@
-import type { Product } from '../../../core/models/product.model';
-import type { ProductCardApiItem } from '../../../core/api/product.api';
+import type { Product } from '../../../core/models';
+
 import type { ProductCardModel, StockStatus } from './product-card.model';
+import {ProductCardApiItem} from '../../../core/api/types';
 
 const PLACEHOLDER_IMAGE = '/images/headphones.svg';
 const ACCENT_CYCLE = ['blue', 'pink', 'orange', 'teal', 'purple'] as const;

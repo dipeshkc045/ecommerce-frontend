@@ -1,17 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
-import { GlobalApiResponse } from './types';
+import {GlobalApiResponse, InventoryResponse} from './types';
 
-export type InventoryResponse = {
-  id: number;
-  productId: number;
-  warehouseId: number;
-  quantity: number;
-  reservedQuantity: number;
-  availableQuantity: number;
-  updatedAt: string | null;
-};
+
 
 @Injectable({ providedIn: 'root' })
 export class InventoryApi {

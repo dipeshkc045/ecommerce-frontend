@@ -12,9 +12,10 @@ import { CategoriesSectionComponent } from './categories-section/categories-sect
 import { FeaturedProductsComponent } from './featured-products/featured-products.component';
 import { AdvertisementSectionComponent } from './advertisement-section/advertisement-section.component';
 import { ProductApi } from '../../core/api/product.api';
-import type { ProductCardApiItem } from '../../core/api/product.api';
+
 import type { ProductCardModel } from '../../shared/ui/product-card/product-card.model';
 import { FavouriteFacade } from '../../core/facades/favourite.facade';
+import {ProductCardApiItem} from '../../core/api/types';
 
 const PLACEHOLDER_IMAGE = '/images/headphones.svg';
 const ACCENT_CYCLE = ['blue', 'pink', 'orange', 'teal', 'purple'] as const;

@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 
 import { CartService } from '../cart/cart.service';
 import { AuthRequiredService } from '../auth/auth-required.service';
-import { NotificationService } from '../services/notification.service';
+import { NotificationService } from '../services';
 
 @Injectable({ providedIn: 'root' })
 export class CartFacade {

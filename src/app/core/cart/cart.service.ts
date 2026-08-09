@@ -2,7 +2,8 @@ import { Injectable, PLATFORM_ID, computed, effect, inject, signal } from '@angu
 import { isPlatformBrowser } from '@angular/common';
 
 import { AuthService } from '../auth/auth.service';
-import { CartApi, type CartItemApiDto } from '../api/cart.api';
+import {CartApi} from '../api/cart.api';
+import {CartItemApiDto} from '../api/types';
 
 export type CartItem = {
   productId: string;

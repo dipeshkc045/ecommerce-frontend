@@ -3,7 +3,8 @@ import { catchError, of, tap } from 'rxjs';
 
 import { AuthService } from '../auth/auth.service';
 import { FavouriteApi } from '../api/favourite.api';
-import type { ProductCardApiItem } from '../api/product.api';
+import {ProductCardApiItem} from '../api/types';
+
 
 @Injectable({ providedIn: 'root' })
 export class FavouriteService {

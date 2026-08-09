@@ -1,11 +1,10 @@
-import { Injectable, inject } from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 
-import { FavouriteService } from '../services/favourite.service';
-import { AuthRequiredService } from '../auth/auth-required.service';
-import { NotificationService } from '../services/notification.service';
-import type { ProductCardApiItem } from '../api/product.api';
+import {FavouriteService} from '../services/favourite.service';
+import {AuthRequiredService} from '../auth/auth-required.service';
+import {NotificationService} from '../services';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class FavouriteFacade {
   private readonly favourites = inject(FavouriteService);
   private readonly authRequired = inject(AuthRequiredService);

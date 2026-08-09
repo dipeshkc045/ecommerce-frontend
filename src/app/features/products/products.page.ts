@@ -7,8 +7,7 @@ import { ProductsFacade } from '../../core/facades/products.facade';
 import { CartFacade } from '../../core/facades/cart.facade';
 import { FavouriteFacade } from '../../core/facades/favourite.facade';
 import { CategoryApi } from '../../core/api/category.api';
-import type { CategoryResponse } from '../../core/api/category.api';
-import type { ProductSearchFilterPayload } from '../../core/api/product.api';
+
 import {
   PRICE_RANGES,
   BRANDS,
@@ -16,10 +15,11 @@ import {
   RATING_OPTIONS,
   AVAILABILITY_OPTIONS,
   DISCOUNT_OPTIONS,
-} from '../../core/models/product.model';
-import { ProductCardComponent } from '../../shared/ui/product-card/product-card.component';
+} from '../../core/models';
+import { ProductCardComponent } from '../../shared';
 import { toProductCardModelList } from '../../shared/ui/product-card/product-card.adapter';
 import type { ProductCardModel } from '../../shared/ui/product-card/product-card.model';
+import {CategoryResponse, ProductSearchFilterPayload} from '../../core/api/types';
 
 const ITEMS_PER_PAGE = 12;
 

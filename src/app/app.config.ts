@@ -2,10 +2,12 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/
 import {
   provideRouter,
   withComponentInputBinding,
-  withViewTransitions,
   withInMemoryScrolling,
 } from '@angular/router';
-import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
+import {
+  provideClientHydration,
+  withEventReplay,
+} from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
 
 import { routes } from './app.routes';
@@ -17,15 +19,18 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideRouter(
       routes,
-      withComponentInputBinding(),        // Bind route params to component inputs
-      withInMemoryScrolling({             // Scroll to top on navigation
+      withComponentInputBinding(),
+      withInMemoryScrolling({
         scrollPositionRestoration: 'top',
         anchorScrolling: 'enabled',
       })
     ),
     provideClientHydration(withEventReplay()),
     provideAnimations(),
-    provideApiBaseUrl(),
+
+    // Backend API base URL
+    provideApiBaseUrl('http://localhost:8080'),
+
     provideAppHttp(),
   ],
 };

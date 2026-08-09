@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 
-import type { InventoryResponse } from '../api/inventory.api';
-import type { Inventory } from '../models/inventory.model';
+
+import type { Inventory } from '../models';
+import {InventoryResponse} from '../api/types';
 
 @Injectable({ providedIn: 'root' })
 export class InventoryMapper {

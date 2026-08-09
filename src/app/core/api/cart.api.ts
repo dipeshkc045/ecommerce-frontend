@@ -4,41 +4,8 @@ import { isPlatformBrowser } from '@angular/common';
 import type { Observable } from 'rxjs';
 import { map } from 'rxjs';
 
-import type { GlobalApiResponse } from './types';
+import type {AddCartItemRequest, CartResponseDto, GlobalApiResponse, MergeCartRequest} from './types';
 import { AuthService } from '../auth/auth.service';
-
-export type CartItemApiDto = {
-  id?: number | string;
-  productId: string | number;
-  productName?: string | null;
-  sku?: string | null;
-  imageUrl?: string | null;
-  unitPrice?: string | number | null;
-  quantity: number;
-  totalPrice?: string | number | null;
-};
-
-export type CartResponseDto = {
-  id?: number | string;
-  userId?: string | null;
-  items: CartItemApiDto[];
-  totalAmount?: string | number | null;
-  totalItems?: number;
-  updatedAt?: string | null;
-};
-
-export type AddCartItemRequest = {
-  productId: string | number;
-  quantity: number;
-};
-
-export type UpdateCartItemRequest = {
-  quantity: number;
-};
-
-export type MergeCartRequest = {
-  items: AddCartItemRequest[];
-};
 
 @Injectable({ providedIn: 'root' })
 export class CartApi {

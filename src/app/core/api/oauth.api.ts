@@ -1,13 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
-import { GlobalApiResponse } from './types';
-import { LoginResponse } from './user.api';
+import {GlobalApiResponse, LoginResponse} from './types';
 
-export type OAuthLoginRequest = {
-  token: string;
-  provider: 'GOOGLE' | 'FACEBOOK' | 'APPLE';
-};
+
+
 
 @Injectable({ providedIn: 'root' })
 export class OAuthApi {

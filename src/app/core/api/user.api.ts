@@ -1,43 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
-import { GlobalApiResponse } from './types';
-
-export type LoginResponse = {
-  userId: string | null;
-  email: string | null;
-  userType: string | null;
-  accessToken: string;
-  refreshToken: string | null;
-  tokenType: string;
-  expiresIn: number | null;
-  requiresVerification: boolean | null;
-  requiresKycVerification: boolean | null;
-};
-
-export type LoginRequest = {
-  emailOrPhone: string;
-  password: string;
-};
-
-export type CustomerRegistrationRequest = {
-  email: string;
-  phone: string;
-  firstName: string;
-  lastName: string;
-  password: string;
-};
-
-export type RegistrationResponse = {
-  userId: string;
-  email: string;
-  userType: string;
-  status: string;
-  message: string;
-  requiresEmailVerification: boolean | null;
-  requiresPhoneVerification: boolean | null;
-  requiresKycVerification: boolean | null;
-};
+import {
+  CustomerRegistrationRequest,
+  GlobalApiResponse,
+  LoginRequest,
+  LoginResponse,
+  RegistrationResponse
+} from './types';
 
 @Injectable({ providedIn: 'root' })
 export class UserApi {

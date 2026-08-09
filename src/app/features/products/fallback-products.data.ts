@@ -1,4 +1,5 @@
-import type { ProductResponse } from '../../core/api/product.api';
+import {ProductResponse} from '../../core/api/types';
+
 
 /**
  * 100 sample products used as fallback when the product API is unavailable.

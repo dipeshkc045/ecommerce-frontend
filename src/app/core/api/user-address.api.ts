@@ -1,23 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable, catchError, map, of } from 'rxjs';
-import { GlobalApiResponse } from './types';
-
-export interface UserAddress {
-  id: string;
-  userId?: string;
-  label: string;
-  name: string;
-  street: string;
-  city: string;
-  state: string;
-  zip: string;
-  country: string;
-  phone: string;
-  isDefault?: boolean;
-}
-
-export type CreateAddressRequest = Omit<UserAddress, 'id'>;
+import {CreateAddressRequest, GlobalApiResponse, UserAddress} from './types';
 
 @Injectable({ providedIn: 'root' })
 export class UserAddressApi {

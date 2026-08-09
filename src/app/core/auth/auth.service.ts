@@ -1,4 +1,4 @@
-import { Injectable, PLATFORM_ID, computed, inject, signal } from '@angular/core';
+import { Injectable, PLATFORM_ID, afterNextRender, computed, inject, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 
@@ -14,7 +14,7 @@ export class AuthService {
   private readonly googleAuth = inject(GoogleAuthService);
   private readonly isBrowser = isPlatformBrowser(this.platformId);
 
-  private readonly accessTokenSignal = signal<string | null>(this.isBrowser ? this.safeRead() : null);
+  private readonly accessTokenSignal = signal<string | null>(null);
 
   readonly accessToken = this.accessTokenSignal.asReadonly();
   readonly isLoggedIn = computed(() => {
@@ -25,6 +25,12 @@ export class AuthService {
 
   constructor() {
     if (this.isBrowser) {
+      // SSR always renders with null — re-read localStorage after hydration
+      afterNextRender(() => {
+        const token = this.safeRead();
+        this.accessTokenSignal.set(token);
+      });
+
       window.addEventListener('storage', (event) => {
         if (event.key === ACCESS_TOKEN_KEY) {
           const newToken = this.safeRead();

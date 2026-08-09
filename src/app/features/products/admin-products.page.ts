@@ -1,18 +1,18 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { NgFor, NgIf } from '@angular/common';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatTableModule } from '@angular/material/table';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatChipsModule } from '@angular/material/chips';
+import {ChangeDetectionStrategy, Component, inject, signal} from '@angular/core';
+import {NgFor, NgIf} from '@angular/common';
+import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {MatCardModule} from '@angular/material/card';
+import {MatButtonModule} from '@angular/material/button';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatTableModule} from '@angular/material/table';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatChipsModule} from '@angular/material/chips';
 
-import { LucideX, LucideRefreshCw, LucidePencil, LucideTrash2 } from '@lucide/angular';
-
-import { ProductApi, type ProductPayload, type ProductResponse } from '../../core/api/product.api';
+import {LucidePencil, LucideRefreshCw, LucideTrash2, LucideX} from '@lucide/angular';
+import {ProductApi} from '../../core/api/product.api';
+import {ProductPayload, ProductResponse} from '../../core/api/types';
 
 @Component({
   standalone: true,
@@ -47,7 +47,7 @@ import { ProductApi, type ProductPayload, type ProductResponse } from '../../cor
     <div class="actions">
       <mat-form-field appearance="outline" class="search">
         <mat-label>Search by name or SKU</mat-label>
-        <input matInput type="search" [value]="searchTerm()" (input)="onSearch($any($event.target).value)" />
+        <input matInput type="search" [value]="searchTerm()" (input)="onSearch($any($event.target).value)"/>
         <button mat-icon-button matSuffix aria-label="Clear" *ngIf="searchTerm()" (click)="onSearch('')">
           <svg lucideX></svg>
         </button>
@@ -74,22 +74,22 @@ import { ProductApi, type ProductPayload, type ProductResponse } from '../../cor
           <form class="form-grid" [formGroup]="form" (ngSubmit)="create()">
             <mat-form-field appearance="outline">
               <mat-label>Name</mat-label>
-              <input matInput formControlName="name" required />
+              <input matInput formControlName="name" required/>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
               <mat-label>SKU</mat-label>
-              <input matInput formControlName="sku" required />
+              <input matInput formControlName="sku" required/>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
               <mat-label>Price</mat-label>
-              <input matInput type="number" min="0" step="0.01" formControlName="price" required />
+              <input matInput type="number" min="0" step="0.01" formControlName="price" required/>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
               <mat-label>Image URL (optional)</mat-label>
-              <input matInput type="url" formControlName="imageUrl" />
+              <input matInput type="url" formControlName="imageUrl"/>
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="full">
@@ -116,7 +116,7 @@ import { ProductApi, type ProductPayload, type ProductResponse } from '../../cor
 
         <mat-card-content>
           <div class="table-wrap" *ngIf="products() === undefined" aria-busy="true">
-            <mat-progress-spinner diameter="32" mode="indeterminate" />
+            <mat-progress-spinner diameter="32" mode="indeterminate"/>
           </div>
 
           <div class="table-wrap" *ngIf="products() && products()!.length === 0">
@@ -125,7 +125,8 @@ import { ProductApi, type ProductPayload, type ProductResponse } from '../../cor
 
           <div class="card-grid" *ngIf="products() && products()!.length > 0">
             <article class="product-card" *ngFor="let p of products()!">
-              <div class="card-img" [style.background-image]="p.imageUrl ? 'url(' + p.imageUrl + ')' : 'linear-gradient(135deg, var(--brand-primary), var(--brand-accent))'"></div>
+              <div class="card-img"
+                   [style.background-image]="p.imageUrl ? 'url(' + p.imageUrl + ')' : 'linear-gradient(135deg, var(--brand-primary), var(--brand-accent))'"></div>
               <div class="card-body">
                 <div class="card-head">
                   <div>
@@ -133,7 +134,8 @@ import { ProductApi, type ProductPayload, type ProductResponse } from '../../cor
                     <div class="sku">{{ p.sku }}</div>
                   </div>
                   <mat-chip-set class="chip-set">
-                    <mat-chip [color]="p.active ? 'primary' : undefined">{{ p.active ? 'Active' : 'Inactive' }}</mat-chip>
+                    <mat-chip [color]="p.active ? 'primary' : undefined">{{ p.active ? 'Active' : 'Inactive' }}
+                    </mat-chip>
                   </mat-chip-set>
                 </div>
                 <p class="desc" *ngIf="p.description">{{ p.description }}</p>
@@ -167,22 +169,22 @@ import { ProductApi, type ProductPayload, type ProductResponse } from '../../cor
         <form class="form-grid" [formGroup]="editForm" (ngSubmit)="saveEdit()">
           <mat-form-field appearance="outline">
             <mat-label>Name</mat-label>
-            <input matInput formControlName="name" required />
+            <input matInput formControlName="name" required/>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>SKU</mat-label>
-            <input matInput formControlName="sku" required />
+            <input matInput formControlName="sku" required/>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Price</mat-label>
-            <input matInput type="number" min="0" step="0.01" formControlName="price" required />
+            <input matInput type="number" min="0" step="0.01" formControlName="price" required/>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Image URL (optional)</mat-label>
-            <input matInput type="url" formControlName="imageUrl" />
+            <input matInput type="url" formControlName="imageUrl"/>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="full">
@@ -242,8 +244,8 @@ import { ProductApi, type ProductPayload, type ProductResponse } from '../../cor
         justify-content: space-between;
         gap: 12px;
         background: radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.15), transparent 45%),
-          radial-gradient(circle at 80% 0%, rgba(236, 72, 153, 0.18), transparent 40%),
-          linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
+        radial-gradient(circle at 80% 0%, rgba(236, 72, 153, 0.18), transparent 40%),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
         border: 1px solid var(--card-stroke);
         border-radius: 16px;
       }
@@ -458,7 +460,7 @@ export class AdminProductsPage {
     this.api.create(payload).subscribe({
       next: () => {
         this.form.reset();
-        this.form.patchValue({ active: true });
+        this.form.patchValue({active: true});
         this.busy.set(false);
         this.refresh();
       },

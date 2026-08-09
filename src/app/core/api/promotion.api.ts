@@ -1,12 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, catchError, of } from 'rxjs';
+import {PromotionValidationResult} from './types';
 
-export interface PromotionValidationResult {
-  valid: boolean;
-  discountAmount: number;
-  message?: string;
-}
 
 /**
  * Promo codes must never live in shipped client JS — anyone can read

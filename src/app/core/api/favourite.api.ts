@@ -3,8 +3,8 @@ import { inject, Injectable } from '@angular/core';
 import { map } from 'rxjs';
 import type { Observable } from 'rxjs';
 
-import type { GlobalApiResponse } from './types';
-import type { ProductCardApiItem } from './product.api';
+import type {GlobalApiResponse, ProductCardApiItem} from './types';
+
 
 @Injectable({ providedIn: 'root' })
 export class FavouriteApi {

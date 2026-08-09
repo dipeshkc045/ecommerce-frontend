@@ -7,11 +7,13 @@ import { catchError, combineLatest, map, of, switchMap } from 'rxjs';
 import { CartService } from '../../core/cart/cart.service';
 import { CartFacade } from '../../core/facades/cart.facade';
 import { FavouriteFacade } from '../../core/facades/favourite.facade';
-import { ProductApi, type ProductResponse } from '../../core/api/product.api';
+
 import { FALLBACK_PRODUCTS } from '../products/fallback-products.data';
-import { ProductCardComponent } from '../../shared/ui/product-card/product-card.component';
+import { ProductCardComponent } from '../../shared';
 import { toProductCardModelFromApiList } from '../../shared/ui/product-card/product-card.adapter';
 import type { ProductCardModel } from '../../shared/ui/product-card/product-card.model';
+import {ProductApi} from '../../core/api/product.api';
+import {ProductResponse} from '../../core/api/types';
 
 type CartLine = {
   productId: string;

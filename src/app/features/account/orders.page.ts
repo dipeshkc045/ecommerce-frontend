@@ -1,19 +1,12 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  inject,
-  OnInit,
-  signal,
-} from '@angular/core';
-import { CurrencyPipe, DatePipe } from '@angular/common';
-import { RouterLink } from '@angular/router';
-import { catchError, of } from 'rxjs';
+import {ChangeDetectionStrategy, Component, computed, inject, OnInit, signal,} from '@angular/core';
+import {CurrencyPipe, DatePipe} from '@angular/common';
+import {RouterLink} from '@angular/router';
+import {catchError, of} from 'rxjs';
 
-import { AuthService } from '../../core/auth/auth.service';
-import { LayoutService } from '../../core/layout/layout.service';
-import { OrderApi, OrderResponse } from '../../core/api/order.api';
-import { FALLBACK_PRODUCTS } from '../products/fallback-products.data';
+import {AuthService} from '../../core/auth/auth.service';
+import {LayoutService} from '../../core/layout/layout.service';
+import {OrderApi} from '../../core/api/order.api';
+import {OrderResponse} from '../../core/api/types';
 
 /* ── Extended display model with UI-only fields ────────────── */
 interface DisplayOrder extends OrderResponse {
@@ -29,71 +22,6 @@ interface DisplayOrder extends OrderResponse {
 type StatusFilter = 'ALL' | 'PLACED' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED';
 type Theme = 'light' | 'dark';
 
-/* ── Fallback mock orders shown when API is unavailable ────── */
-const FALLBACK_ORDERS: DisplayOrder[] = [
-  {
-    id: 1001,
-    orderNumber: 'EM-54879',
-    userId: 'demo',
-    status: 'SHIPPED',
-    totalAmount: '238.00',
-    currency: 'USD',
-    createdAt: '2025-03-22T10:30:00Z',
-    updatedAt: '2025-03-24T14:00:00Z',
-    items: [
-      { id: 1, productId: '9001', productName: 'Slim Fit Oxford Shirt', quantity: 1, unitPrice: '89.00', totalPrice: '89.00' },
-      { id: 2, productId: '9035', productName: 'Leather Crossbody Bag', quantity: 1, unitPrice: '149.00', totalPrice: '149.00' },
-    ],
-    shippingName: 'Floyd Miles',
-    shippingAddress: '7363 Cynthia Pass',
-    shippingCity: 'Toronto, ON N3Y 4H8',
-    contactEmail: 'f.miles@example.com',
-    contactPhone: '1-555-067-4310',
-    cardLast4: '4242',
-    cardExpiry: '02/26',
-  },
-  {
-    id: 1002,
-    orderNumber: 'EM-54102',
-    userId: 'demo',
-    status: 'DELIVERED',
-    totalAmount: '576.00',
-    currency: 'USD',
-    createdAt: '2025-02-14T08:15:00Z',
-    updatedAt: '2025-02-20T09:00:00Z',
-    items: [
-      { id: 3, productId: '9052', productName: 'Classic Running Sneakers', quantity: 2, unitPrice: '129.00', totalPrice: '258.00' },
-      { id: 4, productId: '9069', productName: 'Wireless Noise-Cancelling Headphones', quantity: 1, unitPrice: '318.00', totalPrice: '318.00' },
-    ],
-    shippingName: 'Floyd Miles',
-    shippingAddress: '7363 Cynthia Pass',
-    shippingCity: 'Toronto, ON N3Y 4H8',
-    contactEmail: 'f.miles@example.com',
-    contactPhone: '1-555-067-4310',
-    cardLast4: '4242',
-    cardExpiry: '02/26',
-  },
-  {
-    id: 1003,
-    orderNumber: 'EM-53887',
-    userId: 'demo',
-    status: 'PROCESSING',
-    totalAmount: '65.00',
-    currency: 'USD',
-    createdAt: '2025-04-01T16:45:00Z',
-    updatedAt: '2025-04-02T08:00:00Z',
-    items: [
-      { id: 5, productId: '9085', productName: 'Scented Soy Candle Set', quantity: 1, unitPrice: '65.00', totalPrice: '65.00' },
-    ],
-    shippingName: 'Floyd Miles',
-    shippingAddress: '7363 Cynthia Pass',
-    shippingCity: 'Toronto, ON N3Y 4H8',
-    contactEmail: 'f.miles@example.com',
-    contactPhone: '1-555-067-4310',
-    cardLast4: '4242',
-    cardExpiry: '02/26',
-  },
-];
 
 const STATUS_SEQUENCE = ['PLACED', 'PROCESSING', 'SHIPPED', 'DELIVERED'] as const;
 
@@ -118,7 +46,7 @@ export class OrdersPage implements OnInit {
   readonly searchQuery = signal('');
   readonly statusFilter = signal<StatusFilter>('ALL');
   readonly copiedOrderId = signal<number | null>(null);
-  
+
   /** Dynamic theme synced with system LayoutService */
   readonly theme = computed<Theme>(() => (this.layout.isDark() ? 'dark' : 'light'));
 
@@ -185,7 +113,7 @@ export class OrdersPage implements OnInit {
         if (orders && orders.length > 0) {
           this.displayOrders.set(orders.map((o) => this.enrichOrder(o)));
         } else if (this.usingFallback()) {
-          this.displayOrders.set(FALLBACK_ORDERS);
+          this.displayOrders.set([]);
         } else {
           this.displayOrders.set([]);
         }
@@ -223,13 +151,11 @@ export class OrdersPage implements OnInit {
 
   /* ── Template helpers ────────────────────────────────────── */
   getProductImage(productId: string): string {
-    const product = FALLBACK_PRODUCTS.find((p) => String(p.id) === productId);
-    return product?.imageUrl ?? 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=320&q=80';
+    return '';
   }
 
   getProductDescription(productId: string): string {
-    const product = FALLBACK_PRODUCTS.find((p) => String(p.id) === productId);
-    return product?.description ?? 'Premium quality product from the emox collection.';
+    return '';
   }
 
   getProgressPercent(status: string): number {
@@ -265,12 +191,12 @@ export class OrdersPage implements OnInit {
   getStatusMeta(status: string): { label: string; className: string } {
     const key = status?.toUpperCase();
     const map: Record<string, { label: string; className: string }> = {
-      PLACED: { label: 'Order placed', className: 'is-placed' },
-      PROCESSING: { label: 'Processing', className: 'is-processing' },
-      SHIPPED: { label: 'Shipped', className: 'is-shipped' },
-      DELIVERED: { label: 'Delivered', className: 'is-delivered' },
+      PLACED: {label: 'Order placed', className: 'is-placed'},
+      PROCESSING: {label: 'Processing', className: 'is-processing'},
+      SHIPPED: {label: 'Shipped', className: 'is-shipped'},
+      DELIVERED: {label: 'Delivered', className: 'is-delivered'},
     };
-    return map[key] ?? { label: status, className: 'is-placed' };
+    return map[key] ?? {label: status, className: 'is-placed'};
   }
 
   getTax(subtotal: string): number {

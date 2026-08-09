@@ -1,12 +1,12 @@
-import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { HeaderComponent } from '../header/header.component';
-import { FooterComponent } from '../footer/footer.component';
-import { SidebarComponent } from '../sidebar/sidebar.component';
-import { GlobalLoaderComponent } from '../global-loader/global-loader.component';
-import { NotificationComponent } from '../notification/notification.component';
-import { LayoutService } from '../layout.service';
-import { MenuItem } from '../../models/menu-item.model';
+import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
+import {RouterOutlet} from '@angular/router';
+import {HeaderComponent} from '../header/header.component';
+import {FooterComponent} from '../footer/footer.component';
+import {SidebarComponent} from '../sidebar/sidebar.component';
+import {GlobalLoaderComponent} from '../global-loader/global-loader.component';
+import {NotificationComponent} from '../notification/notification.component';
+import {LayoutService} from '../layout.service';
+import {MenuItem} from '../../models/menu-item.model';
 
 @Component({
   standalone: true,
@@ -20,23 +20,23 @@ import { MenuItem } from '../../models/menu-item.model';
     NotificationComponent,
   ],
   template: `
-    <app-global-loader />
-    <app-notification />
+    <app-global-loader/>
+    <app-notification/>
 
     <div class="customer-shell">
-      <app-header />
+      <app-header/>
       <div class="customer-body">
-        <app-sidebar [items]="menuItems" title="My Account" />
+        <app-sidebar [items]="menuItems" title="My Account"/>
         <main
           class="customer-main"
           [class.customer-main--expanded]="layout.sidebarCollapsed()"
           id="main-content"
           tabindex="-1"
         >
-          <router-outlet />
+          <router-outlet/>
         </main>
       </div>
-      <app-footer />
+      <app-footer/>
     </div>
   `,
   styleUrl: './customer-layout.component.scss',

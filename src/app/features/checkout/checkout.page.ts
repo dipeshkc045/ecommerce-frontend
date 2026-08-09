@@ -24,12 +24,14 @@ import {
 import { catchError, combineLatest, map, of, switchMap, tap } from 'rxjs';
 
 import { CartService } from '../../core/cart/cart.service';
-import { ProductApi, type ProductResponse } from '../../core/api/product.api';
-import { OrderApi, type CreateOrderRequest } from '../../core/api/order.api';
 import { AuthService } from '../../core/auth/auth.service';
 import { PromotionApi } from '../../core/api/promotion.api';
-import { UserAddressApi, type UserAddress } from '../../core/api/user-address.api';
-import { UserPaymentApi, type UserPaymentMethod } from '../../core/api/user-payment.api';
+import {UserPaymentApi} from '../../core/api/user-payment.api';
+import { UserAddressApi } from "../../core/api/user-address.api";
+import {OrderApi} from '../../core/api/order.api';
+import {ProductApi} from '../../core/api/product.api';
+import {CreateOrderRequest, ProductResponse, UserAddress, UserPaymentMethod} from '../../core/api/types';
+
 
 type CheckoutLine = { productId: string; quantity: number; product: ProductResponse | null };
 type AccordionSection = 'delivery' | 'payment' | 'review';
@@ -2096,11 +2098,6 @@ export class CheckoutPage implements OnInit {
       paymentMethodType = this.selectedExpressPay()!.toUpperCase();
     }
 
-    // ── Build contact info ──
-    const contactEmail = this.isGuest()
-      ? this.guestEmail().trim()
-      : (addr.phone || '');
-
     let req: CreateOrderRequest;
     try {
       req = {
@@ -2129,10 +2126,9 @@ export class CheckoutPage implements OnInit {
           postalCode: addr.zip,
           country: addr.country,
         },
-        contactInfo: {
-          email: contactEmail,
-          phone: addr.phone,
-        },
+        contactInfo: this.isGuest()
+          ? { email: this.guestEmail().trim(), phone: '' }
+          : { email: '', phone: addr.phone ?? '' },
         paymentInfo: {
           methodType: paymentMethodType,
           last4: paymentLast4,

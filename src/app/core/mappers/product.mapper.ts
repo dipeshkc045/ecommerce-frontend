@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 
-import type { ProductPayload, ProductResponse } from '../api/product.api';
-import { PRODUCT_PLACEHOLDER_IMAGE, type Product } from '../models/product.model';
+
+import { PRODUCT_PLACEHOLDER_IMAGE, type Product } from '../models';
+import {ProductPayload, ProductResponse} from '../api/types';
 
 @Injectable({ providedIn: 'root' })
 export class ProductMapper {
