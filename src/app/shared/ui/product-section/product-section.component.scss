@@ -51,7 +51,7 @@
 .ps__grid {
   @include container;
   display: grid;
-  gap: var(--space-lg);
+  gap: var(--space-lg); /* ← GAP RESTORED */
   align-items: stretch;
 }
 
