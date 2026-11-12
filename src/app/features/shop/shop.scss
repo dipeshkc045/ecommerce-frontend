@@ -1,0 +1,389 @@
+:host {
+  display: block;
+  color: var(--color-text-primary);
+}
+
+.shop {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 16px 64px;
+}
+
+.shop h1 {
+  font-size: 1.5rem;
+  line-height: 1.3;
+  margin: 0 0 16px;
+}
+
+.shop h2 {
+  font-size: 1.1rem;
+  margin: 0 0 12px;
+}
+
+.muted {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
+.card {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: var(--shadow-card);
+}
+
+/* Product grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+
+.product-card:hover {
+  box-shadow: var(--shadow-card-hover);
+}
+
+.product-card h3 {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.price {
+  margin: 12px 0 8px;
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+/* Stock badge */
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--color-bg-muted);
+  color: var(--color-text-secondary);
+}
+
+.badge--ok {
+  background: var(--color-success-light);
+  color: var(--color-success);
+}
+
+.badge--low {
+  background: var(--color-warning-light);
+  color: var(--color-text-primary);
+}
+
+.badge--out,
+.badge--bad {
+  background: var(--color-danger-light);
+  color: var(--color-danger);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 20px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  background: var(--color-accent);
+  color: var(--color-text-inverse);
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--color-accent-hover);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+}
+
+.btn--ghost:hover:not(:disabled) {
+  background: var(--color-bg-muted);
+}
+
+.btn--link {
+  background: none;
+  color: var(--color-text-link);
+  padding: 0 8px;
+  min-height: 44px;
+}
+
+.btn--link:hover:not(:disabled) {
+  background: none;
+  text-decoration: underline;
+}
+
+.btn--block {
+  width: 100%;
+}
+
+/* Messages */
+.notice {
+  padding: 12px 16px;
+  border-radius: 10px;
+  margin: 0 0 16px;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-elevated);
+}
+
+.notice--error {
+  border-color: var(--color-danger);
+  background: var(--color-danger-light);
+}
+
+.notice--ok {
+  border-color: var(--color-success);
+  background: var(--color-success-light);
+}
+
+.notice--warn {
+  border-color: var(--color-warning);
+  background: var(--color-warning-light);
+}
+
+/* Forms */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.field label {
+  font-weight: 600;
+}
+
+.field input,
+.field select {
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  font: inherit;
+  background: var(--color-bg-card);
+  color: var(--color-text-primary);
+}
+
+.field input:focus-visible,
+.field select:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 1px;
+}
+
+.code-input {
+  letter-spacing: 0.4em;
+  font-size: 1.4rem;
+  text-align: center;
+}
+
+/* Cart and order lines */
+.lines {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.line {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.line:last-child {
+  border-bottom: 0;
+}
+
+.line-name {
+  font-weight: 600;
+}
+
+.line-total {
+  text-align: right;
+  font-weight: 700;
+}
+
+.line-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.stepper {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.stepper button {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: var(--color-bg-elevated);
+  color: var(--color-text-primary);
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.stepper button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.stepper output {
+  min-width: 40px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.summary-row--total {
+  font-weight: 700;
+  font-size: 1.15rem;
+  padding-top: 8px;
+  border-top: 1px solid var(--color-border);
+}
+
+.layout-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+@media (min-width: 860px) {
+  .layout-2 {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.methods {
+  border: 0;
+  padding: 0;
+  margin: 0 0 16px;
+  display: grid;
+  gap: 12px;
+}
+
+.method {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.method:has(input:checked) {
+  border-color: var(--color-accent);
+  background: var(--color-accent-light);
+}
+
+.method input {
+  margin-top: 4px;
+  width: 20px;
+  height: 20px;
+}
+
+.orders {
+  display: grid;
+  gap: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.order-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px 16px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.order-row:hover {
+  box-shadow: var(--shadow-card-hover);
+}
+
+.center {
+  text-align: center;
+  padding: 48px 16px;
+}
+
+.skeleton {
+  height: 120px;
+  border-radius: 12px;
+  background: var(--color-bg-muted);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+a.btn.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.shop p {
+  margin: 0 0 12px;
+}

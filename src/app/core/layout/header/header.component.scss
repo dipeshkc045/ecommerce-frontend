@@ -382,3 +382,45 @@
   from { opacity: 0; transform: translateY(-4px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+.header-nav {
+  display: flex;
+  gap: 16px;
+  margin-right: auto;
+  margin-left: 24px;
+}
+
+.nav-link {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.nav-link.active,
+.nav-link:hover {
+  color: var(--color-text-primary);
+}
+
+button.sign-in-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.nav-link {
+  white-space: nowrap;
+}
+
+@media (max-width: 520px) {
+  .logo-text,
+  .btn-label {
+    display: none;
+  }
+
+  .header-nav {
+    margin-left: 4px;
+    gap: 10px;
+  }
+}
