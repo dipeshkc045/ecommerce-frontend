@@ -1,26 +1,16 @@
 import { CanActivateFn, Router } from '@angular/router';
-import { Injectable, PLATFORM_ID, inject } from '@angular/core';
+import { PLATFORM_ID, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
 import { AuthService } from './auth.service';
 
 export const authGuard: CanActivateFn = (_route, state) => {
-  const platformId = inject(PLATFORM_ID);
+  // The server has no tokens; let it render and let the browser decide after it takes over.
+  if (!isPlatformBrowser(inject(PLATFORM_ID))) return true;
+
   const auth = inject(AuthService);
-  const router = inject(Router);
+  auth.ensureLoaded();
+  if (auth.isLoggedIn()) return true;
 
-  // During SSR, localStorage is not accessible on the server.
-  // Allow SSR render to pass through so client hydration can inspect localStorage.
-  if (!isPlatformBrowser(platformId)) {
-    return true;
-  }
-
-  if (auth.isLoggedIn()) {
-    return true;
-  }
-
-  return router.createUrlTree(['/login'], {
-    queryParams: { redirect: state.url },
-  });
+  return inject(Router).createUrlTree(['/login'], { queryParams: { redirect: state.url } });
 };
-
