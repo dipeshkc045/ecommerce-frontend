@@ -18,6 +18,8 @@ const MESSAGES: Record<string, string> = {
   invalid_phone: 'Enter a valid Nepali mobile number, for example 98XXXXXXXX.',
   invalid_code: 'That code is not right. Check it and try again.',
   code_locked: 'Too many wrong codes. Ask for a new code.',
+  address_not_found: 'That address could not be found. Choose or enter an address again.',
+  too_many_addresses: 'You have too many saved addresses. Use one of them.',
   sms_unavailable: 'We cannot send codes right now. Please try again later.',
 };
 
@@ -47,5 +49,12 @@ export function retryAfterSeconds(error: unknown): number | null {
     const v = Number(error.headers.get('Retry-After'));
     return Number.isFinite(v) && v > 0 ? v : null;
   }
+  return null;
+}
+
+/** The server's own wording for a bad address field (it is written for customers, e.g. "Ward must be 1 to 33"). */
+export function addressProblem(error: unknown): { field?: string; message: string } | null {
+  const p = problemOf(error) as (Problem & { field?: string }) | null;
+  if (p?.code === 'invalid_address' && p.detail) return { field: p.field, message: p.detail };
   return null;
 }

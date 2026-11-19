@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 
 import { safeRedirect } from './login.page';
-import { isHttpUrl } from './checkout.page';
+import { isHttpUrl, formError } from './checkout.page';
 import { stockBadge, lowestPrice } from './product-view';
 import { messageFor, retryAfterSeconds } from '../../core/shop/problem';
 import type { Product, Sku } from '../../core/shop/shop.types';
@@ -60,5 +60,26 @@ describe('error messages', () => {
   it('reads Retry-After', () => {
     expect(retryAfterSeconds(http(429, { code: 'rate_limited' }, { 'Retry-After': '30' }))).toBe(30);
     expect(retryAfterSeconds(http(429, null))).toBeNull();
+  });
+});
+
+
+
+describe('address form check', () => {
+  const ok = {
+    recipient_name: 'Sita', phone: '9841234567', province: 'Bagmati', district: 'Kathmandu',
+    municipality: 'Kathmandu', ward: '10', street: '', landmark: 'Near the temple',
+  };
+  it('accepts a complete address with no street', () => {
+    expect(formError(ok)).toBeNull();
+  });
+  it('names the first missing field', () => {
+    expect(formError({ ...ok, landmark: ' ' })?.field).toBe('landmark');
+    expect(formError({ ...ok, province: '' })?.field).toBe('province');
+  });
+  it('limits the ward to 1 to 33', () => {
+    expect(formError({ ...ok, ward: '0' })?.field).toBe('ward');
+    expect(formError({ ...ok, ward: '34' })?.field).toBe('ward');
+    expect(formError({ ...ok, ward: '2.5' })?.field).toBe('ward');
   });
 });

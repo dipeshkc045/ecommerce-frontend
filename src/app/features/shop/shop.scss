@@ -387,3 +387,29 @@ a.btn.disabled {
 .shop p {
   margin: 0 0 12px;
 }
+
+.address-form {
+  display: grid;
+  gap: 0 16px;
+  grid-template-columns: 1fr;
+  padding-top: 8px;
+}
+
+@media (min-width: 600px) {
+  .address-form {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .address-form > .notice,
+  .address-form > p {
+    grid-column: 1 / -1;
+  }
+}
+
+.methods legend {
+  padding: 0;
+}
+
+.methods legend h2 {
+  margin: 0 0 12px;
+}

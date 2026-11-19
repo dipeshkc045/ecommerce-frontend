@@ -120,3 +120,31 @@ export interface Problem {
   code?: string;
   saga_id?: string;
 }
+
+/** A saved delivery address (ticket #7). Nepal addresses: province, district, municipality, ward, landmark. */
+export interface Address {
+  address_id: string;
+  recipient_name: string;
+  phone: string;
+  province: string;
+  district: string;
+  municipality: string;
+  ward: number;
+  street?: string | null;
+  landmark: string;
+  is_default: boolean;
+}
+
+export interface AddressBody {
+  recipient_name: string;
+  phone: string;
+  province: string;
+  district: string;
+  municipality: string;
+  ward: number;
+  street?: string;
+  landmark: string;
+  make_default?: boolean;
+}
+
+export const PROVINCES = ['Koshi', 'Madhesh', 'Bagmati', 'Gandaki', 'Lumbini', 'Karnali', 'Sudurpashchim'] as const;

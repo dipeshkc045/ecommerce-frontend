@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import type {
-  Cart, CodeSent, OrderDetail, OrderSummary, Page, PaymentMethod, Placement, Product, Session,
+  Address, AddressBody, Cart, CodeSent, OrderDetail, OrderSummary, Page, PaymentMethod, Placement, Product, Session,
 } from './shop.types';
 
 const V1 = '/web/v1';
@@ -43,10 +43,10 @@ export class ShopApi {
   }
 
   /** The same key must be reused when the customer retries the same attempt (it makes the retry safe). */
-  placeOrder(method: PaymentMethod, idempotencyKey: string): Observable<Placement> {
+  placeOrder(method: PaymentMethod, idempotencyKey: string, addressId: string): Observable<Placement> {
     return this.http.post<Placement>(
       `${V1}/orders`,
-      { from_cart: true, payment_method: method },
+      { from_cart: true, payment_method: method, address_id: addressId },
       { headers: { 'Idempotency-Key': idempotencyKey } },
     );
   }
@@ -56,6 +56,14 @@ export class ShopApi {
   /** Khalti sends the customer back with ?pidx=; the server confirms it by asking Khalti, not from the URL. */
   checkoutReturn(pidx: string): Observable<Placement> {
     return this.http.get<Placement>(`${V1}/checkout/return`, { params: { pidx } });
+  }
+
+  addresses(): Observable<{ items: Address[] }> {
+    return this.http.get<{ items: Address[] }>(`${V1}/me/addresses`);
+  }
+  /** The client picks the id, so saving the same address twice (a retry) changes nothing. */
+  saveAddress(id: string, body: AddressBody): Observable<Address> {
+    return this.http.put<Address>(`${V1}/me/addresses/${id}`, body);
   }
 
   orders(cursor?: string | null, limit = 10): Observable<Page<OrderSummary>> {
