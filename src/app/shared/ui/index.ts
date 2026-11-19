@@ -10,5 +10,3 @@ export * from './pagination/pagination.component';
 export * from './search-input/search-input.component';
 export * from './dropdown/dropdown.component';
 export * from './confirmation-dialog/confirmation-dialog.component';
-export * from './product-card/product-card.component';
-export * from './product-section/product-section.component';

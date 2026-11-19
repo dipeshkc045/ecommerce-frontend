@@ -1,14 +1,6 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
-import {
-  provideRouter,
-  withComponentInputBinding,
-  withInMemoryScrolling,
-} from '@angular/router';
-import {
-  provideClientHydration,
-  withEventReplay,
-} from '@angular/platform-browser';
-import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideRouter, withComponentInputBinding, withInMemoryScrolling } from '@angular/router';
+import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 
 import { routes } from './app.routes';
 import { provideAppHttp } from './core/http/http.providers';
@@ -20,16 +12,13 @@ export const appConfig: ApplicationConfig = {
     provideRouter(
       routes,
       withComponentInputBinding(),
-      withInMemoryScrolling({
-        scrollPositionRestoration: 'top',
-        anchorScrolling: 'enabled',
-      })
+      withInMemoryScrolling({ scrollPositionRestoration: 'top', anchorScrolling: 'enabled' }),
     ),
     provideClientHydration(withEventReplay()),
-    provideAnimations(),
 
-    // Backend API base URL
-    provideApiBaseUrl('http://localhost:8080'),
+    // Browser: same origin, the dev server forwards /web to commerce-core (proxy.conf.json).
+    // Server-side rendering has no origin, so it calls commerce-core directly (see api-base-url.token.ts).
+    provideApiBaseUrl(),
 
     provideAppHttp(),
   ],
