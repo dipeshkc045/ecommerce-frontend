@@ -21,6 +21,23 @@ export interface Product {
   name: string;
   description: string | null;
   skus: Sku[];
+  /** Display order, the main image first. A product list carries only the main image. */
+  images?: ProductImage[];
+}
+
+/** One `<source>` of a `<picture>`: a format (best first) and a ready srcset in the allowed widths. */
+export interface ImageSource {
+  type: string;
+  srcset: string;
+}
+
+/** A product image as the API gives it; width and height are of the original, for the aspect ratio. */
+export interface ProductImage {
+  alt: string;
+  width: number;
+  height: number;
+  src: string;
+  sources: ImageSource[];
 }
 
 export interface Page<T> {

@@ -7,12 +7,13 @@ import { formatMoney } from '../../core/shop/money';
 import { messageFor } from '../../core/shop/problem';
 import { ShopApi } from '../../core/shop/shop.api';
 import type { Product, Sku } from '../../core/shop/shop.types';
+import { ProductPicture } from './product-picture';
 import { skuBadge } from './product-view';
 
 @Component({
   standalone: true,
   selector: 'app-product-page',
-  imports: [RouterLink],
+  imports: [RouterLink, ProductPicture],
   styleUrl: './shop.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -22,7 +23,23 @@ import { skuBadge } from './product-view';
         <p class="notice notice--error" role="alert">{{ error() }}</p>
       }
       @if (product(); as p) {
-        <article class="card">
+        <article class="card product-layout">
+          <div class="gallery">
+            <app-product-picture [image]="shown()" sizes="(max-width: 640px) 100vw, 600px" [eager]="true" />
+            @if ((p.images?.length ?? 0) > 1) {
+              <ul class="thumbs" aria-label="More images">
+                @for (img of p.images; track img.src; let i = $index) {
+                  <li>
+                    <button type="button" class="thumb" [class.thumb--on]="i === shownIndex()" [attr.aria-label]="'Show image ' + (i + 1) + ': ' + img.alt"
+                      [attr.aria-pressed]="i === shownIndex()" (click)="shownIndex.set(i)">
+                      <app-product-picture [image]="img" sizes="72px" />
+                    </button>
+                  </li>
+                }
+              </ul>
+            }
+          </div>
+          <div class="product-info">
           <h1>{{ p.name }}</h1>
           @if (p.description) { <p>{{ p.description }}</p> }
 
@@ -49,6 +66,7 @@ import { skuBadge } from './product-view';
               </p>
             }
           }
+          </div>
         </article>
       } @else if (!error()) {
         <div class="skeleton" aria-busy="true"></div>
@@ -70,6 +88,8 @@ export class ProductPage {
   readonly selectedId = signal('');
   readonly adding = signal(false);
   readonly added = signal(false);
+  readonly shownIndex = signal(0);
+  readonly shown = computed(() => this.product()?.images?.[this.shownIndex()] ?? this.product()?.images?.[0] ?? null);
   readonly selected = computed<Sku | null>(() => {
     const p = this.product();
     return p ? (p.skus.find((s) => s.sku_id === this.selectedId()) ?? p.skus[0] ?? null) : null;
@@ -79,6 +99,7 @@ export class ProductPage {
     effect(() => {
       const id = this.id();
       this.product.set(null);
+      this.shownIndex.set(0);
       this.error.set(null);
       this.api.product(id).subscribe({
         next: (p) => {
