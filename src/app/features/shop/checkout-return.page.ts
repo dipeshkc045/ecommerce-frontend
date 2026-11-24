@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import type { Observable } from 'rxjs';
 
 import { CartService } from '../../core/cart/cart.service';
 import { codeOf, messageFor } from '../../core/shop/problem';
@@ -79,9 +80,14 @@ export class CheckoutReturnPage implements OnInit, OnDestroy {
       this.view.set({ kind: 'unknown' });
       return;
     }
-    this.api.checkoutReturn(pidx).subscribe({
+    this.check(() => this.api.checkoutReturn(pidx));
+  }
+
+  /** Asks the server; a lookup that fails for a reason other than the payment's own outcome is asked again. */
+  private check(lookup: () => Observable<Placement>): void {
+    lookup().subscribe({
       next: (p) => this.apply(p),
-      error: (e) => this.fail(e),
+      error: (e) => this.fail(e, lookup),
     });
   }
 
@@ -92,31 +98,43 @@ export class CheckoutReturnPage implements OnInit, OnDestroy {
       this.view.set({ kind: 'paid', orderId: p.order_id, orderNumber: p.order_number });
     } else {
       this.view.set({ kind: 'waiting', sagaId: p.saga_id });
-      this.pollLater(p.saga_id);
+      this.retryLater(() => this.api.placementStatus(p.saga_id));
     }
   }
 
-  private pollLater(sagaId: string): void {
-    if (this.tries++ >= POLL_TRIES) return;
-    this.timer = setTimeout(() => {
-      this.api.placementStatus(sagaId).subscribe({
-        next: (p) => this.apply(p),
-        error: (e) => this.fail(e),
-      });
-    }, POLL_MS);
+  private retryLater(lookup: () => Observable<Placement>): void {
+    if (this.tries++ >= POLL_TRIES) return; // stays on "still waiting": the order list shows the outcome later
+    this.timer = setTimeout(() => this.check(lookup), POLL_MS);
   }
 
-  private fail(e: unknown): void {
-    const code = codeOf(e);
-    if (code === 'not_found' || (!code && (e as { status?: number })?.status === 404)) {
+  private fail(e: unknown, lookup: () => Observable<Placement>): void {
+    const outcome = lookupOutcome(e);
+    if (outcome === 'unknown') {
       this.view.set({ kind: 'unknown' });
-      return;
+    } else if (outcome === 'failed') {
+      this.failMessage.set(messageFor(e, 'The payment was not completed, so no order was placed.'));
+      this.view.set({ kind: 'failed', message: this.failMessage() });
+    } else {
+      // A network error, a server error, a rate limit or "still in progress" says nothing about the payment:
+      // Khalti may have charged the customer, so never say "no order was placed" here
+      const current = this.view();
+      this.view.set(current.kind === 'waiting' ? current : { kind: 'waiting', sagaId: '' });
+      this.retryLater(lookup);
     }
-    this.failMessage.set(messageFor(e, 'The payment was not completed, so no order was placed.'));
-    this.view.set({ kind: 'failed', message: this.failMessage() });
   }
 
   ngOnDestroy(): void {
     if (this.timer) clearTimeout(this.timer);
   }
+}
+
+/**
+ * What a failed lookup tells us. Only a 422 is the server saying the checkout ended without an order; a 404 means
+ * there is no such payment. Anything else (no connection, 5xx, 429, 409 "still in progress") must be asked again.
+ */
+export function lookupOutcome(e: unknown): 'failed' | 'unknown' | 'retry' {
+  const status = (e as { status?: number })?.status;
+  if (status === 404 || codeOf(e) === 'not_found') return 'unknown';
+  if (status === 422) return 'failed';
+  return 'retry';
 }

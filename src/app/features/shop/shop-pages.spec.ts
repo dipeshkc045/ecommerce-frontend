@@ -4,6 +4,7 @@ import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { safeRedirect } from './login.page';
 import { isHttpUrl, formError } from './checkout.page';
 import { stockBadge, lowestPrice } from './product-view';
+import { lookupOutcome } from './checkout-return.page';
 import { messageFor, retryAfterSeconds } from '../../core/shop/problem';
 import type { Product, Sku } from '../../core/shop/shop.types';
 
@@ -81,5 +82,23 @@ describe('address form check', () => {
     expect(formError({ ...ok, ward: '0' })?.field).toBe('ward');
     expect(formError({ ...ok, ward: '34' })?.field).toBe('ward');
     expect(formError({ ...ok, ward: '2.5' })?.field).toBe('ward');
+  });
+});
+
+describe('payment lookup after Khalti', () => {
+  const http = (status: number, error: object | null = null) => new HttpErrorResponse({ status, error });
+
+  it('says no order was placed only when the server says the checkout failed', () => {
+    expect(lookupOutcome(http(422, { code: 'payment_failed' }))).toBe('failed');
+  });
+
+  it('keeps asking when the answer says nothing about the payment', () => {
+    for (const status of [0, 500, 502, 503, 429, 409]) {
+      expect(lookupOutcome(http(status))).toBe('retry');
+    }
+  });
+
+  it('treats an unknown payment as not found', () => {
+    expect(lookupOutcome(http(404))).toBe('unknown');
   });
 });

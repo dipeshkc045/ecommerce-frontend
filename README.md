@@ -36,6 +36,19 @@ ng build
 
 This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
 
+## Running the built app (Docker, Vercel, any Node host)
+
+`node dist/ecommerce-web/server/server.mjs` serves the pages and forwards the browser's API calls (`/web/...`) to
+commerce-core, so the browser only ever talks to this site and no CORS is needed. Set:
+
+| Variable | Example | What it is |
+|---|---|---|
+| `COMMERCE_API_URL` | `https://api.example.com` | commerce-core. Used for the forwarded `/web` calls and for pages rendered on the server. Default `http://localhost:8180`. |
+| `NG_ALLOWED_HOSTS` | `shop.example.com` | Host names this site answers on (comma-separated). Without it Angular refuses to render on the server and every page falls back to rendering in the browser. |
+| `PORT` | `3000` | Port to listen on (the Dockerfile exposes 3000). |
+
+Point payment-service's `KHALTI_RETURN_URL` at this site's `/checkout/return`, so Khalti sends the customer back here.
+
 ## Running unit tests
 
 To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
