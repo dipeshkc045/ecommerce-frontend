@@ -25,7 +25,7 @@ import { skuBadge } from './product-view';
       @if (product(); as p) {
         <article class="card product-layout">
           <div class="gallery">
-            <app-product-picture [image]="shown()" sizes="(max-width: 640px) 100vw, 600px" [eager]="true" />
+            <app-product-picture [image]="shown()" sizes="(max-width: 767px) calc(100vw - 64px), 520px" [eager]="true" />
             @if ((p.images?.length ?? 0) > 1) {
               <ul class="thumbs" aria-label="More images">
                 @for (img of p.images; track img.src; let i = $index) {

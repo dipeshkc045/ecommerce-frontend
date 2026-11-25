@@ -33,7 +33,7 @@ import { lowestPrice, stockBadge } from './product-view';
           @for (p of products(); track p.id) {
             <li>
               <a class="card product-card" [routerLink]="['/products', p.id]">
-                <app-product-picture [image]="p.images?.[0]" sizes="(max-width: 640px) 50vw, 240px" />
+                <app-product-picture [image]="p.images?.[0]" sizes="(max-width: 500px) calc(100vw - 64px), (max-width: 760px) calc(50vw - 48px), 260px" />
                 <h3>{{ p.name }}</h3>
                 <span class="price">{{ price(p) }}</span>
                 <span class="badge" [class]="badge(p).css">{{ badge(p).label }}</span>
