@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, signal, effect } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 
-import { AuthService } from '../../core/auth/auth.service';
 import { CartService } from '../../core/cart/cart.service';
 import { MoneyPipe, NumPipe, TPipe, WhenPipe } from '../../core/i18n/pipes';
 import { I18nService } from '../../core/i18n/i18n.service';
@@ -78,8 +77,6 @@ import { skuBadge } from './product-view';
 export class ProductPage {
   private readonly api = inject(ShopApi);
   private readonly cart = inject(CartService);
-  private readonly auth = inject(AuthService);
-  private readonly router = inject(Router);
   private readonly i18n = inject(I18nService);
 
   /** Route parameter (component input binding is on). */
@@ -123,10 +120,6 @@ export class ProductPage {
   }
 
   add(s: Sku): void {
-    if (!this.auth.isLoggedIn()) {
-      void this.router.navigate(['/login'], { queryParams: { redirect: this.router.url } });
-      return;
-    }
     this.adding.set(true);
     this.added.set(false);
     this.error.set(null);

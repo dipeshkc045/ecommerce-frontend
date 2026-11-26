@@ -1,12 +1,18 @@
-import { Injectable, PLATFORM_ID, computed, effect, inject, signal } from '@angular/core';
+import { Injectable, PLATFORM_ID, computed, effect, inject, signal, untracked } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { Observable, of, switchMap, tap } from 'rxjs';
+import { Observable, catchError, finalize, map, of, shareReplay, switchMap, tap } from 'rxjs';
 
 import { AuthService } from '../auth/auth.service';
 import { ShopApi } from '../shop/shop.api';
 import type { Cart } from '../shop/shop.types';
 
-/** The customer's cart as the server shows it. Prices and stock always come from the server. */
+/**
+ * The shopper's cart as the server shows it. Prices and stock always come from the server.
+ *
+ * Guests have a cart too (ADR-0025): the server keys it by an HttpOnly `guest_cart` cookie, so the app sends the same
+ * calls with no token. When someone is signed in, the guest cart is merged into theirs first (the merge is safe to
+ * repeat and, with no guest cookie, just returns the customer's cart).
+ */
 @Injectable({ providedIn: 'root' })
 export class CartService {
   private readonly api = inject(ShopApi);
@@ -17,18 +23,26 @@ export class CartService {
   readonly cart = this.state.asReadonly();
   readonly totalItems = computed(() => this.state()?.item_count ?? 0);
 
+  /** A merge still on its way: reads wait for it, so they never show the cart from before the merge. */
+  private merging: Observable<unknown> | null = null;
+
   constructor() {
     if (this.isBrowser) {
-      // Load when someone signs in, forget when they sign out.
+      this.auth.ensureLoaded(); // know who is signed in before the first read, so a customer never asks for a guest cart
+      // Signing in merges the guest cart into the customer's; signing out shows the (now empty) guest cart.
       effect(() => {
-        if (this.auth.isLoggedIn()) this.load().subscribe({ error: () => undefined });
-        else this.state.set(null);
+        const signedIn = this.auth.isLoggedIn();
+        untracked(() => {
+          this.state.set(null);
+          (signedIn ? this.merge() : this.load()).subscribe({ error: () => undefined });
+        });
       });
     }
   }
 
   load(): Observable<Cart> {
-    return this.api.cart().pipe(tap((c) => this.state.set(c)));
+    const read$ = this.api.cart().pipe(tap((c) => this.state.set(c)));
+    return this.merging ? this.merging.pipe(switchMap(() => read$)) : read$;
   }
   setQuantity(skuId: string, quantity: number): Observable<Cart> {
     return this.api.setQuantity(skuId, quantity).pipe(tap((c) => this.state.set(c)));
@@ -49,5 +63,20 @@ export class CartService {
   /** Forget the local copy, for example after an order used the cart. */
   reset(): void {
     this.state.set(null);
+  }
+
+  /** Moves the guest cart into the signed-in customer's cart and shows the result. */
+  private merge(): Observable<Cart> {
+    const merge$: Observable<Cart> = this.api.mergeCart().pipe(
+      map((m) => m.cart),
+      tap((c) => this.state.set(c)),
+      finalize(() => {
+        if (this.merging === wait$) this.merging = null;
+      }),
+      shareReplay(1),
+    );
+    const wait$ = merge$.pipe(catchError(() => of(null))); // a failed merge must not stop the cart from being read
+    this.merging = wait$;
+    return merge$;
   }
 }
