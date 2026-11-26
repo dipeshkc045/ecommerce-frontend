@@ -1,8 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { DatePipe } from '@angular/common';
 
-import { formatMoney } from '../../core/shop/money';
+import { MoneyPipe, NumPipe, TPipe, WhenPipe } from '../../core/i18n/pipes';
 import { messageFor } from '../../core/shop/problem';
 import { ShopApi } from '../../core/shop/shop.api';
 import type { OrderSummary } from '../../core/shop/shop.types';
@@ -11,30 +10,30 @@ import { statusLabel } from './order-view';
 @Component({
   standalone: true,
   selector: 'app-orders-page',
-  imports: [RouterLink, DatePipe],
+  imports: [RouterLink, TPipe, MoneyPipe, NumPipe, WhenPipe],
   styleUrl: './shop.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="shop">
-      <h1>My orders</h1>
+      <h1>{{ 'My orders' | t }}</h1>
       @if (error()) {
         <p class="notice notice--error" role="alert">
-          {{ error() }} <button class="btn btn--link" type="button" (click)="load(true)">Try again</button>
+          {{ error() | t }} <button class="btn btn--link" type="button" (click)="load(true)">{{ 'Try again' | t }}</button>
         </p>
       }
       @if (loading() && orders().length === 0) {
         <div class="skeleton" aria-busy="true"></div>
       } @else if (orders().length === 0 && !error()) {
-        <div class="card center"><p>You have not ordered anything yet.</p><a class="btn" routerLink="/products">Browse products</a></div>
+        <div class="card center"><p>{{ 'You have not ordered anything yet.' | t }}</p><a class="btn" routerLink="/products">{{ 'Browse products' | t }}</a></div>
       } @else {
         <ul class="orders">
           @for (o of orders(); track o.order_id) {
             <li>
               <a class="card order-row" [routerLink]="['/orders', o.order_id]">
                 <strong>{{ o.order_number }}</strong>
-                <span class="price">{{ money(o.total) }}</span>
-                <span class="muted">{{ o.placed_at | date: 'mediumDate' }} · {{ o.item_count }} item{{ o.item_count === 1 ? '' : 's' }}</span>
-                <span [class]="status(o.status).css">{{ status(o.status).label }}</span>
+                <span class="price">{{ o.total | money }}</span>
+                <span class="muted">{{ o.placed_at | when }} · {{ (o.item_count === 1 ? '{n} item' : '{n} items') | t: { n: (o.item_count | num) } }}</span>
+                <span [class]="status(o.status).css">{{ status(o.status).label | t }}</span>
               </a>
             </li>
           }
@@ -42,7 +41,7 @@ import { statusLabel } from './order-view';
         @if (more()) {
           <p class="center">
             <button class="btn btn--ghost" type="button" [disabled]="loading()" (click)="load(false)">
-              {{ loading() ? 'Loading…' : 'Show older orders' }}
+              {{ (loading() ? 'Loading…' : 'Show older orders') | t }}
             </button>
           </p>
         }
@@ -59,7 +58,6 @@ export class OrdersPage implements OnInit {
   readonly error = signal<string | null>(null);
   private cursor: string | null = null;
 
-  money = formatMoney;
   status = statusLabel;
 
   ngOnInit(): void {

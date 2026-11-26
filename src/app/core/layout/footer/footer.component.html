@@ -4,11 +4,11 @@
 
       <!-- Brand Column -->
       <div class="footer-brand">
-        <a routerLink="/" class="footer-logo" aria-label="Emox home">
+        <a routerLink="/" class="footer-logo" [attr.aria-label]="'Emox home' | t">
           <span class="footer-logo-mark">e</span>
           <span class="footer-logo-text">emox</span>
         </a>
-        <p class="footer-tagline">Your one-stop destination for everything you need, delivered fast and reliably.</p>
+        <p class="footer-tagline">{{ 'Your one-stop destination for everything you need, delivered fast and reliably.' | t }}</p>
         <div class="footer-socials">
           <a href="https://facebook.com" class="social-link" aria-label="Facebook" target="_blank" rel="noopener">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
@@ -39,11 +39,11 @@
       <!-- Link Columns -->
       @for (group of links; track group.title) {
         <div class="footer-col">
-          <h3 class="footer-col-title">{{ group.title }}</h3>
+          <h3 class="footer-col-title">{{ group.title | t }}</h3>
           <ul class="footer-link-list">
             @for (link of group.items; track link.label) {
               <li>
-                <a [routerLink]="link.route" class="footer-link">{{ link.label }}</a>
+                <a [routerLink]="link.route" class="footer-link">{{ link.label | t }}</a>
               </li>
             }
           </ul>
@@ -55,8 +55,8 @@
   <!-- Footer Bottom -->
   <div class="footer-bottom">
     <div class="footer-bottom-inner">
-      <p class="footer-copyright">&copy; {{ year }} Emox. All rights reserved.</p>
-      <div class="footer-payment-icons" aria-label="Accepted payment methods">
+      <p class="footer-copyright">{{ '© {year} Emox. All rights reserved.' | t: { year: year() } }}</p>
+      <div class="footer-payment-icons" [attr.aria-label]="'Accepted payment methods' | t">
         <span class="payment-chip">Visa</span>
         <span class="payment-chip">Mastercard</span>
         <span class="payment-chip">PayPal</span>

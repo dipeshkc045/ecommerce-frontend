@@ -23,6 +23,7 @@ To try the whole flow: start commerce-core, payment-service and the Khalti simul
 - `src/app/core/cart/cart.service.ts`: the server's cart as a signal; prices and stock always come from the server.
 - `src/app/features/shop/`: products, product, cart, checkout, checkout-return, orders, order and login pages. One shared `shop.scss`.
 - `src/app/core/layout/`: header, footer and layouts (public and auth).
+- `src/app/core/i18n/`: Nepali and English (ticket #58). `I18nService` keeps the language in a `lang` cookie (so the server renders it and it survives sign-in); `messages.ne.ts` holds the Nepali text keyed by the English sentence; pipes `t`, `money`, `num`, `when` do the rest; Nepali digits, lakh grouping and month names are written by hand in `format.ts`, not with `Intl`.
 
 ## Rules
 
@@ -31,4 +32,5 @@ To try the whole flow: start commerce-core, payment-service and the Khalti simul
 - A checkout attempt uses one `Idempotency-Key`; keep it on retry after a lost connection, renew it after any server answer.
 - Pages that need a signed-in customer render in the browser only (`app.routes.server.ts`): the server has no tokens.
 - SSR: never touch `window`/`localStorage` without a platform check.
+- Every text the customer reads is `{{ 'English sentence' | t }}` (or a key kept in code and piped to `t` where shown) with its Nepali in `messages.ne.ts`; `i18n.spec.ts` fails for a missing or unused translation. Write the curly apostrophe (’), not a straight one, inside an English sentence in a template: a straight one breaks the expression. Show money with `| money`, counts with `| num`, dates with `| when`. Never keep language in a module-level variable: the server handles many visitors at once.
 - Fields bound with `ngModel` in OnPush components must be signals (`[ngModel]="x()" (ngModelChange)="x.set($event)"`), or the template will not update.

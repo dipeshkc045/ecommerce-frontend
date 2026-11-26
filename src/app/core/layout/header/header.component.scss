@@ -419,8 +419,31 @@ button.sign-in-btn {
     display: none;
   }
 
-  .header-nav {
-    margin-left: 4px;
-    gap: 10px;
+  // Nepali text is wider and there is a language switch now: the links get a row of their own instead of squeezing
+  .header-inner {
+    flex-wrap: wrap;
+    height: auto;
+    padding-block: 8px;
+    row-gap: 2px;
   }
+
+  .logo {
+    margin-right: auto;
+  }
+
+  .header-nav {
+    order: 3;
+    flex-basis: 100%;
+    margin: 0;
+    gap: 16px;
+  }
+}
+
+/* The language switch is a word, not an icon, so it is wider than the other action buttons */
+.lang-btn {
+  width: auto;
+  min-width: 40px;
+  padding: 0 10px;
+  font-size: 0.875rem;
+  font-weight: 600;
 }

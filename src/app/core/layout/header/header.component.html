@@ -1,15 +1,15 @@
 <header class="site-header" role="banner">
   <div class="header-inner">
 
-    <a routerLink="/" class="logo" aria-label="Emox home">
+    <a routerLink="/" class="logo" [attr.aria-label]="'Emox home' | t">
       <span class="logo-mark">e</span>
       <span class="logo-text">emox</span>
     </a>
 
-    <nav class="header-nav" aria-label="Main">
-      <a routerLink="/products" routerLinkActive="active" class="nav-link">Products</a>
+    <nav class="header-nav" [attr.aria-label]="'Main' | t">
+      <a routerLink="/products" routerLinkActive="active" class="nav-link">{{ 'Products' | t }}</a>
       @if (isLoggedIn()) {
-        <a routerLink="/orders" routerLinkActive="active" class="nav-link">My orders</a>
+        <a routerLink="/orders" routerLinkActive="active" class="nav-link">{{ 'My orders' | t }}</a>
       }
     </nav>
 
@@ -18,8 +18,8 @@
       <button
         class="action-icon-btn theme-btn"
         type="button"
-        [attr.aria-label]="'Current theme: ' + themeLabel() + '. Click to change theme.'"
-        [title]="'Theme: ' + themeLabel()"
+        [attr.aria-label]="'Current theme: {theme}. Click to change theme.' | t: { theme: (themeLabel() | t) }"
+        [title]="'Theme: {theme}' | t: { theme: (themeLabel() | t) }"
         (click)="toggleTheme()"
       >
         @if (isDark()) {
@@ -29,19 +29,30 @@
         }
       </button>
 
-      <a routerLink="/cart" class="action-icon-btn cart-btn" aria-label="Shopping cart">
+      <button
+        class="action-icon-btn lang-btn"
+        type="button"
+        [attr.lang]="i18n.lang() === 'en' ? 'ne' : 'en'"
+        [attr.aria-label]="(i18n.lang() === 'en' ? 'Change language to Nepali' : 'Change language to English') | t"
+        [title]="(i18n.lang() === 'en' ? 'Change language to Nepali' : 'Change language to English') | t"
+        (click)="i18n.toggle()"
+      >
+        {{ i18n.lang() === 'en' ? 'नेपाली' : 'English' }}
+      </button>
+
+      <a routerLink="/cart" class="action-icon-btn cart-btn" [attr.aria-label]="'Shopping cart' | t">
         <svg lucideShoppingCart width="20" height="20"></svg>
         @if (cartCount() > 0) {
-          <span class="cart-badge">{{ cartCount() }}</span>
+          <span class="cart-badge">{{ cartCount() | num }}</span>
         }
       </a>
 
       @if (!isLoggedIn()) {
-        <a routerLink="/login" class="sign-in-btn">Sign In</a>
+        <a routerLink="/login" class="sign-in-btn">{{ 'Sign In' | t }}</a>
       } @else {
-        <button class="sign-in-btn" type="button" aria-label="Sign out" (click)="logout()">
+        <button class="sign-in-btn" type="button" [attr.aria-label]="'Sign out' | t" (click)="logout()">
           <svg lucideLogOut width="15" height="15"></svg>
-          <span class="btn-label">Sign Out</span>
+          <span class="btn-label">{{ 'Sign Out' | t }}</span>
         </button>
       }
     </div>

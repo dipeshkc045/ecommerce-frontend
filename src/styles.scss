@@ -103,3 +103,8 @@ input, select, textarea {
   white-space: nowrap;
   border: 0;
 }
+/* Nepali (ticket #58): Devanagari is not in the shop's fonts, so name fonts that have it, and give it a little more line height */
+html[lang='ne'] body {
+  font-family: 'Space Grotesk', 'Inter', 'Noto Sans Devanagari', 'Nirmala UI', 'Mangal', system-ui, sans-serif;
+  line-height: 1.6;
+}

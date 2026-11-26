@@ -1,16 +1,22 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+
+import { formatNumber } from '../../i18n/format';
+import { I18nService } from '../../i18n/i18n.service';
+import { TPipe } from '../../i18n/pipes';
 
 @Component({
   standalone: true,
   selector: 'app-footer',
-  imports: [RouterLink],
+  imports: [RouterLink, TPipe],
   templateUrl: './footer.component.html',
   styleUrl: './footer.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FooterComponent {
-  readonly year = new Date().getFullYear();
+  private readonly i18n = inject(I18nService);
+  private readonly thisYear = new Date().getFullYear();
+  readonly year = computed(() => formatNumber(this.thisYear, this.i18n.lang(), false));
 
   readonly links = [
     {
