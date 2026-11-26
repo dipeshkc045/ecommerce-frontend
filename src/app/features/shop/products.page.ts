@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 
 import { formatMoney } from '../../core/shop/money';
 import { messageFor } from '../../core/shop/problem';
+import { ProductPicture } from './product-picture';
 import { ShopApi } from '../../core/shop/shop.api';
 import type { Product } from '../../core/shop/shop.types';
 import { lowestPrice, stockBadge } from './product-view';
@@ -10,7 +11,7 @@ import { lowestPrice, stockBadge } from './product-view';
 @Component({
   standalone: true,
   selector: 'app-products-page',
-  imports: [RouterLink],
+  imports: [RouterLink, ProductPicture],
   styleUrl: './shop.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -32,6 +33,7 @@ import { lowestPrice, stockBadge } from './product-view';
           @for (p of products(); track p.id) {
             <li>
               <a class="card product-card" [routerLink]="['/products', p.id]">
+                <app-product-picture [image]="p.images?.[0]" sizes="(max-width: 500px) calc(100vw - 64px), (max-width: 760px) calc(50vw - 48px), 260px" />
                 <h3>{{ p.name }}</h3>
                 <span class="price">{{ price(p) }}</span>
                 <span class="badge" [class]="badge(p).css">{{ badge(p).label }}</span>
