@@ -1,0 +1,218 @@
+/*
+ * Design tokens: direction A "Himal" (ecommerce-platform #145, UX-3).
+ * Source of truth: Figma file "Storefront – Product Design (Nepal)", page 02 · Design System
+ * (variable collections "Primitives" and "Semantic"). Names match the Figma variables with "/" → "-".
+ *
+ * Not imported anywhere yet: the build ticket that adopts the new design will add
+ *   @import "./styles/tokens.css";
+ * to src/styles.css, after @import "tailwindcss".
+ *
+ * Three layers:
+ *   1. Primitives in @theme       → Tailwind utilities for raw ramps (bg-himal-700 …). Components should not use them.
+ *   2. Semantic roles on :root    → the only values components read (var(--brand-primary) …).
+ *   3. @theme inline              → Tailwind utilities for the semantic roles (bg-brand-primary, text-text-secondary …).
+ *      "inline" makes each utility read the :root variable at run time, so a later dark theme only
+ *      redefines layer 2 under [data-theme="dark"]; no component or utility changes.
+ */
+
+@theme {
+  /* ---- Colour primitives ---- */
+  --color-himal-50: #eef3fc;
+  --color-himal-100: #d9e4f8;
+  --color-himal-200: #b3c8f0;
+  --color-himal-300: #7fa2e2;
+  --color-himal-400: #4d7bd1;
+  --color-himal-500: #2a5bbe;
+  --color-himal-600: #1f4aa3;
+  --color-himal-700: #1a3d88;
+  --color-himal-800: #16326e;
+  --color-himal-900: #0f2350;
+
+  --color-sayapatri-50: #fff7e6;
+  --color-sayapatri-100: #fdeac0;
+  --color-sayapatri-200: #fad583;
+  --color-sayapatri-300: #f6bd45;
+  --color-sayapatri-400: #f2a60f;
+  --color-sayapatri-500: #d98b00;
+  --color-sayapatri-600: #b06f00;
+  --color-sayapatri-700: #8a5600;
+  --color-sayapatri-800: #653f00;
+  --color-sayapatri-900: #432a00;
+
+  --color-stone-0: #ffffff;
+  --color-stone-25: #fbfaf7;
+  --color-stone-50: #f6f4ef;
+  --color-stone-100: #ece9e2;
+  --color-stone-200: #dcd8ce;
+  --color-stone-300: #c2bdb1;
+  --color-stone-400: #9c9789;
+  --color-stone-500: #78736a;
+  --color-stone-600: #5c5850;
+  --color-stone-700: #45423c;
+  --color-stone-800: #2d2b27;
+  --color-stone-900: #1b1a17;
+
+  --color-green-50: #eaf6ef;
+  --color-green-100: #c9e9d5;
+  --color-green-500: #23824e;
+  --color-green-600: #1c6b40;
+  --color-green-700: #155232;
+
+  --color-red-50: #fdeeec;
+  --color-red-100: #f9d2cc;
+  --color-red-500: #c4321f;
+  --color-red-600: #a62718;
+  --color-red-700: #801e12;
+
+  --color-amber-50: #fff5e0;
+  --color-amber-100: #fde3a8;
+  --color-amber-600: #9a5b00;
+  --color-amber-700: #7a4700;
+
+  /* ---- Type: Mukta covers Latin and Devanagari; two weights only (400, 600) ---- */
+  --font-sans: "Mukta", system-ui, "Noto Sans Devanagari", sans-serif;
+  --font-weight-normal: 400;
+  --font-weight-semibold: 600;
+
+  /* Text styles → text-display, text-h1 … (size + line-height + weight in one utility) */
+  --text-display: 2rem;              /* 32 */
+  --text-display--line-height: 2.5rem;
+  --text-display--font-weight: 600;
+  --text-display--letter-spacing: -0.01em;
+  --text-h1: 1.625rem;               /* 26 */
+  --text-h1--line-height: 2.125rem;
+  --text-h1--font-weight: 600;
+  --text-h1--letter-spacing: -0.005em;
+  --text-h2: 1.3125rem;              /* 21 */
+  --text-h2--line-height: 1.875rem;
+  --text-h2--font-weight: 600;
+  --text-h3: 1.125rem;               /* 18 */
+  --text-h3--line-height: 1.625rem;
+  --text-h3--font-weight: 600;
+  --text-body-lg: 1.0625rem;         /* 17 */
+  --text-body-lg--line-height: 1.625rem;
+  --text-body: 1rem;                 /* 16: never smaller for body text on phones */
+  --text-body--line-height: 1.5rem;
+  --text-body-sm: 0.875rem;          /* 14 */
+  --text-body-sm--line-height: 1.25rem;
+  --text-label: 0.9375rem;           /* 15 */
+  --text-label--line-height: 1.25rem;
+  --text-label--font-weight: 600;
+  --text-caption: 0.75rem;           /* 12: single line only, Devanagari matras need room */
+  --text-caption--line-height: 1rem;
+  --text-caption--font-weight: 600;
+  --text-caption--letter-spacing: 0.02em;
+  --text-price-lg: 1.5rem;           /* 24 */
+  --text-price-lg--line-height: 1.875rem;
+  --text-price-lg--font-weight: 600;
+  --text-price: 1.0625rem;           /* 17 */
+  --text-price--line-height: 1.5rem;
+  --text-price--font-weight: 600;
+
+  /* ---- Spacing: 4 px base; p-1 = 4, p-2 = 8, p-3 = 12, p-4 = 16, p-6 = 24, p-8 = 32 … ---- */
+  --spacing: 0.25rem;
+
+  /* ---- Radius ---- */
+  --radius-sm: 0.25rem;   /* badges */
+  --radius-md: 0.5rem;    /* buttons, inputs */
+  --radius-lg: 0.75rem;   /* cards */
+  --radius-xl: 1rem;      /* sheets, dialogs */
+
+  /* ---- Elevation ---- */
+  --shadow-raised: 0 1px 2px rgb(27 26 23 / 0.06), 0 1px 3px rgb(27 26 23 / 0.08);
+  --shadow-sticky: 0 -2px 8px rgb(27 26 23 / 0.08), 0 4px 12px rgb(27 26 23 / 0.06);
+  --shadow-overlay: 0 8px 24px rgb(27 26 23 / 0.14), 0 2px 6px rgb(27 26 23 / 0.08);
+
+  /* ---- Breakpoints: 360 is the design width (no query); md = 768, lg = 1280 ---- */
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 80rem;
+  --container-content: 80rem; /* max-w-content = 1280 */
+
+  /* ---- Motion ---- */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-enter: cubic-bezier(0, 0, 0, 1);
+  --ease-exit: cubic-bezier(0.3, 0, 1, 1);
+}
+
+/* ---- Layer 2: semantic roles (light theme). Components read only these. ---- */
+:root {
+  --bg-page: var(--color-stone-25);
+  --bg-surface: var(--color-stone-0);
+  --bg-subtle: var(--color-stone-50);
+  --bg-muted: var(--color-stone-100);
+  --bg-inverse: var(--color-stone-900);
+
+  --text-primary: var(--color-stone-900);
+  --text-secondary: var(--color-stone-600);
+  --text-tertiary: var(--color-stone-500);   /* only on bg-page and bg-surface (contrast) */
+  --text-on-brand: var(--color-stone-0);
+  --text-link: var(--color-himal-600);
+  --text-disabled: var(--color-stone-400);
+
+  --border-default: var(--color-stone-200);
+  --border-strong: var(--color-stone-500);   /* inputs: 4.7:1 on white */
+  --border-focus: var(--color-himal-500);
+
+  --brand-primary: var(--color-himal-700);
+  --brand-primary-hover: var(--color-himal-800);
+  --brand-primary-pressed: var(--color-himal-900);
+  --brand-primary-subtle: var(--color-himal-50);
+
+  --accent-deal: var(--color-sayapatri-400);  /* deals only, never buttons */
+  --accent-deal-subtle: var(--color-sayapatri-50);
+  --accent-on-deal: var(--color-stone-900);
+
+  --status-success: var(--color-green-600);
+  --status-success-bg: var(--color-green-50);
+  --status-error: var(--color-red-600);
+  --status-error-bg: var(--color-red-50);
+  --status-warning: var(--color-amber-700);
+  --status-warning-bg: var(--color-amber-50);
+  --status-info: var(--color-himal-700);
+  --status-info-bg: var(--color-himal-50);
+
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 300ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    /* Movement becomes a short fade; components keep using the same variables. */
+    --duration-base: 120ms;
+    --duration-slow: 120ms;
+  }
+}
+
+/* ---- Layer 3: utilities for the semantic roles (bg-bg-surface, text-text-secondary, border-border-strong …) ---- */
+@theme inline {
+  --color-bg-page: var(--bg-page);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-subtle: var(--bg-subtle);
+  --color-bg-muted: var(--bg-muted);
+  --color-bg-inverse: var(--bg-inverse);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+  --color-text-on-brand: var(--text-on-brand);
+  --color-text-link: var(--text-link);
+  --color-text-disabled: var(--text-disabled);
+  --color-border-default: var(--border-default);
+  --color-border-strong: var(--border-strong);
+  --color-border-focus: var(--border-focus);
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-primary-hover: var(--brand-primary-hover);
+  --color-brand-primary-pressed: var(--brand-primary-pressed);
+  --color-brand-primary-subtle: var(--brand-primary-subtle);
+  --color-accent-deal: var(--accent-deal);
+  --color-accent-deal-subtle: var(--accent-deal-subtle);
+  --color-accent-on-deal: var(--accent-on-deal);
+  --color-status-success: var(--status-success);
+  --color-status-success-bg: var(--status-success-bg);
+  --color-status-error: var(--status-error);
+  --color-status-error-bg: var(--status-error-bg);
+  --color-status-warning: var(--status-warning);
+  --color-status-warning-bg: var(--status-warning-bg);
+  --color-status-info: var(--status-info);
+  --color-status-info-bg: var(--status-info-bg);
+}
