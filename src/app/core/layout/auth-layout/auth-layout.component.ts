@@ -1,28 +1,40 @@
-import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, computed, inject } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
+import { formatNumber } from '../../i18n/format';
+import { I18nService } from '../../i18n/i18n.service';
+import { TPipe } from '../../i18n/pipes';
 import { LayoutService } from '../layout.service';
 import { NotificationComponent } from '../notification/notification.component';
 
 @Component({
   standalone: true,
   selector: 'app-auth-layout',
-  imports: [RouterOutlet, RouterLink, NotificationComponent],
+  imports: [RouterOutlet, RouterLink, NotificationComponent, TPipe],
   template: `
     <app-notification />
 
     <div class="auth-shell">
       <!-- Auth Header -->
       <header class="auth-header">
-        <a routerLink="/" class="auth-logo" aria-label="Emox home">
+        <a routerLink="/" class="auth-logo" [attr.aria-label]="'Emox home' | t">
           <span class="auth-logo-mark">e</span>
           <span class="auth-logo-text">emox</span>
         </a>
         <div class="auth-header-right">
           <button
+            class="auth-theme-btn auth-lang-btn"
+            type="button"
+            [attr.lang]="i18n.lang() === 'en' ? 'ne' : 'en'"
+            [attr.aria-label]="(i18n.lang() === 'en' ? 'Change language to Nepali' : 'Change language to English') | t"
+            (click)="i18n.toggle()"
+          >
+            {{ i18n.lang() === 'en' ? 'नेपाली' : 'English' }}
+          </button>
+          <button
             class="auth-theme-btn"
             type="button"
             (click)="layout.toggleTheme()"
-            [attr.aria-label]="'Switch to ' + (layout.isDark() ? 'light' : 'dark') + ' mode'"
+            [attr.aria-label]="(layout.isDark() ? 'Switch to light mode' : 'Switch to dark mode') | t"
           >
             @if (layout.isDark()) {
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -41,7 +53,7 @@ import { NotificationComponent } from '../notification/notification.component';
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <polyline points="15 18 9 12 15 6"/>
             </svg>
-            Back to store
+            {{ 'Back to store' | t }}
           </a>
         </div>
       </header>
@@ -55,7 +67,7 @@ import { NotificationComponent } from '../notification/notification.component';
 
       <!-- Auth Footer -->
       <footer class="auth-footer">
-        <p>&copy; {{ year }} Emox. All rights reserved.</p>
+        <p>{{ '© {year} Emox. All rights reserved.' | t: { year: year() } }}</p>
       </footer>
     </div>
   `,
@@ -64,7 +76,9 @@ import { NotificationComponent } from '../notification/notification.component';
 })
 export class AuthLayoutComponent implements OnInit {
   readonly layout = inject(LayoutService);
-  readonly year = new Date().getFullYear();
+  readonly i18n = inject(I18nService);
+  private readonly thisYear = new Date().getFullYear();
+  readonly year = computed(() => formatNumber(this.thisYear, this.i18n.lang(), false));
 
   ngOnInit(): void {
     this.layout.setLayoutMode('auth');

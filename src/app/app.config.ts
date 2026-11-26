@@ -1,10 +1,11 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
-import { provideRouter, withComponentInputBinding, withInMemoryScrolling } from '@angular/router';
+import { TitleStrategy, provideRouter, withComponentInputBinding, withInMemoryScrolling } from '@angular/router';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 
 import { routes } from './app.routes';
 import { provideAppHttp } from './core/http/http.providers';
 import { provideApiBaseUrl } from './core/http/api-base-url.token';
+import { TranslatedTitleStrategy } from './core/i18n/translated-title.strategy';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -14,6 +15,7 @@ export const appConfig: ApplicationConfig = {
       withComponentInputBinding(),
       withInMemoryScrolling({ scrollPositionRestoration: 'top', anchorScrolling: 'enabled' }),
     ),
+    { provide: TitleStrategy, useClass: TranslatedTitleStrategy },
     provideClientHydration(withEventReplay()),
 
     // Browser: same origin, the dev server forwards /web to commerce-core (proxy.conf.json).

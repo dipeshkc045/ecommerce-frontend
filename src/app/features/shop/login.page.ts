@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AuthService } from '../../core/auth/auth.service';
+import { NumPipe, TPipe } from '../../core/i18n/pipes';
 import { ShopApi } from '../../core/shop/shop.api';
 import { codeOf, messageFor, retryAfterSeconds } from '../../core/shop/problem';
 
@@ -14,42 +15,42 @@ export function safeRedirect(value: string | null | undefined): string {
 @Component({
   standalone: true,
   selector: 'app-login-page',
-  imports: [FormsModule],
+  imports: [FormsModule, TPipe, NumPipe],
   styleUrl: './shop.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="shop" style="max-width: 440px">
-      <h1>Sign in</h1>
+      <h1>{{ 'Sign in' | t }}</h1>
       @if (error()) {
-        <p class="notice notice--error" role="alert">{{ error() }}</p>
+        <p class="notice notice--error" role="alert">{{ error() | t }}</p>
       }
       @if (step() === 'phone') {
         <form class="card" (ngSubmit)="sendCode()" novalidate>
           <div class="field">
-            <label for="phone">Mobile number</label>
+            <label for="phone">{{ 'Mobile number' | t }}</label>
             <input id="phone" name="phone" type="tel" inputmode="numeric" autocomplete="tel-national"
                    placeholder="98XXXXXXXX" [ngModel]="phone()" (ngModelChange)="phone.set($event)" required />
-            <span class="muted">We send a 6-digit code by SMS.</span>
+            <span class="muted">{{ 'We send a 6-digit code by SMS.' | t }}</span>
           </div>
           <button class="btn btn--block" type="submit" [disabled]="busy() || !phone().trim()">
-            {{ busy() ? 'Sending…' : 'Send code' }}
+            {{ (busy() ? 'Sending…' : 'Send code') | t }}
           </button>
         </form>
       } @else {
         <form class="card" (ngSubmit)="verify()" novalidate>
-          <p class="muted">Code sent to {{ phone() }}. It works for 5 minutes.</p>
+          <p class="muted">{{ 'Code sent to {phone}. It works for 5 minutes.' | t: { phone: phone() } }}</p>
           <div class="field">
-            <label for="code">6-digit code</label>
+            <label for="code">{{ '6-digit code' | t }}</label>
             <input id="code" name="code" class="code-input" type="text" inputmode="numeric" maxlength="6"
                    autocomplete="one-time-code" [ngModel]="code()" (ngModelChange)="code.set($event)" required />
           </div>
           <button class="btn btn--block" type="submit" [disabled]="busy() || code().trim().length !== 6">
-            {{ busy() ? 'Checking…' : 'Sign in' }}
+            {{ (busy() ? 'Checking…' : 'Sign in') | t }}
           </button>
           <p class="center" style="padding: 12px 0 0">
-            <button class="btn btn--link" type="button" (click)="back()">Change number</button>
+            <button class="btn btn--link" type="button" (click)="back()">{{ 'Change number' | t }}</button>
             <button class="btn btn--link" type="button" [disabled]="busy() || wait() > 0" (click)="sendCode()">
-              {{ wait() > 0 ? 'Send again in ' + wait() + 's' : 'Send a new code' }}
+              {{ wait() > 0 ? ('Send again in {n}s' | t: { n: (wait() | num) }) : ('Send a new code' | t) }}
             </button>
           </p>
         </form>

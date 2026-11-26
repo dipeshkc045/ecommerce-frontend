@@ -3,7 +3,8 @@ import { Router, RouterLink } from '@angular/router';
 
 import { AuthService } from '../../core/auth/auth.service';
 import { CartService } from '../../core/cart/cart.service';
-import { formatMoney } from '../../core/shop/money';
+import { MoneyPipe, NumPipe, TPipe, WhenPipe } from '../../core/i18n/pipes';
+import { I18nService } from '../../core/i18n/i18n.service';
 import { messageFor } from '../../core/shop/problem';
 import { ShopApi } from '../../core/shop/shop.api';
 import type { Product, Sku } from '../../core/shop/shop.types';
@@ -13,24 +14,24 @@ import { skuBadge } from './product-view';
 @Component({
   standalone: true,
   selector: 'app-product-page',
-  imports: [RouterLink, ProductPicture],
+  imports: [RouterLink, ProductPicture, TPipe, MoneyPipe],
   styleUrl: './shop.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="shop">
-      <p><a routerLink="/products">← All products</a></p>
+      <p><a routerLink="/products">{{ '← All products' | t }}</a></p>
       @if (error()) {
-        <p class="notice notice--error" role="alert">{{ error() }}</p>
+        <p class="notice notice--error" role="alert">{{ error() | t }}</p>
       }
       @if (product(); as p) {
         <article class="card product-layout">
           <div class="gallery">
             <app-product-picture [image]="shown()" sizes="(max-width: 767px) calc(100vw - 64px), 520px" [eager]="true" />
             @if ((p.images?.length ?? 0) > 1) {
-              <ul class="thumbs" aria-label="More images">
+              <ul class="thumbs" [attr.aria-label]="'More images' | t">
                 @for (img of p.images; track img.src; let i = $index) {
                   <li>
-                    <button type="button" class="thumb" [class.thumb--on]="i === shownIndex()" [attr.aria-label]="'Show image ' + (i + 1) + ': ' + img.alt"
+                    <button type="button" class="thumb" [class.thumb--on]="i === shownIndex()" [attr.aria-label]="'Show image {n}: {alt}' | t: { n: i + 1, alt: img.alt }"
                       [attr.aria-pressed]="i === shownIndex()" (click)="shownIndex.set(i)">
                       <app-product-picture [image]="img" sizes="72px" />
                     </button>
@@ -45,7 +46,7 @@ import { skuBadge } from './product-view';
 
           @if (p.skus.length > 1) {
             <div class="field">
-              <label for="sku">Option</label>
+              <label for="sku">{{ 'Option' | t }}</label>
               <select id="sku" [value]="selectedId()" (change)="selectedId.set($any($event.target).value)">
                 @for (s of p.skus; track s.sku_id) {
                   <option [value]="s.sku_id">{{ s.option || s.sku_code }}</option>
@@ -55,14 +56,14 @@ import { skuBadge } from './product-view';
           }
 
           @if (selected(); as s) {
-            <p class="price">{{ s.price ? money(s.price) : 'Price not set' }}</p>
-            <p><span [class]="badge(s).css">{{ badge(s).label }}</span> <span class="muted">Price includes VAT</span></p>
+            <p class="price">{{ s.price ? (s.price | money) : ('Price not set' | t) }}</p>
+            <p><span [class]="badge(s).css">{{ badge(s).label | t }}</span> <span class="muted">{{ 'Price includes VAT' | t }}</span></p>
             <button class="btn" type="button" [disabled]="!canBuy(s) || adding()" (click)="add(s)">
-              {{ adding() ? 'Adding…' : 'Add to cart' }}
+              {{ (adding() ? 'Adding…' : 'Add to cart') | t }}
             </button>
             @if (added()) {
               <p class="notice notice--ok" role="status">
-                Added. <a routerLink="/cart">View cart</a>
+                {{ 'Added.' | t }} <a routerLink="/cart">{{ 'View cart' | t }}</a>
               </p>
             }
           }
@@ -79,6 +80,7 @@ export class ProductPage {
   private readonly cart = inject(CartService);
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly i18n = inject(I18nService);
 
   /** Route parameter (component input binding is on). */
   readonly id = input.required<string>();
@@ -98,6 +100,7 @@ export class ProductPage {
   constructor() {
     effect(() => {
       const id = this.id();
+      this.i18n.lang(); // read again in the new language: names, descriptions and image alt text come from the catalog
       this.product.set(null);
       this.shownIndex.set(0);
       this.error.set(null);
@@ -113,7 +116,6 @@ export class ProductPage {
     });
   }
 
-  money = formatMoney;
   badge = skuBadge;
 
   canBuy(s: Sku): boolean {

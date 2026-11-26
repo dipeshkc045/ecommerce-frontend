@@ -3,6 +3,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import type { Observable } from 'rxjs';
 
 import { CartService } from '../../core/cart/cart.service';
+import { TPipe } from '../../core/i18n/pipes';
 import { codeOf, messageFor } from '../../core/shop/problem';
 import { ShopApi } from '../../core/shop/shop.api';
 import type { Placement } from '../../core/shop/shop.types';
@@ -21,42 +22,42 @@ const POLL_TRIES = 10;
 @Component({
   standalone: true,
   selector: 'app-checkout-return-page',
-  imports: [RouterLink],
+  imports: [RouterLink, TPipe],
   styleUrl: './shop.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="shop" style="max-width: 560px">
-      <h1>Your payment</h1>
+      <h1>{{ 'Your payment' | t }}</h1>
       @switch (view().kind) {
         @case ('checking') {
-          <div class="card center" aria-busy="true" role="status"><p>Checking your payment with Khalti…</p></div>
+          <div class="card center" aria-busy="true" role="status"><p>{{ 'Checking your payment with Khalti…' | t }}</p></div>
         }
         @case ('paid') {
           <div class="card center notice--ok" role="status">
-            <h2>Payment received</h2>
-            <p>Thank you. Your order is confirmed.</p>
-            <a class="btn" [routerLink]="['/orders', paidOrderId()]">See your order</a>
+            <h2>{{ 'Payment received' | t }}</h2>
+            <p>{{ 'Thank you. Your order is confirmed.' | t }}</p>
+            <a class="btn" [routerLink]="['/orders', paidOrderId()]">{{ 'See your order' | t }}</a>
           </div>
         }
         @case ('waiting') {
           <div class="card center notice--warn" role="status">
-            <h2>Still waiting for Khalti</h2>
-            <p>We have not heard back yet. This can take a minute. Your order will show in your orders once the payment is confirmed.</p>
-            <a class="btn btn--ghost" routerLink="/orders">Go to my orders</a>
+            <h2>{{ 'Still waiting for Khalti' | t }}</h2>
+            <p>{{ 'We have not heard back yet. This can take a minute. Your order will show in your orders once the payment is confirmed.' | t }}</p>
+            <a class="btn btn--ghost" routerLink="/orders">{{ 'Go to my orders' | t }}</a>
           </div>
         }
         @case ('failed') {
           <div class="card center notice--error" role="alert">
-            <h2>No order was placed</h2>
-            <p>{{ failMessage() }}</p>
-            <a class="btn" routerLink="/cart">Back to my cart</a>
+            <h2>{{ 'No order was placed' | t }}</h2>
+            <p>{{ failMessage() | t }}</p>
+            <a class="btn" routerLink="/cart">{{ 'Back to my cart' | t }}</a>
           </div>
         }
         @default {
           <div class="card center" role="alert">
-            <h2>We could not find this payment</h2>
-            <p>If money left your account, contact us. Otherwise you can start again.</p>
-            <a class="btn" routerLink="/cart">Back to my cart</a>
+            <h2>{{ 'We could not find this payment' | t }}</h2>
+            <p>{{ 'If money left your account, contact us. Otherwise you can start again.' | t }}</p>
+            <a class="btn" routerLink="/cart">{{ 'Back to my cart' | t }}</a>
           </div>
         }
       }

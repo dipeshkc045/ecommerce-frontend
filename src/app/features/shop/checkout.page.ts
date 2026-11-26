@@ -4,7 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { Observable, of, switchMap, map } from 'rxjs';
 
 import { CartService } from '../../core/cart/cart.service';
-import { formatMoney } from '../../core/shop/money';
+import { MoneyPipe, NumPipe, TPipe, WhenPipe } from '../../core/i18n/pipes';
 import { addressProblem, messageFor } from '../../core/shop/problem';
 import { ShopApi } from '../../core/shop/shop.api';
 import { PROVINCES } from '../../core/shop/shop.types';
@@ -50,26 +50,26 @@ export function formError(f: AddressForm): { field: FormField; message: string }
 @Component({
   standalone: true,
   selector: 'app-checkout-page',
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink, TPipe, MoneyPipe, NumPipe],
   styleUrl: './shop.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="shop">
-      <h1>Checkout</h1>
+      <h1>{{ 'Checkout' | t }}</h1>
       @if (error()) {
         <p class="notice notice--error" role="alert">
-          {{ error() }} <a routerLink="/cart">Back to cart</a>
+          {{ error() | t }} <a routerLink="/cart">{{ 'Back to cart' | t }}</a>
         </p>
       }
       @if (!cart.cart() || addresses() === null) {
         <div class="skeleton" aria-busy="true"></div>
       } @else if (cart.totalItems() === 0) {
-        <div class="card center"><p>Your cart is empty.</p><a class="btn" routerLink="/products">Browse products</a></div>
+        <div class="card center"><p>{{ 'Your cart is empty.' | t }}</p><a class="btn" routerLink="/products">{{ 'Browse products' | t }}</a></div>
       } @else {
         <form class="layout-2" (ngSubmit)="place()" novalidate>
           <div>
             <fieldset class="card methods" style="margin-bottom: 16px">
-              <legend><h2>Delivery address</h2></legend>
+              <legend><h2>{{ 'Delivery address' | t }}</h2></legend>
               @for (a of addresses(); track a.address_id) {
                 <label class="method">
                   <input type="radio" name="address" [value]="a.address_id" [checked]="!newMode() && selectedId() === a.address_id"
@@ -83,77 +83,77 @@ export function formError(f: AddressForm): { field: FormField; message: string }
               @if (addresses()!.length > 0) {
                 <label class="method">
                   <input type="radio" name="address" value="new" [checked]="newMode()" (change)="newMode.set(true)" />
-                  <span><strong>Use a new address</strong></span>
+                  <span><strong>{{ 'Use a new address' | t }}</strong></span>
                 </label>
               }
               @if (newMode()) {
                 <div class="address-form">
                   <div class="field">
-                    <label for="a-name">Receiver's name</label>
+                    <label for="a-name">{{ 'Receiver’s name' | t }}</label>
                     <input id="a-name" autocomplete="name" [value]="form().recipient_name" (input)="set('recipient_name', $any($event.target).value)" />
                   </div>
                   <div class="field">
-                    <label for="a-phone">Mobile number (the courier will call)</label>
+                    <label for="a-phone">{{ 'Mobile number (the courier will call)' | t }}</label>
                     <input id="a-phone" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="98XXXXXXXX"
                            [value]="form().phone" (input)="set('phone', $any($event.target).value)" />
                   </div>
                   <div class="field">
-                    <label for="a-province">Province</label>
+                    <label for="a-province">{{ 'Province' | t }}</label>
                     <select id="a-province" [value]="form().province" (change)="set('province', $any($event.target).value)">
-                      <option value="">Choose…</option>
-                      @for (p of provinces; track p) { <option [value]="p" [selected]="form().province === p">{{ p }}</option> }
+                      <option value="">{{ 'Choose…' | t }}</option>
+                      @for (p of provinces; track p) { <option [value]="p" [selected]="form().province === p">{{ p | t }}</option> }
                     </select>
                   </div>
                   <div class="field">
-                    <label for="a-district">District</label>
+                    <label for="a-district">{{ 'District' | t }}</label>
                     <input id="a-district" [value]="form().district" (input)="set('district', $any($event.target).value)" />
                   </div>
                   <div class="field">
-                    <label for="a-muni">Municipality or rural municipality</label>
+                    <label for="a-muni">{{ 'Municipality or rural municipality' | t }}</label>
                     <input id="a-muni" [value]="form().municipality" (input)="set('municipality', $any($event.target).value)" />
                   </div>
                   <div class="field">
-                    <label for="a-ward">Ward number</label>
+                    <label for="a-ward">{{ 'Ward number' | t }}</label>
                     <input id="a-ward" type="number" min="1" max="33" inputmode="numeric" [value]="form().ward"
                            (input)="set('ward', $any($event.target).value)" />
                   </div>
                   <div class="field">
-                    <label for="a-street">Street or tole (optional)</label>
+                    <label for="a-street">{{ 'Street or tole (optional)' | t }}</label>
                     <input id="a-street" [value]="form().street" (input)="set('street', $any($event.target).value)" />
                   </div>
                   <div class="field">
-                    <label for="a-landmark">Landmark</label>
-                    <input id="a-landmark" placeholder="Near a temple, school, shop…" [value]="form().landmark"
+                    <label for="a-landmark">{{ 'Landmark' | t }}</label>
+                    <input id="a-landmark" [placeholder]="'Near a temple, school, shop…' | t" [value]="form().landmark"
                            (input)="set('landmark', $any($event.target).value)" />
                   </div>
                   @if (fieldError()) {
-                    <p class="notice notice--error" role="alert">{{ fieldError() }}</p>
+                    <p class="notice notice--error" role="alert">{{ fieldError() | t }}</p>
                   }
-                  <p class="muted">This address is saved to your account for next time.</p>
+                  <p class="muted">{{ 'This address is saved to your account for next time.' | t }}</p>
                 </div>
               }
             </fieldset>
 
             <fieldset class="card methods">
-              <legend><h2>Payment method</h2></legend>
+              <legend><h2>{{ 'Payment method' | t }}</h2></legend>
               <label class="method">
                 <input type="radio" name="method" value="KHALTI" [checked]="method() === 'KHALTI'" (change)="method.set('KHALTI')" />
-                <span><strong>Pay with Khalti</strong><br /><span class="muted">You pay on the Khalti page, then come back here.</span></span>
+                <span><strong>{{ 'Pay with Khalti' | t }}</strong><br /><span class="muted">{{ 'You pay on the Khalti page, then come back here.' | t }}</span></span>
               </label>
               <label class="method">
                 <input type="radio" name="method" value="COD" [checked]="method() === 'COD'" (change)="method.set('COD')" />
-                <span><strong>Cash on delivery</strong><br /><span class="muted">Pay when your order arrives.</span></span>
+                <span><strong>{{ 'Cash on delivery' | t }}</strong><br /><span class="muted">{{ 'Pay when your order arrives.' | t }}</span></span>
               </label>
             </fieldset>
           </div>
-          <aside class="card summary" aria-label="Order summary">
-            <h2>Summary</h2>
-            <div class="summary-row"><span>Items ({{ cart.totalItems() }})</span><span>{{ money(cart.cart()?.subtotal) }}</span></div>
-            <div class="summary-row"><span>Delivery</span><span>{{ money(cart.cart()?.delivery) }}</span></div>
-            <div class="summary-row summary-row--total"><span>Total</span><span>{{ money(cart.cart()?.total) }}</span></div>
-            <p class="muted">Prices include 13% VAT.</p>
+          <aside class="card summary" [attr.aria-label]="'Order summary' | t">
+            <h2>{{ 'Summary' | t }}</h2>
+            <div class="summary-row"><span>{{ 'Items ({n})' | t: { n: (cart.totalItems() | num) } }}</span><span>{{ cart.cart()?.subtotal | money }}</span></div>
+            <div class="summary-row"><span>{{ 'Delivery' | t }}</span><span>{{ cart.cart()?.delivery | money }}</span></div>
+            <div class="summary-row summary-row--total"><span>{{ 'Total' | t }}</span><span>{{ cart.cart()?.total | money }}</span></div>
+            <p class="muted">{{ 'Prices include 13% VAT.' | t }}</p>
             <button class="btn btn--block" type="submit" [disabled]="busy()">
-              {{ busy() ? 'Placing your order…' : method() === 'KHALTI' ? 'Pay with Khalti' : 'Place order' }}
+              {{ (busy() ? 'Placing your order…' : method() === 'KHALTI' ? 'Pay with Khalti' : 'Place order') | t }}
             </button>
           </aside>
         </form>
@@ -176,7 +176,6 @@ export class CheckoutPage implements OnInit {
   readonly newMode = signal(false);
   readonly form = signal<AddressForm>({ ...EMPTY_FORM });
   readonly canPick = computed(() => !this.newMode() && this.selectedId() !== null);
-  money = formatMoney;
 
   /** One key and one new-address id per attempt: a double press or a retry after a lost answer cannot make two orders or two addresses. */
   private key = newId();
