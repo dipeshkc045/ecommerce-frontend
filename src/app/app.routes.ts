@@ -3,7 +3,8 @@ import { authGuard } from './core/auth/auth.guard';
 
 /**
  * Shell layout pattern: each layout owns the chrome, feature pages render inside its outlet.
- * Customer pages (cart, checkout, orders) sit behind the sign-in guard.
+ * Guests can use the cart and checkout (doc 01 §3, ADR-0025): checkout asks for the phone code before the order.
+ * Only order history sits behind the sign-in guard.
  */
 export const routes: Routes = [
   {
@@ -23,25 +24,25 @@ export const routes: Routes = [
         loadComponent: () => import('./features/shop/product.page').then(m => m.ProductPage),
       },
       {
+        path: 'cart',
+        title: 'Your cart',
+        loadComponent: () => import('./features/shop/cart.page').then(m => m.CartPage),
+      },
+      {
+        path: 'checkout',
+        title: 'Checkout',
+        loadComponent: () => import('./features/shop/checkout.page').then(m => m.CheckoutPage),
+      },
+      {
+        path: 'checkout/return',
+        title: 'Your payment',
+        loadComponent: () =>
+          import('./features/shop/checkout-return.page').then(m => m.CheckoutReturnPage),
+      },
+      {
         path: '',
         canActivate: [authGuard],
         children: [
-          {
-            path: 'cart',
-            title: 'Your cart',
-            loadComponent: () => import('./features/shop/cart.page').then(m => m.CartPage),
-          },
-          {
-            path: 'checkout',
-            title: 'Checkout',
-            loadComponent: () => import('./features/shop/checkout.page').then(m => m.CheckoutPage),
-          },
-          {
-            path: 'checkout/return',
-            title: 'Your payment',
-            loadComponent: () =>
-              import('./features/shop/checkout-return.page').then(m => m.CheckoutReturnPage),
-          },
           {
             path: 'orders',
             title: 'My orders',

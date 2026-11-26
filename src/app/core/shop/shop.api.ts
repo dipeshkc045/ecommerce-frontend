@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import type {
-  Address, AddressBody, Cart, CodeSent, OrderDetail, OrderSummary, Page, PaymentMethod, Placement, Product, Session,
+  Address, AddressBody, Cart, CartMerge, CodeSent, OrderDetail, OrderSummary, Page, PaymentMethod, Placement, Product, Session,
 } from './shop.types';
 
 const V1 = '/web/v1';
@@ -40,6 +40,10 @@ export class ShopApi {
   }
   removeLine(skuId: string): Observable<Cart> {
     return this.http.delete<Cart>(`${V1}/cart/lines/${skuId}`);
+  }
+  /** Moves the guest cart (named by the HttpOnly `guest_cart` cookie) into the signed-in customer's cart. Safe to repeat. */
+  mergeCart(): Observable<CartMerge> {
+    return this.http.post<CartMerge>(`${V1}/cart/merge`, {});
   }
 
   /** The same key must be reused when the customer retries the same attempt (it makes the retry safe). */

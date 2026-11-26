@@ -1,8 +1,10 @@
 import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Observable, of, switchMap, map } from 'rxjs';
 
+import { AuthService } from '../../core/auth/auth.service';
 import { CartService } from '../../core/cart/cart.service';
 import { MoneyPipe, NumPipe, TPipe, WhenPipe } from '../../core/i18n/pipes';
 import { addressProblem, messageFor } from '../../core/shop/problem';
@@ -50,7 +52,7 @@ export function formError(f: AddressForm): { field: FormField; message: string }
 @Component({
   standalone: true,
   selector: 'app-checkout-page',
-  imports: [FormsModule, RouterLink, TPipe, MoneyPipe, NumPipe],
+  imports: [FormsModule, NgTemplateOutlet, RouterLink, TPipe, MoneyPipe, NumPipe],
   styleUrl: './shop.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -61,10 +63,29 @@ export function formError(f: AddressForm): { field: FormField; message: string }
           {{ error() | t }} <a routerLink="/cart">{{ 'Back to cart' | t }}</a>
         </p>
       }
-      @if (!cart.cart() || addresses() === null) {
+      <ng-template #totals>
+        <h2>{{ 'Summary' | t }}</h2>
+        <div class="summary-row"><span>{{ 'Items ({n})' | t: { n: (cart.totalItems() | num) } }}</span><span>{{ cart.cart()?.subtotal | money }}</span></div>
+        <div class="summary-row"><span>{{ 'Delivery' | t }}</span><span>{{ cart.cart()?.delivery | money }}</span></div>
+        <div class="summary-row summary-row--total"><span>{{ 'Total' | t }}</span><span>{{ cart.cart()?.total | money }}</span></div>
+        <p class="muted">{{ 'Prices include 13% VAT.' | t }}</p>
+      </ng-template>
+      @if (!cart.cart() || (signedIn() && addresses() === null)) {
         <div class="skeleton" aria-busy="true"></div>
       } @else if (cart.totalItems() === 0) {
         <div class="card center"><p>{{ 'Your cart is empty.' | t }}</p><a class="btn" routerLink="/products">{{ 'Browse products' | t }}</a></div>
+      } @else if (!signedIn()) {
+        <!-- Guest checkout (ADR-0025): confirm the phone with a code, the guest cart is merged, then the order. -->
+        <div class="layout-2">
+          <section class="card">
+            <h2>{{ 'Check out with your mobile number' | t }}</h2>
+            <p>{{ 'We send a 6-digit code by SMS to confirm your number. Your cart stays as it is.' | t }}</p>
+            <a class="btn" routerLink="/login" [queryParams]="{ redirect: '/checkout' }">{{ 'Continue with mobile number' | t }}</a>
+          </section>
+          <aside class="card summary" [attr.aria-label]="'Order summary' | t">
+            <ng-container [ngTemplateOutlet]="totals" />
+          </aside>
+        </div>
       } @else {
         <form class="layout-2" (ngSubmit)="place()" novalidate>
           <div>
@@ -147,11 +168,7 @@ export function formError(f: AddressForm): { field: FormField; message: string }
             </fieldset>
           </div>
           <aside class="card summary" [attr.aria-label]="'Order summary' | t">
-            <h2>{{ 'Summary' | t }}</h2>
-            <div class="summary-row"><span>{{ 'Items ({n})' | t: { n: (cart.totalItems() | num) } }}</span><span>{{ cart.cart()?.subtotal | money }}</span></div>
-            <div class="summary-row"><span>{{ 'Delivery' | t }}</span><span>{{ cart.cart()?.delivery | money }}</span></div>
-            <div class="summary-row summary-row--total"><span>{{ 'Total' | t }}</span><span>{{ cart.cart()?.total | money }}</span></div>
-            <p class="muted">{{ 'Prices include 13% VAT.' | t }}</p>
+            <ng-container [ngTemplateOutlet]="totals" />
             <button class="btn btn--block" type="submit" [disabled]="busy()">
               {{ (busy() ? 'Placing your order…' : method() === 'KHALTI' ? 'Pay with Khalti' : 'Place order') | t }}
             </button>
@@ -163,6 +180,8 @@ export function formError(f: AddressForm): { field: FormField; message: string }
 })
 export class CheckoutPage implements OnInit {
   readonly cart = inject(CartService);
+  /** A guest sees the cart and the phone-code step; addresses and placing an order need a signed-in customer. */
+  readonly signedIn = inject(AuthService).isLoggedIn;
   private readonly api = inject(ShopApi);
   private readonly router = inject(Router);
 
@@ -183,6 +202,7 @@ export class CheckoutPage implements OnInit {
 
   ngOnInit(): void {
     this.cart.load().subscribe({ error: (e) => this.error.set(messageFor(e, 'We could not load your cart.')) });
+    if (!this.signedIn()) return;
     this.api.addresses().subscribe({
       next: ({ items }) => {
         this.addresses.set(items);

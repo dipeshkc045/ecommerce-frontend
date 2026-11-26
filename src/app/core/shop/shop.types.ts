@@ -69,6 +69,15 @@ export interface Cart {
   item_count: number;
 }
 
+/** Answer of `POST /web/v1/cart/merge` (ADR-0025): `capped` and `skipped` are SKU ids. */
+export interface CartMerge {
+  merged: boolean;
+  lines_moved: number;
+  capped: string[];
+  skipped: string[];
+  cart: Cart;
+}
+
 export type PaymentMethod = 'KHALTI' | 'COD';
 
 export interface PlaceOrderRequest {

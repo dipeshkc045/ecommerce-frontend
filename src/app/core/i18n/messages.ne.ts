@@ -99,6 +99,10 @@ export const NE: Record<string, string> = {
   'We could not change your cart.': 'तपाईंको कार्ट परिवर्तन गर्न सकिएन।',
 
   // ── Checkout
+  'Check out with your mobile number': 'मोबाइल नम्बरबाट चेकआउट गर्नुहोस्',
+  'We send a 6-digit code by SMS to confirm your number. Your cart stays as it is.':
+    'तपाईंको नम्बर पुष्टि गर्न हामी एसएमएसबाट ६ अङ्कको कोड पठाउँछौं। तपाईंको कार्ट जस्ताको तस्तै रहन्छ।',
+  'Continue with mobile number': 'मोबाइल नम्बरबाट अगाडि बढ्नुहोस्',
   'Back to cart': 'कार्टमा फर्कनुहोस्',
   'Delivery address': 'ढुवानी ठेगाना',
   'Use a new address': 'नयाँ ठेगाना प्रयोग गर्नुहोस्',
