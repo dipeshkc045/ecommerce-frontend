@@ -3,19 +3,28 @@
  * Source of truth: Figma file "Storefront – Product Design (Nepal)", page 02 · Design System
  * (variable collections "Primitives" and "Semantic"). Names match the Figma variables with "/" → "-".
  *
+ * Naming: fg-* (text colour), surface-* (backgrounds), line-* (borders), plus brand-, accent-, status-.
+ * The old SCSS tokens in src/scss define --radius-md/lg and other names unlayered; #163 must retire or
+ * rename them when this file is imported, or they override these (rounded-md would become 12 px).
+ *
  * Not imported anywhere yet: the build ticket that adopts the new design will add
  *   @import "./styles/tokens.css";
  * to src/styles.css, after @import "tailwindcss".
  *
  * Three layers:
  *   1. Primitives in @theme       → Tailwind utilities for raw ramps (bg-himal-700 …). Components should not use them.
- *   2. Semantic roles on :root    → the only values components read (var(--brand-primary) …).
- *   3. @theme inline              → Tailwind utilities for the semantic roles (bg-brand-primary, text-text-secondary …).
+ *   2. Semantic roles on :root    → the only values components read (var(--brand-primary), var(--fg-secondary) …).
+ *   3. @theme inline              → Tailwind utilities for the semantic roles (bg-brand-primary, text-fg-secondary, bg-surface-page, border-line-strong …).
  *      "inline" makes each utility read the :root variable at run time, so a later dark theme only
  *      redefines layer 2 under [data-theme="dark"]; no component or utility changes.
  */
 
 @theme {
+  /* Start from an empty colour and breakpoint set, so Tailwind's default palette
+     (bg-green-200, bg-red-300 …) and sm/xl/2xl breakpoints can't leak in. */
+  --color-*: initial;
+  --breakpoint-*: initial;
+
   /* ---- Colour primitives ---- */
   --color-himal-50: #eef3fc;
   --color-himal-100: #d9e4f8;
@@ -136,22 +145,22 @@
 
 /* ---- Layer 2: semantic roles (light theme). Components read only these. ---- */
 :root {
-  --bg-page: var(--color-stone-25);
-  --bg-surface: var(--color-stone-0);
-  --bg-subtle: var(--color-stone-50);
-  --bg-muted: var(--color-stone-100);
-  --bg-inverse: var(--color-stone-900);
+  --surface-page: var(--color-stone-25);
+  --surface-raised: var(--color-stone-0);
+  --surface-subtle: var(--color-stone-50);
+  --surface-muted: var(--color-stone-100);
+  --surface-inverse: var(--color-stone-900);
 
-  --text-primary: var(--color-stone-900);
-  --text-secondary: var(--color-stone-600);
-  --text-tertiary: var(--color-stone-500);   /* only on bg-page and bg-surface (contrast) */
-  --text-on-brand: var(--color-stone-0);
-  --text-link: var(--color-himal-600);
-  --text-disabled: var(--color-stone-400);
+  --fg-primary: var(--color-stone-900);
+  --fg-secondary: var(--color-stone-600);
+  --fg-tertiary: var(--color-stone-500);   /* only on surface-page and surface-raised (contrast) */
+  --fg-on-brand: var(--color-stone-0);
+  --fg-link: var(--color-himal-600);
+  --fg-disabled: var(--color-stone-400);
 
-  --border-default: var(--color-stone-200);
-  --border-strong: var(--color-stone-500);   /* inputs: 4.7:1 on white */
-  --border-focus: var(--color-himal-500);
+  --line-default: var(--color-stone-200);
+  --line-strong: var(--color-stone-500);   /* inputs: 4.7:1 on white */
+  --line-focus: var(--color-himal-500);
 
   --brand-primary: var(--color-himal-700);
   --brand-primary-hover: var(--color-himal-800);
@@ -171,35 +180,35 @@
   --status-info: var(--color-himal-700);
   --status-info-bg: var(--color-himal-50);
 
-  --duration-fast: 120ms;
-  --duration-base: 200ms;
-  --duration-slow: 300ms;
+  --motion-fast: 120ms;
+  --motion-base: 200ms;
+  --motion-slow: 300ms;
 }
 
 @media (prefers-reduced-motion: reduce) {
   :root {
     /* Movement becomes a short fade; components keep using the same variables. */
-    --duration-base: 120ms;
-    --duration-slow: 120ms;
+    --motion-base: 120ms;
+    --motion-slow: 120ms;
   }
 }
 
-/* ---- Layer 3: utilities for the semantic roles (bg-bg-surface, text-text-secondary, border-border-strong …) ---- */
+/* ---- Layer 3: utilities for the semantic roles (bg-surface-raised, text-fg-secondary, border-line-strong …) ---- */
 @theme inline {
-  --color-bg-page: var(--bg-page);
-  --color-bg-surface: var(--bg-surface);
-  --color-bg-subtle: var(--bg-subtle);
-  --color-bg-muted: var(--bg-muted);
-  --color-bg-inverse: var(--bg-inverse);
-  --color-text-primary: var(--text-primary);
-  --color-text-secondary: var(--text-secondary);
-  --color-text-tertiary: var(--text-tertiary);
-  --color-text-on-brand: var(--text-on-brand);
-  --color-text-link: var(--text-link);
-  --color-text-disabled: var(--text-disabled);
-  --color-border-default: var(--border-default);
-  --color-border-strong: var(--border-strong);
-  --color-border-focus: var(--border-focus);
+  --color-surface-page: var(--surface-page);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-subtle: var(--surface-subtle);
+  --color-surface-muted: var(--surface-muted);
+  --color-surface-inverse: var(--surface-inverse);
+  --color-fg-primary: var(--fg-primary);
+  --color-fg-secondary: var(--fg-secondary);
+  --color-fg-tertiary: var(--fg-tertiary);
+  --color-fg-on-brand: var(--fg-on-brand);
+  --color-fg-link: var(--fg-link);
+  --color-fg-disabled: var(--fg-disabled);
+  --color-line-default: var(--line-default);
+  --color-line-strong: var(--line-strong);
+  --color-line-focus: var(--line-focus);
   --color-brand-primary: var(--brand-primary);
   --color-brand-primary-hover: var(--brand-primary-hover);
   --color-brand-primary-pressed: var(--brand-primary-pressed);
